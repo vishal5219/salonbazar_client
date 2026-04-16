@@ -23,7 +23,6 @@ const NAV_SECTIONS = ['Gallery', 'Services', 'Staff', 'Reviews', 'Location']
 
 export default function SalonDetails() {
   const { id }       = useParams()
-  console.log(`id::::::`, id)
   const dispatch     = useDispatch()
   const navigate     = useNavigate()
 
