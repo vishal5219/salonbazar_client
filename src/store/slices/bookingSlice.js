@@ -1,0 +1,151 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import bookingService from '@/services/bookingService'
+
+// ── Steps ─────────────────────────────────────────────────────
+// 1 = Service Selection
+// 2 = Date & Time
+// 3 = Payment
+// 4 = Confirmation
+
+// ── Async: Create booking on backend ─────────────────────────
+export const submitBooking = createAsyncThunk(
+  'booking/submit',
+  async (bookingData, { rejectWithValue }) => {
+    try {
+      // TODO: replace with real call → bookingService.create(bookingData)
+      // Mock: simulate API latency
+      await new Promise(r => setTimeout(r, 1400))
+      const mockId = `SB-${Date.now().toString(36).toUpperCase()}`
+      return {
+        id: mockId,
+        ...bookingData,
+        status: 'confirmed',
+        createdAt: new Date().toISOString(),
+        queuePosition: Math.floor(Math.random() * 5) + 1,
+      }
+    } catch (err) {
+      return rejectWithValue(err.message || 'Booking failed')
+    }
+  }
+)
+
+// ── Async: Verify Razorpay payment ────────────────────────────
+export const verifyPayment = createAsyncThunk(
+  'booking/verifyPayment',
+  async (paymentData, { rejectWithValue }) => {
+    try {
+      // TODO: paymentService.verify(paymentData)
+      await new Promise(r => setTimeout(r, 800))
+      return { verified: true, paymentId: paymentData.razorpay_payment_id }
+    } catch (err) {
+      return rejectWithValue(err.message || 'Payment verification failed')
+    }
+  }
+)
+
+const initialState = {
+  // Step tracking
+  step: 1,           // 1 | 2 | 3 | 4
+
+  // Step 1: Service
+  selectedService:  null,
+  selectedStaff:    null,
+  salonId:          null,
+  salonName:        '',
+  salonImage:       '',
+
+  // Step 2: Date & Time
+  selectedDate:     null,   // { day, month, monthName, year, displayDate }
+  selectedSlot:     null,   // '10:30 AM'
+
+  // Step 3: Payment
+  paymentMethod:    'online',  // 'online' | 'counter'
+  couponCode:       '',
+  couponDiscount:   0,
+  paymentVerified:  false,
+  razorpayOrderId:  null,
+
+  // Step 4: Confirmation
+  currentBooking:   null,   // full booking object from API
+  bookingHistory:   [],
+
+  // Meta
+  loading:   false,
+  error:     null,
+}
+
+const bookingSlice = createSlice({
+  name: 'booking',
+  initialState,
+  reducers: {
+    setStep:          (s, a) => { s.step = a.payload; s.error = null },
+    goNextStep:       (s)    => { if (s.step < 4) s.step++ },
+    goPrevStep:       (s)    => { if (s.step > 1) s.step--; s.error = null },
+
+    // Step 1
+    setSelectedService: (s, a) => { s.selectedService = a.payload },
+    setSelectedStaff:   (s, a) => { s.selectedStaff   = a.payload },
+    setSalonContext:    (s, a) => {
+      s.salonId    = a.payload.salonId
+      s.salonName  = a.payload.salonName
+      s.salonImage = a.payload.salonImage || ''
+    },
+
+    // Step 2
+    setSelectedDate: (s, a) => { s.selectedDate = a.payload; s.selectedSlot = null },
+    setSelectedSlot: (s, a) => { s.selectedSlot = a.payload },
+
+    // Step 3
+    setPaymentMethod:  (s, a) => { s.paymentMethod   = a.payload },
+    applyCoupon:       (s, a) => {
+      s.couponCode     = a.payload.code
+      s.couponDiscount = a.payload.discount
+    },
+    clearCoupon:       (s)    => { s.couponCode = ''; s.couponDiscount = 0 },
+    setRazorpayOrder:  (s, a) => { s.razorpayOrderId = a.payload },
+    markPaymentVerified:(s)   => { s.paymentVerified = true },
+
+    // Misc
+    addToHistory: (s, a) => { s.bookingHistory.unshift(a.payload) },
+    clearError:   (s)    => { s.error = null },
+    resetBooking: ()     => ({ ...initialState }),
+  },
+
+  extraReducers: builder => {
+    builder
+      // submitBooking
+      .addCase(submitBooking.pending,   s => { s.loading = true; s.error = null })
+      .addCase(submitBooking.fulfilled, (s, a) => {
+        s.loading        = false
+        s.currentBooking = a.payload
+        s.step           = 4
+        s.bookingHistory.unshift(a.payload)
+      })
+      .addCase(submitBooking.rejected,  (s, a) => {
+        s.loading = false
+        s.error   = a.payload
+      })
+
+      // verifyPayment
+      .addCase(verifyPayment.pending,   s => { s.loading = true })
+      .addCase(verifyPayment.fulfilled, s => {
+        s.loading         = false
+        s.paymentVerified = true
+      })
+      .addCase(verifyPayment.rejected,  (s, a) => {
+        s.loading = false
+        s.error   = a.payload
+      })
+  },
+})
+
+export const {
+  setStep, goNextStep, goPrevStep,
+  setSelectedService, setSelectedStaff, setSalonContext,
+  setSelectedDate, setSelectedSlot,
+  setPaymentMethod, applyCoupon, clearCoupon,
+  setRazorpayOrder, markPaymentVerified,
+  addToHistory, clearError, resetBooking,
+} = bookingSlice.actions
+
+export default bookingSlice.reducer

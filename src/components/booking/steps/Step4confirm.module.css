@@ -1,0 +1,384 @@
+.wrap {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    position: relative;
+    text-align: center;
+    padding: 12px 0;
+    animation: pageIn .5s cubic-bezier(.4,0,.2,1) both;
+  }
+  
+  @keyframes pageIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* Confetti */
+  .confettiWrap {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+  
+  .confettiPiece {
+    position: absolute;
+    top: -20px;
+    animation: fall linear both;
+  }
+  
+  @keyframes fall {
+    0%   { transform: translateY(-20px) rotate(0deg);   opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+  }
+  
+  /* Success ring */
+  .successRing {
+    width: 96px;
+    height: 96px;
+    border-radius: 50%;
+    background: var(--gold-muted);
+    border: 3px solid var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    animation: ringPop .5s .1s cubic-bezier(.34,1.56,.64,1) both;
+    position: relative;
+    z-index: 1;
+  }
+  
+  @keyframes ringPop {
+    from { transform: scale(0); opacity: 0; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  
+  .successCircle {
+    width: 68px;
+    height: 68px;
+    border-radius: 50%;
+    background: var(--charcoal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--gold);
+  }
+  
+  .checkPath {
+    stroke-dasharray: 50;
+    stroke-dashoffset: 50;
+    animation: drawCheck .5s .35s ease forwards;
+  }
+  
+  @keyframes drawCheck {
+    to { stroke-dashoffset: 0; }
+  }
+  
+  /* Heading */
+  .heading {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .title {
+    font-family: var(--font-display);
+    font-size: clamp(32px, 5vw, 48px);
+    font-weight: 400;
+    color: var(--charcoal);
+    animation: fadeUp .5s .2s ease both;
+  }
+  
+  @keyframes fadeUp { from{opacity:0;transform:translateY(12px)} to{opacity:1;transform:translateY(0)} }
+  
+  .sub {
+    font-size: 15px;
+    color: var(--smoke);
+    line-height: 1.7;
+    max-width: 440px;
+    animation: fadeUp .5s .3s ease both;
+  }
+  
+  /* Ticket card */
+  .ticketCard {
+    width: 100%;
+    max-width: 480px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 8px 40px rgba(26,23,20,.12);
+    overflow: hidden;
+    animation: fadeUp .5s .35s ease both;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .ticketHeader {
+    background: var(--charcoal);
+    padding: 20px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
+  
+  .ticketSalon {
+    font-family: var(--font-display);
+    font-size: 22px;
+    color: var(--warm-white);
+    font-weight: 400;
+  }
+  
+  .bookingId {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--gold);
+    letter-spacing: .1em;
+    background: rgba(201,168,76,.15);
+    padding: 4px 10px;
+    border-radius: 6px;
+    border: 1px solid rgba(201,168,76,.25);
+    font-family: var(--font-body);
+    white-space: nowrap;
+  }
+  
+  /* Ticket notch */
+  .ticketNotch {
+    display: flex;
+    align-items: center;
+    background: var(--warm-white);
+    position: relative;
+  }
+  
+  .notchLeft {
+    width: 22px;
+    height: 22px;
+    border-radius: 0 50% 50% 0;
+    background: var(--warm-white);
+    border: 1.5px solid var(--cream-2);
+    border-left: none;
+    flex-shrink: 0;
+    margin-left: -1px;
+  }
+  
+  .notchRight {
+    width: 22px;
+    height: 22px;
+    border-radius: 50% 0 0 50%;
+    background: var(--warm-white);
+    border: 1.5px solid var(--cream-2);
+    border-right: none;
+    flex-shrink: 0;
+    margin-right: -1px;
+  }
+  
+  .dashedLine {
+    flex: 1;
+    height: 1.5px;
+    background: repeating-linear-gradient(
+      90deg,
+      var(--cream-2) 0,
+      var(--cream-2) 6px,
+      transparent 6px,
+      transparent 12px
+    );
+  }
+  
+  /* Ticket body */
+  .ticketBody {
+    padding: 20px 24px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+  }
+  
+  .ticketGrid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  
+  .ticketField {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    text-align: left;
+  }
+  
+  .fieldIcon {
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    background: var(--cream);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--charcoal-3);
+    flex-shrink: 0;
+  }
+  
+  .fieldLabel {
+    font-size: 10.5px;
+    font-weight: 600;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    margin-bottom: 3px;
+    font-family: var(--font-body);
+  }
+  
+  .fieldValue {
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--charcoal);
+    font-family: var(--font-body);
+  }
+  
+  /* Amount */
+  .ticketAmount {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 16px;
+    background: var(--cream);
+    border-radius: 12px;
+  }
+  
+  .amountLabel { font-size: 13px; color: var(--smoke); font-family: var(--font-body); }
+  
+  .amountValue {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 500;
+    color: var(--charcoal);
+  }
+  
+  /* QR */
+  .qrBlock {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 14px;
+    background: var(--cream);
+    border-radius: 12px;
+    border: 1px dashed var(--cream-2);
+  }
+  
+  .qrCode { color: var(--charcoal); }
+  
+  .qrLabel {
+    font-size: 12px;
+    color: var(--smoke);
+    font-family: var(--font-body);
+  }
+  
+  /* Queue block */
+  .queueBlock {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    background: var(--gold-muted);
+    border: 1px solid rgba(201,168,76,.25);
+    border-radius: 12px;
+  }
+  
+  .queueIcon { font-size: 22px; }
+  
+  .queueNum {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--charcoal);
+    font-family: var(--font-body);
+  }
+  
+  .queueSub { font-size: 12.5px; color: var(--smoke); }
+  
+  /* Actions */
+  .actions {
+    display: flex;
+    gap: 12px;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp .5s .45s ease both;
+  }
+  
+  .calendarBtn, .downloadBtn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 20px;
+    border-radius: 10px;
+    font-size: 13.5px;
+    font-weight: 500;
+    font-family: var(--font-body);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  
+  .calendarBtn {
+    background: var(--charcoal);
+    color: var(--warm-white);
+    border: none;
+  }
+  
+  .calendarBtn:hover { background: var(--gold-dark); }
+  
+  .downloadBtn {
+    background: #fff;
+    color: var(--charcoal);
+    border: 1.5px solid var(--cream-2);
+  }
+  
+  .downloadBtn:hover { border-color: var(--gold); }
+  
+  /* Nav links */
+  .navLinks {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    justify-content: center;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp .5s .5s ease both;
+  }
+  
+  .navLink {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 9px 16px;
+    border: 1.5px solid var(--cream-2);
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--charcoal-3);
+    background: #fff;
+    font-family: var(--font-body);
+    transition: all var(--transition-fast);
+  }
+  
+  .navLink:hover { border-color: var(--gold); color: var(--charcoal); }
+  
+  /* Reminder */
+  .reminder {
+    max-width: 460px;
+    padding: 12px 16px;
+    background: var(--cream);
+    border-radius: 10px;
+    font-size: 12.5px;
+    color: var(--smoke);
+    line-height: 1.6;
+    text-align: center;
+    position: relative;
+    z-index: 1;
+    animation: fadeUp .5s .55s ease both;
+  }
+  
+  @media (max-width: 480px) {
+    .actions { flex-direction: column; width: 100%; }
+    .calendarBtn, .downloadBtn { justify-content: center; }
+    .ticketGrid { grid-template-columns: 1fr; }
+  }

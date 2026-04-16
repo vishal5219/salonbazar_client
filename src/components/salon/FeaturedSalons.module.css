@@ -1,0 +1,126 @@
+.section {
+  padding: 96px 0;
+  background: var(--cream);
+}
+
+.inner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 56px;
+  align-items: start;
+}
+
+/* Sidebar */
+.sidebar {
+  position: sticky;
+  top: calc(var(--nav-height) + 24px);
+}
+
+.sidebarContent { display: flex; flex-direction: column; gap: 20px; }
+
+.title {
+  font-size: clamp(36px, 3.5vw, 50px);
+  color: var(--charcoal);
+  line-height: 1.1;
+}
+
+.title em { font-style: italic; color: var(--gold-dark); }
+
+.desc {
+  font-size: 14.5px;
+  color: var(--smoke);
+  line-height: 1.75;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 24px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+  align-self: flex-start;
+}
+
+.cta:hover { background: var(--gold-dark); }
+
+.ctaArrow {
+  transition: transform var(--transition-fast);
+}
+
+.cta:hover .ctaArrow { transform: translateX(4px); }
+
+/* Deco block */
+.decoBlock {
+  background: var(--charcoal);
+  border-radius: 14px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.decoStat { display: flex; flex-direction: column; gap: 2px; }
+
+.decoNum {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--gold);
+  font-weight: 500;
+}
+
+.decoLabel {
+  font-size: 11px;
+  color: rgba(250,248,245,0.5);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+}
+
+/* Cards area */
+.cardsArea {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.cardWrap {
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Override card for horizontal layout */
+.cardWrap :global(.card) {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+}
+
+.cardWrap :global(.imageWrap) {
+  aspect-ratio: unset;
+  height: 100%;
+  min-height: 200px;
+}
+
+@media (max-width: 1024px) {
+  .inner { grid-template-columns: 1fr; gap: 40px; }
+  .sidebar { position: static; }
+  .cardsArea { display: grid; grid-template-columns: repeat(2, 1fr); }
+  .cardWrap :global(.card) { display: block; }
+  .cardWrap :global(.imageWrap) { aspect-ratio: 4/3; height: auto; min-height: unset; }
+}
+
+@media (max-width: 640px) {
+  .section { padding: 56px 0; }
+  .cardsArea { grid-template-columns: 1fr; }
+}

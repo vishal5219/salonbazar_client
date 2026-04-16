@@ -1,0 +1,84 @@
+.wrap {
+    display: flex;
+    align-items: center;
+    flex: 1;
+    gap: 0;
+  }
+  
+  .stepItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex: 1;
+  }
+  
+  .stepItem:last-child { flex: 0; }
+  
+  /* Connector */
+  .connector {
+    flex: 1;
+    height: 1.5px;
+    background: var(--cream-2);
+    transition: background var(--transition-med);
+    min-width: 24px;
+  }
+  
+  .connDone { background: var(--gold); }
+  
+  /* Circle */
+  .circle {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all var(--transition-med);
+    border: 2px solid transparent;
+  }
+  
+  .circleDone {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--charcoal);
+    box-shadow: 0 0 0 4px rgba(201,168,76,.15);
+  }
+  
+  .circleActive {
+    background: var(--charcoal);
+    border-color: var(--charcoal);
+    color: var(--warm-white);
+    box-shadow: 0 0 0 4px rgba(26,23,20,.1);
+  }
+  
+  .circleFuture {
+    background: #fff;
+    border-color: var(--cream-2);
+    color: var(--smoke-light);
+  }
+  
+  .circleNum {
+    font-size: 11.5px;
+    font-weight: 600;
+    font-family: var(--font-body);
+    line-height: 1;
+  }
+  
+  /* Labels */
+  .label {
+    font-size: 12.5px;
+    font-weight: 500;
+    font-family: var(--font-body);
+    white-space: nowrap;
+    transition: color var(--transition-fast);
+  }
+  
+  .labelDone   { color: var(--gold-dark); }
+  .labelActive { color: var(--charcoal); }
+  .labelFuture { color: var(--smoke-light); }
+  
+  @media (max-width: 480px) {
+    .label { display: none; }
+    .connector { min-width: 12px; }
+  }

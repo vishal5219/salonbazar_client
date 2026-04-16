@@ -1,0 +1,106 @@
+.section {
+  padding: 80px 0;
+  background: var(--warm-white);
+}
+
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 28px;
+}
+
+.title {
+  font-size: clamp(30px, 4vw, 44px);
+  margin-top: 8px;
+  color: var(--charcoal);
+}
+
+.title em { font-style: italic; color: var(--gold-dark); }
+
+.viewAll {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--gold-dark);
+  padding-bottom: 3px;
+  border-bottom: 1px solid var(--gold);
+  transition: opacity var(--transition-fast);
+}
+
+.viewAll:hover { opacity: 0.7; }
+
+/* Filter pills */
+.filters {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 36px;
+}
+
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 18px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 100px;
+  font-size: 13.5px;
+  font-family: var(--font-body);
+  color: var(--charcoal-3);
+  background: #fff;
+  transition: all var(--transition-fast);
+}
+
+.filterBtn:hover {
+  border-color: var(--gold);
+  color: var(--charcoal);
+}
+
+.filterBtn.active {
+  background: var(--charcoal);
+  border-color: var(--charcoal);
+  color: var(--warm-white);
+}
+
+.filterDot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #6EE7B7;
+}
+
+/* Grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.cardWrap {
+  animation: fadeUp 0.5s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Empty state */
+.empty {
+  text-align: center;
+  padding: 64px 24px;
+  color: var(--smoke);
+}
+
+.empty span { font-size: 48px; display: block; margin-bottom: 12px; }
+.empty p { font-size: 16px; }
+
+@media (max-width: 1024px) {
+  .grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .section { padding: 56px 0; }
+  .grid { grid-template-columns: 1fr; }
+  .header { flex-direction: column; align-items: flex-start; gap: 8px; }
+}

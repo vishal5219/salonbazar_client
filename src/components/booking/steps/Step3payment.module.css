@@ -1,0 +1,329 @@
+.wrap { display: flex; flex-direction: column; gap: 24px; }
+
+.header { display: flex; flex-direction: column; gap: 6px; }
+
+.stepTag {
+  font-size: 11px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--gold-dark); background: var(--gold-muted); border: 1px solid rgba(201,168,76,.2);
+  padding: 3px 10px; border-radius: 100px; display: inline-block; align-self: flex-start;
+}
+
+.title { font-size: clamp(26px,3.5vw,38px); color: var(--charcoal); font-weight: 400; }
+.title em { color: var(--gold-dark); font-style: italic; }
+.sub { font-size: 14.5px; color: var(--smoke); }
+
+/* Review card */
+.reviewCard {
+  background: var(--charcoal);
+  border-radius: 16px;
+  overflow: hidden;
+  padding: 20px;
+}
+
+.reviewTitle {
+  font-family: var(--font-display);
+  font-size: 16px;
+  color: var(--gold-light);
+  font-weight: 400;
+  margin-bottom: 14px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255,255,255,.08);
+}
+
+.reviewRows { display: flex; flex-direction: column; gap: 10px; }
+
+.reviewRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13.5px;
+  font-family: var(--font-body);
+}
+
+.reviewLabel { color: var(--smoke); }
+.reviewValue { color: var(--warm-white); font-weight: 500; }
+
+/* Section */
+.section { display: flex; flex-direction: column; gap: 12px; }
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--charcoal-3);
+  font-family: var(--font-body);
+}
+
+/* Payment methods */
+.methodGrid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.methodCard {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 16px;
+  background: #fff;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 14px;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  font-family: var(--font-body);
+  text-align: left;
+}
+
+.methodCard:hover { border-color: var(--gold); }
+
+.methodActive {
+  border-color: var(--charcoal) !important;
+  background: var(--cream) !important;
+}
+
+.methodIcon { font-size: 24px; margin-bottom: 4px; }
+.methodLabel { font-size: 14px; font-weight: 600; color: var(--charcoal); }
+.methodSub   { font-size: 12px; color: var(--smoke); line-height: 1.4; }
+
+.methodCheck {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 2px solid var(--cream-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--transition-fast);
+}
+
+.methodCheckActive {
+  background: var(--charcoal);
+  border-color: var(--charcoal);
+  color: var(--warm-white);
+}
+
+/* Coupon */
+.couponRow { display: flex; gap: 10px; }
+
+.couponInput {
+  flex: 1;
+  padding: 11px 14px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 10px;
+  font-size: 14.5px;
+  font-family: var(--font-body);
+  color: var(--charcoal);
+  outline: none;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  transition: border-color var(--transition-fast);
+}
+
+.couponInput:focus { border-color: var(--gold); }
+.couponInput::placeholder { text-transform: none; letter-spacing: 0; color: var(--smoke-light); }
+
+.applyBtn {
+  padding: 11px 20px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  transition: background var(--transition-fast);
+  white-space: nowrap;
+}
+
+.applyBtn:hover { background: var(--gold-dark); }
+
+.couponApplied {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: rgba(16,185,129,.08);
+  border: 1.5px solid rgba(16,185,129,.25);
+  border-radius: 10px;
+  animation: popIn .2s ease;
+}
+
+@keyframes popIn { from{opacity:0;transform:scale(.97)} to{opacity:1;transform:scale(1)} }
+
+.couponAppliedLeft { display: flex; align-items: center; gap: 10px; }
+.couponCheckIcon { color: #059669; flex-shrink: 0; }
+.couponCode { font-size: 14px; font-weight: 600; color: var(--charcoal); letter-spacing: .08em; }
+.couponSaving { font-size: 12.5px; color: #059669; font-weight: 500; }
+
+.removeCoupon {
+  width: 28px; height: 28px; border-radius: 50%;
+  background: rgba(239,68,68,.1); color: #DC2626;
+  display: flex; align-items: center; justify-content: center;
+  transition: background var(--transition-fast);
+}
+
+.removeCoupon:hover { background: rgba(239,68,68,.2); }
+
+.couponError {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: #DC2626;
+  font-family: var(--font-body);
+}
+
+.couponHints { display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: var(--smoke); }
+.hintChip {
+  padding: 3px 10px;
+  background: var(--cream);
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: .06em;
+  color: var(--charcoal-3);
+  font-family: var(--font-body);
+  transition: background var(--transition-fast);
+}
+.hintChip:hover { background: var(--cream-2); }
+
+/* Price breakdown */
+.priceBreakdown {
+  background: #fff;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 14px;
+  padding: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.priceRow {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  color: var(--charcoal);
+  font-family: var(--font-body);
+}
+
+.discountRow { color: #059669; font-weight: 500; }
+.feeRow      { color: var(--smoke); font-size: 13px; }
+
+.priceDivider { height: 1px; background: var(--cream-2); margin: 2px 0; }
+
+.totalRow { font-size: 16px; font-weight: 600; }
+.totalAmt {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+/* Secure badge */
+.secureBadge {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: var(--cream);
+  border-radius: 10px;
+  font-size: 12.5px;
+  color: var(--smoke);
+  font-family: var(--font-body);
+}
+
+.shieldIcon { color: var(--gold-dark); flex-shrink: 0; }
+
+/* Terms */
+.termsRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.termsCheck {
+  width: 17px;
+  height: 17px;
+  accent-color: var(--gold-dark);
+  flex-shrink: 0;
+  margin-top: 2px;
+  cursor: pointer;
+}
+
+.termsText { font-size: 13px; color: var(--smoke); line-height: 1.6; }
+.termsLink { color: var(--gold-dark); font-weight: 500; }
+
+/* Error */
+.errorMsg {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: rgba(220,38,38,.06);
+  border: 1px solid rgba(220,38,38,.2);
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: #DC2626;
+  font-family: var(--font-body);
+}
+
+/* Nav */
+.navRow { display: flex; justify-content: space-between; align-items: center; gap: 12px; }
+
+.backBtn {
+  padding: 13px 22px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--charcoal-3);
+  background: #fff;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.backBtn:hover:not(:disabled) { border-color: var(--charcoal); color: var(--charcoal); }
+.backBtn:disabled { opacity: .5; cursor: not-allowed; }
+
+.payBtn {
+  flex: 1;
+  padding: 15px 28px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  font-size: 15px;
+  font-weight: 600;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.payBtn:hover:not(.payBtnDisabled) { background: var(--gold-dark); }
+.payBtnDisabled { background: var(--smoke-light) !important; cursor: not-allowed; }
+
+.loadingSpinner { display: flex; align-items: center; justify-content: center; gap: 10px; }
+
+.spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255,255,255,.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin .7s linear infinite;
+  display: inline-block;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+@media (max-width: 480px) {
+  .methodGrid { grid-template-columns: 1fr; }
+}

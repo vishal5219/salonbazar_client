@@ -1,0 +1,84 @@
+.page {
+    min-height: 100vh;
+    background: var(--warm-white);
+    padding-top: var(--nav-height);
+  }
+  
+  /* Progress bar */
+  .progressBar {
+    position: sticky;
+    top: var(--nav-height);
+    z-index: 40;
+    background: rgba(250,248,245,.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--cream-2);
+    box-shadow: 0 2px 12px rgba(26,23,20,.05);
+  }
+  
+  .progressInner {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 0 24px;
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    height: 64px;
+  }
+  
+  .backLink {
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--smoke);
+    font-family: var(--font-body);
+    transition: color var(--transition-fast);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .backLink:hover { color: var(--charcoal); }
+  
+  /* Body */
+  .body {
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding: 36px 24px 80px;
+    display: grid;
+    grid-template-columns: 1fr 360px;
+    gap: 32px;
+    align-items: start;
+  }
+  
+  .stepArea { min-width: 0; }
+  
+  .stepContent {
+    animation: stepIn .35s cubic-bezier(.4,0,.2,1) both;
+  }
+  
+  @keyframes stepIn {
+    from { opacity: 0; transform: translateX(16px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  
+  /* Sidebar */
+  .sidebar {
+    position: sticky;
+    top: calc(var(--nav-height) + 80px);
+  }
+  
+  /* Step 4 full-page */
+  .confirmWrap {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 48px 24px 80px;
+  }
+  
+  @media (max-width: 1024px) {
+    .body { grid-template-columns: 1fr; }
+    .sidebar { position: static; order: -1; }
+  }
+  
+  @media (max-width: 640px) {
+    .body { padding: 20px 16px 80px; gap: 20px; }
+    .progressInner { gap: 16px; }
+    .backLink { font-size: 12px; }
+  }

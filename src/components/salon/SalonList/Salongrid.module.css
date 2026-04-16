@@ -1,0 +1,445 @@
+/* ── Grid Layout ─────────────────────────────────────────── */
+.gridContainer {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+  }
+  
+  .gridItem {
+    animation: fadeUp 0.45s ease both;
+  }
+  
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* ── Grid Card ───────────────────────────────────────────── */
+  .card {
+    display: block;
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 2px 16px rgba(26,23,20,.07);
+    border: 1.5px solid transparent;
+    transition: transform var(--transition-med), box-shadow var(--transition-med), border-color var(--transition-fast);
+    color: var(--charcoal);
+  }
+  
+  .card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 36px rgba(26,23,20,.13);
+    border-color: var(--cream-2);
+  }
+  
+  .imgWrap {
+    position: relative;
+    aspect-ratio: 4/3;
+    overflow: hidden;
+  }
+  
+  .img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--transition-slow);
+    display: block;
+  }
+  
+  .card:hover .img { transform: scale(1.05); }
+  
+  .imgOverlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgba(26,23,20,.38) 0%, transparent 55%);
+  }
+  
+  .statusBadge {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 500;
+    backdrop-filter: blur(8px);
+    background: rgba(26,23,20,.55);
+  }
+  
+  .open  { color: #6EE7B7; }
+  .closed { color: #FCA5A5; }
+  
+  .statusDot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: currentColor;
+    animation: pulse 2s ease infinite;
+  }
+  
+  .closed .statusDot { animation: none; }
+  
+  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:.4} }
+  
+  .heartBtn {
+    position: absolute;
+    top: 9px;
+    right: 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(250,248,245,.9);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--smoke);
+    backdrop-filter: blur(4px);
+    transition: all var(--transition-fast);
+  }
+  
+  .heartBtn:hover { transform: scale(1.12); }
+  .hearted { color: #E24B4A !important; }
+  
+  .waitBadge {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    padding: 4px 9px;
+    border-radius: 20px;
+    background: rgba(201,168,76,.92);
+    color: var(--charcoal);
+    font-size: 11px;
+    font-weight: 500;
+  }
+  
+  .cardBody { padding: 14px 16px 16px; }
+  
+  .cardTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  
+  .cardName {
+    font-family: var(--font-display);
+    font-size: 18px;
+    font-weight: 500;
+    color: var(--charcoal);
+    line-height: 1.2;
+  }
+  
+  .cardCat { font-size: 11.5px; color: var(--smoke); margin-top: 2px; }
+  
+  .cardRating {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+  
+  .starIcon { color: var(--gold); }
+  .reviewCount { font-size: 11.5px; color: var(--smoke); font-weight: 400; }
+  
+  .cardMeta {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+    font-size: 12px;
+    color: var(--smoke);
+  }
+  
+  .loc { display: flex; align-items: center; gap: 3px; }
+  .dist { color: var(--gold-dark); font-weight: 500; }
+  
+  .tags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+  
+  .tag {
+    padding: 2px 8px;
+    background: var(--cream);
+    color: var(--charcoal-3);
+    font-size: 11px;
+    font-weight: 500;
+    border-radius: 20px;
+  }
+  
+  .cardFooter {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-top: 1px solid var(--cream);
+    padding-top: 10px;
+  }
+  
+  .priceLbl { font-size: 10px; color: var(--smoke); text-transform: uppercase; letter-spacing: .08em; }
+  .priceVal {
+    font-family: var(--font-display);
+    font-size: 20px;
+    font-weight: 500;
+    color: var(--charcoal);
+    line-height: 1.1;
+  }
+  
+  .bookBtn {
+    padding: 8px 16px;
+    background: var(--charcoal);
+    color: var(--warm-white);
+    font-size: 12.5px;
+    font-weight: 500;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    transition: background var(--transition-fast);
+  }
+  
+  .bookBtn:hover { background: var(--gold-dark); }
+  
+  /* ── List Layout ─────────────────────────────────────────── */
+  .listContainer {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .listItem {
+    animation: fadeUp 0.4s ease both;
+  }
+  
+  .listRow {
+    display: grid;
+    grid-template-columns: 160px 1fr auto;
+    gap: 0;
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 2px 12px rgba(26,23,20,.06);
+    border: 1.5px solid transparent;
+    transition: all var(--transition-med);
+    color: var(--charcoal);
+    min-height: 140px;
+  }
+  
+  .listRow:hover {
+    transform: translateX(4px);
+    box-shadow: 0 6px 24px rgba(26,23,20,.1);
+    border-color: var(--cream-2);
+  }
+  
+  .listImgWrap {
+    position: relative;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+  
+  .listImg {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--transition-slow);
+  }
+  
+  .listRow:hover .listImg { transform: scale(1.06); }
+  
+  .statusDot {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+  }
+  
+  .dotOpen  { background: #6EE7B7; animation: pulse 2s ease infinite; }
+  .dotClosed { background: #FCA5A5; }
+  
+  .listInfo {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    justify-content: center;
+    min-width: 0;
+  }
+  
+  .listTop {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  
+  .listName {
+    font-family: var(--font-display);
+    font-size: 19px;
+    font-weight: 500;
+    color: var(--charcoal);
+    line-height: 1.2;
+  }
+  
+  .listCat { font-size: 12px; color: var(--smoke); margin-top: 2px; }
+  
+  .listRating {
+    display: flex;
+    align-items: center;
+    gap: 3px;
+    flex-shrink: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--charcoal);
+  }
+  
+  .ratingNum { font-weight: 600; }
+  .ratingCount { font-size: 11.5px; color: var(--smoke); font-weight: 400; }
+  
+  .listMeta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 12.5px;
+    color: var(--smoke);
+    flex-wrap: wrap;
+  }
+  
+  .listMeta span { display: flex; align-items: center; gap: 4px; }
+  .waitSpan { color: var(--gold-dark); font-weight: 500; }
+  
+  .listTags {
+    display: flex;
+    gap: 5px;
+    flex-wrap: wrap;
+  }
+  
+  .listRight {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 16px 20px;
+    border-left: 1px solid var(--cream);
+    flex-shrink: 0;
+    min-width: 120px;
+  }
+  
+  .listPrice { text-align: center; }
+  
+  .wishBtn {
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    border: 1.5px solid var(--cream-2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--smoke);
+    transition: all var(--transition-fast);
+  }
+  
+  .wishBtn:hover { border-color: #E24B4A; color: #E24B4A; }
+  .wished { color: #E24B4A !important; border-color: #E24B4A !important; }
+  
+  .listBookBtn {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 14px;
+    background: var(--charcoal);
+    color: var(--warm-white);
+    font-size: 12.5px;
+    font-weight: 500;
+    border-radius: 8px;
+    transition: background var(--transition-fast);
+  }
+  
+  .listRow:hover .listBookBtn { background: var(--gold-dark); }
+  
+  /* ── Skeleton ────────────────────────────────────────────── */
+  .skeleton {
+    background: #fff;
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1.5px solid var(--cream);
+    animation: shimmer 1.5s ease infinite alternate;
+  }
+  
+  .skeletonList {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    min-height: 140px;
+  }
+  
+  @keyframes shimmer {
+    from { opacity: .7; }
+    to   { opacity: 1; }
+  }
+  
+  .skelImg {
+    aspect-ratio: 4/3;
+    background: var(--cream-2);
+  }
+  
+  .skeletonList .skelImg { aspect-ratio: unset; height: 100%; }
+  
+  .skelBody {
+    padding: 14px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+  }
+  
+  .skelLine {
+    background: var(--cream);
+    border-radius: 6px;
+    animation: pulse 1.5s ease infinite alternate;
+  }
+  
+  @keyframes pulse { from{opacity:.5} to{opacity:1} }
+  
+  /* ── Empty State ─────────────────────────────────────────── */
+  .empty {
+    text-align: center;
+    padding: 80px 24px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+  }
+  
+  .emptyIcon { font-size: 52px; }
+  
+  .emptyTitle {
+    font-family: var(--font-display);
+    font-size: 26px;
+    color: var(--charcoal);
+    font-weight: 400;
+  }
+  
+  .emptyDesc { font-size: 14.5px; color: var(--smoke); }
+  
+  /* ── Responsive ──────────────────────────────────────────── */
+  @media (max-width: 1200px) {
+    .gridContainer { grid-template-columns: repeat(2, 1fr); }
+  }
+  
+  @media (max-width: 768px) {
+    .gridContainer { grid-template-columns: 1fr; }
+    .listRow { grid-template-columns: 120px 1fr; }
+    .listRight { display: none; }
+  }

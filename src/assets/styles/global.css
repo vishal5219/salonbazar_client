@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&display=swap');
+
+:root {
+  /* Brand Colors */
+  --gold: #C9A84C;
+  --gold-light: #E8C97A;
+  --gold-dark: #9E7E30;
+  --gold-muted: rgba(201, 168, 76, 0.12);
+  --charcoal: #1A1714;
+  --charcoal-2: #2C2825;
+  --charcoal-3: #3D3830;
+  --warm-white: #FAF8F5;
+  --cream: #F3EFE7;
+  --cream-2: #EAE3D5;
+  --smoke: #8A8178;
+  --smoke-light: #B5AFA5;
+
+  /* Typography */
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+
+  /* Spacing */
+  --nav-height: 72px;
+  --section-padding: 96px;
+  --container-max: 1280px;
+
+  /* Transitions */
+  --transition-fast: 0.18s ease;
+  --transition-med: 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+  --transition-slow: 0.55s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Shadows */
+  --shadow-card: 0 2px 24px rgba(26, 23, 20, 0.08);
+  --shadow-hover: 0 12px 40px rgba(26, 23, 20, 0.15);
+  --shadow-gold: 0 4px 24px rgba(201, 168, 76, 0.25);
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--warm-white);
+  color: var(--charcoal);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 400;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+img {
+  max-width: 100%;
+  display: block;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  background: none;
+  font-family: var(--font-body);
+}
+
+/* Utility classes */
+.container-custom {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+.section-padding {
+  padding: var(--section-padding) 0;
+}
+
+/* Gold divider */
+.gold-line {
+  display: inline-block;
+  width: 48px;
+  height: 2px;
+  background: var(--gold);
+  margin-bottom: 16px;
+}
+
+/* Overline label */
+.overline {
+  font-family: var(--font-body);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--cream); }
+::-webkit-scrollbar-thumb { background: var(--gold-dark); border-radius: 3px; }

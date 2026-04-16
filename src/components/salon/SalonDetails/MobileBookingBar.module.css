@@ -1,0 +1,206 @@
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(26,23,20,.5);
+  backdrop-filter: blur(4px);
+  z-index: 98;
+}
+
+.sheet {
+  display: none;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  background: var(--warm-white);
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -8px 40px rgba(26,23,20,.18);
+  transition: transform var(--transition-med);
+}
+
+/* Collapsed bar */
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 14px 20px;
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  transition: border-color var(--transition-fast);
+}
+
+.sheetOpen .bar {
+  border-bottom-color: var(--cream-2);
+}
+
+.barLeft {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.barService {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+.barPrice {
+  font-size: 13px;
+  color: var(--gold-dark);
+  font-weight: 500;
+}
+
+.barPlaceholder {
+  font-size: 13.5px;
+  color: var(--smoke);
+  font-style: italic;
+  font-family: var(--font-display);
+}
+
+.barRight {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.bookBtn {
+  padding: 10px 22px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  transition: background var(--transition-fast);
+}
+
+.bookBtn:hover { background: var(--gold-dark); }
+.bookBtnDisabled { background: var(--smoke-light) !important; }
+
+.chevron { color: var(--smoke); }
+
+/* Expanded */
+.expanded {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height var(--transition-med);
+  padding: 0 20px;
+}
+
+.sheetOpen .expanded {
+  max-height: 480px;
+  padding: 16px 20px 32px;
+}
+
+.expandedHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 14px;
+}
+
+.expandedTitle {
+  font-family: var(--font-display);
+  font-size: 20px;
+  color: var(--charcoal);
+  font-weight: 400;
+}
+
+.closeBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: var(--cream);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--charcoal-3);
+  transition: background var(--transition-fast);
+}
+
+.closeBtn:hover { background: var(--cream-2); }
+
+.serviceSummary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 14px;
+  background: var(--gold-muted);
+  border: 1px solid rgba(201,168,76,.25);
+  border-radius: 10px;
+  font-size: 13.5px;
+  color: var(--charcoal);
+  font-family: var(--font-body);
+  margin-bottom: 16px;
+}
+
+.summaryPrice { color: var(--gold-dark); font-weight: 500; }
+
+.slotsLabel {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  margin-bottom: 10px;
+}
+
+.slotsGrid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 16px;
+}
+
+.slot {
+  padding: 8px 4px;
+  border-radius: 8px;
+  border: 1.5px solid var(--cream-2);
+  background: #fff;
+  font-size: 11.5px;
+  font-family: var(--font-body);
+  color: var(--charcoal);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  text-align: center;
+}
+
+.slot:hover { border-color: var(--gold); }
+.slotUnavail { background: var(--cream) !important; color: var(--smoke-light) !important; border-color: var(--cream) !important; text-decoration: line-through; cursor: not-allowed !important; }
+.slotSel { background: var(--charcoal) !important; color: var(--warm-white) !important; border-color: var(--charcoal) !important; }
+
+.confirmBtn {
+  width: 100%;
+  padding: 14px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  font-size: 15px;
+  font-weight: 500;
+  border-radius: 12px;
+  font-family: var(--font-body);
+  transition: background var(--transition-fast);
+  margin-bottom: 10px;
+}
+
+.confirmBtn:hover:not(.confirmDisabled) { background: var(--gold-dark); }
+.confirmDisabled { background: var(--smoke-light) !important; cursor: not-allowed; }
+
+.walkinBtn {
+  width: 100%;
+  padding: 12px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-family: var(--font-body);
+  color: var(--charcoal-3);
+  background: #fff;
+  transition: all var(--transition-fast);
+}
+
+.walkinBtn:hover { border-color: var(--gold); }
+
+@media (max-width: 1100px) {
+  .sheet { display: block; }
+}

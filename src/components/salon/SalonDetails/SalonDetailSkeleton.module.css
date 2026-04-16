@@ -1,0 +1,123 @@
+.wrap {
+  min-height: 100vh;
+  background: var(--warm-white);
+  padding-top: var(--nav-height);
+}
+
+.bone {
+  background: var(--cream);
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+  display: block;
+}
+
+@keyframes shimmer {
+  from { opacity: .55; }
+  to   { opacity: 1; }
+}
+
+/* Mosaic */
+.mosaicSkel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  height: 460px;
+  gap: 3px;
+  background: var(--cream-2);
+}
+
+.mainSkel {
+  background: var(--cream-2);
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+.thumbsSkel {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 3px;
+}
+
+.thumbSkel {
+  background: var(--cream);
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+/* Info bar */
+.infoBar {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 24px 24px 20px;
+}
+
+.statsRowSkel {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+}
+
+/* Nav */
+.navSkel {
+  height: 52px;
+  background: var(--cream);
+  border-bottom: 1px solid var(--cream-2);
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+/* Body */
+.body {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 32px 24px 64px;
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 32px;
+  align-items: start;
+}
+
+.content { min-width: 0; }
+
+/* Gallery strip */
+.stripSkel {
+  display: flex;
+  gap: 10px;
+  overflow: hidden;
+  margin-bottom: 40px;
+}
+
+.stripItemSkel {
+  width: 220px;
+  height: 160px;
+  border-radius: 12px;
+  background: var(--cream);
+  flex-shrink: 0;
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+/* Service rows */
+.serviceRowSkel {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  border-bottom: 1px solid var(--cream);
+}
+
+/* Panel */
+.panelSkel {
+  background: #fff;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 20px;
+  overflow: hidden;
+}
+
+.panelHeaderSkel {
+  height: 72px;
+  background: var(--cream-2);
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+@media (max-width: 1100px) {
+  .body { grid-template-columns: 1fr; }
+  .panelSkel { display: none; }
+  .mosaicSkel { height: 280px; grid-template-columns: 1fr; }
+  .thumbsSkel { display: none; }
+}
