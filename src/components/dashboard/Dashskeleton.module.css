@@ -1,0 +1,95 @@
+.wrap {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    padding: 4px 0;
+  }
+  
+  /* Bone — the base shimmer element */
+  .bone {
+    background: var(--cream-2);
+    display: block;
+    animation: shimmer 1.4s ease-in-out infinite alternate;
+    flex-shrink: 0;
+  }
+  
+  @keyframes shimmer {
+    from { opacity: 0.5; }
+    to   { opacity: 1;   }
+  }
+  
+  /* Page header */
+  .header {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  /* KPI row */
+  .kpiRow {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+  }
+  
+  .kpiSkel {
+    background: var(--warm-white);
+    border: 1.5px solid var(--cream-2);
+    border-radius: 16px;
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    animation: shimmer 1.4s ease-in-out infinite alternate;
+  }
+  
+  .kpiSkel .bone {
+    background: var(--cream);
+  }
+  
+  /* Section */
+  .sectionSkel {
+    background: var(--warm-white);
+    border: 1.5px solid var(--cream-2);
+    border-radius: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .sectionSkel .bone {
+    background: var(--cream);
+  }
+  
+  /* Queue row skeleton */
+  .rowSkel {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--cream);
+  }
+  
+  .rowSkel:last-child {
+    border-bottom: none;
+  }
+  
+  .rowSkel > div {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  @media (max-width: 900px) {
+    .kpiRow {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .kpiRow {
+      grid-template-columns: 1fr;
+    }
+  }

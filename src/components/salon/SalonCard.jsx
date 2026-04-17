@@ -51,7 +51,9 @@ export default function SalonCard({ salon, variant = 'default' }) {
           <div className={styles.rating}>
             <span className={styles.star}>★</span>
             <span className={styles.ratingNum}>{salon.rating}</span>
-            <span className={styles.reviews}>({salon.reviews})</span>
+            <span className={styles.reviews}>
+              ({Array.isArray(salon.reviews) ? salon.reviews.length : salon.reviews})
+            </span>
           </div>
         </div>
 

@@ -1,0 +1,70 @@
+.wrap { min-height: 100vh; background: var(--warm-white); padding-top: var(--nav-height); }
+
+.bone {
+  background: var(--cream);
+  display: block;
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes shimmer { from { opacity: .55; } to { opacity: 1; } }
+
+.heroSkel { background: var(--charcoal-2); padding: 40px 24px 36px; }
+
+.heroInner {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  display: flex;
+  align-items: flex-end;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+
+.avatarSkel {
+  width: 90px; height: 90px; border-radius: 50%;
+  background: var(--charcoal-3); flex-shrink: 0;
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+.nameSkel {
+  display: flex; flex-direction: column; gap: 10px; flex: 1;
+}
+
+.nameSkel .bone { background: rgba(255,255,255,.1); }
+
+.statsSkel {
+  display: grid; grid-template-columns: repeat(4,1fr); gap: 10px; min-width: 340px;
+}
+
+.statSkel {
+  background: rgba(255,255,255,.06); border-radius: 14px; padding: 14px;
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+
+.statSkel .bone { background: rgba(255,255,255,.1); }
+
+.tabSkel {
+  background: var(--warm-white); padding: 14px 24px;
+  display: flex; gap: 20px; border-bottom: 1px solid var(--cream-2);
+}
+
+.tabSkel .bone { background: var(--cream-2); }
+
+.content {
+  max-width: var(--container-max); margin: 0 auto;
+  padding: 32px 24px; display: flex; flex-direction: column; gap: 16px;
+}
+
+.filtersSkel { display: flex; gap: 8px; flex-wrap: wrap; }
+.filtersSkel .bone { background: var(--cream-2); }
+
+.cardSkel {
+  display: grid; grid-template-columns: 120px 1fr;
+  background: #fff; border: 1.5px solid var(--cream-2); border-radius: 16px; overflow: hidden;
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+.cardImgSkel { height: 120px; background: var(--cream-2); }
+
+.cardBodySkel {
+  padding: 16px; display: flex; flex-direction: column; gap: 10px; justify-content: center;
+}

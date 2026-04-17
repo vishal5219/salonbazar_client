@@ -86,7 +86,9 @@ export default function SalonDetailHero({ salon }) {
                   <span key={s} className={salon.rating >= s ? styles.starFull : styles.starEmpty}>★</span>
                 ))}
               </div>
-              <span className={styles.reviewCount}>({salon.reviews} reviews)</span>
+              <span className={styles.reviewCount}>
+                ({Array.isArray(salon.reviews) ? salon.reviews.length : salon.reviews} reviews)
+              </span>
             </div>
             <div className={styles.statDivider} />
             <div className={styles.statItem}>

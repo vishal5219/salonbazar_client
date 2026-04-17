@@ -49,7 +49,9 @@ function SalonListRow({ salon, onHover }) {
           <div className={styles.listRating}>
             <FiStar size={13} className={styles.starIcon} />
             <span className={styles.ratingNum}>{salon.rating}</span>
-            <span className={styles.ratingCount}>({salon.reviews})</span>
+            <span className={styles.ratingCount}>
+              ({Array.isArray(salon.reviews) ? salon.reviews.length : salon.reviews})
+            </span>
           </div>
         </div>
 
@@ -140,7 +142,9 @@ function SalonGridCard({ salon, onHover }) {
           <div className={styles.cardRating}>
             <FiStar size={12} className={styles.starIcon} />
             <span>{salon.rating}</span>
-            <span className={styles.reviewCount}>({salon.reviews})</span>
+            <span className={styles.reviewCount}>
+              ({Array.isArray(salon.reviews) ? salon.reviews.length : salon.reviews})
+            </span>
           </div>
         </div>
 

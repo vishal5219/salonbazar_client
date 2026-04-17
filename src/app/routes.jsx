@@ -4,9 +4,8 @@ import Home from '@/pages/Home'
 import SalonList from '@/pages/SalonList'
 import SalonDetails from '@/pages/SalonDetails/index.jsx'
 import Booking from '@/pages/Booking/index.jsx'
-
-// Lazy imports for future pages
-// import Profile from '@/pages/Profile'
+import Dashboard from '@/pages/Dashboard'
+import Profile from '@/pages/Profile'
 
 const router = createBrowserRouter([
   {
@@ -17,7 +16,8 @@ const router = createBrowserRouter([
       { path: 'salons', element: <SalonList /> },
       { path: 'salons/:id', element: <SalonDetails /> },
       { path: 'booking/:salonId', element: <Booking /> },
-      // { path: 'profile', element: <Profile /> },
+      { path: 'dashboard', element: <Dashboard /> },
+      { path: 'profile', element: <Profile /> },
     ],
   },
 ])
