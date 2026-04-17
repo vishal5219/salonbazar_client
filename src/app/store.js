@@ -4,8 +4,8 @@ import salonReducer from '../store/slices/salonSlice'
 import bookingReducer from '../store/slices/bookingSlice'
 import wishlistReducer from '../store/slices/wishlistSlice'
 import uiReducer from '../store/slices/uiSlice'
-import dashboardReducer from '../slices/dashboardSlice'
-import profileReducer from '../slices/profileSlice'
+import dashboardReducer from '../store/slices/dashboardSlice'
+import profileReducer from '../store/slices/profileSlice'
 
 export const store = configureStore({
   reducer: {

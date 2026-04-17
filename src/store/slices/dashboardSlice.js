@@ -1,3 +1,5 @@
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
 // ── Mock data generators ──────────────────────────────────────
 const mockQueue = [
     { id: 'q1', position: 1, customerName: 'Rohan Mehta',   phone: '98765 43210', service: 'Haircut & Styling',   duration: 45, status: 'in_progress', joinedAt: '10:02 AM', estimatedTime: 'Now',     staffName: 'Rohan Shah',  bookingType: 'qr'     },
