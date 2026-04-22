@@ -6,10 +6,11 @@ import SalonDetails from '@/pages/SalonDetails/index.jsx'
 import Booking from '@/pages/Booking/index.jsx'
 import Dashboard from '@/pages/Dashboard'
 import Profile from '@/pages/Profile'
+import Admin from '@/pages/Admin'
 
 const router = createBrowserRouter([
   {
-    path: '/',
+    path: '/',  
     element: <RootLayout />,
     children: [
       { index: true, element: <Home /> },
@@ -18,6 +19,7 @@ const router = createBrowserRouter([
       { path: 'booking/:salonId', element: <Booking /> },
       { path: 'dashboard', element: <Dashboard /> },
       { path: 'profile', element: <Profile /> },
+      { path: 'admin', element: <Admin /> },
     ],
   },
 ])

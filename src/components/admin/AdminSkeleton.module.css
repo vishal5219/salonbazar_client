@@ -1,0 +1,42 @@
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+
+.bone {
+  background: #2C2825;
+  display: block;
+  animation: shimmer 1.4s ease-in-out infinite alternate;
+}
+
+@keyframes shimmer { from{opacity:.4} to{opacity:.8} }
+
+.kpiRow {
+  display: grid;
+  grid-template-columns: repeat(4,1fr);
+  gap: 12px;
+}
+
+.kpiSkel {
+  background: #1A1714; border: 1px solid #2C2825; border-radius: 14px;
+  padding: 16px; display: flex; flex-direction: column; gap: 10px;
+}
+
+.bottomRow { display: grid; grid-template-columns: 1fr 340px; gap: 14px; }
+
+.panelSkel {
+  background: #1A1714; border: 1px solid #2C2825; border-radius: 14px;
+  padding: 18px; display: flex; flex-direction: column; gap: 0;
+}
+
+.rightSkel { display: flex; flex-direction: column; gap: 14px; }
+
+.rowSkel {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid #1F1C19;
+}
+
+.rowSkel > div { flex: 1; display: flex; flex-direction: column; gap: 8px; }
+.rowSkel:last-child { border-bottom: none; }
+
+@media (max-width: 900px) {
+  .kpiRow   { grid-template-columns: repeat(2,1fr); }
+  .bottomRow{ grid-template-columns: 1fr; }
+}

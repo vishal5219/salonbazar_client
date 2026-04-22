@@ -6,6 +6,7 @@ import { showNotification } from '@/store/slices/uiSlice'
 import styles from './SalonDetailHero.module.css'
 
 export default function SalonDetailHero({ salon }) {
+console.log(`2salon::::::`, salon)
   const dispatch   = useDispatch()
   const wishlist   = useSelector(s => s.wishlist.items)
   const isWished   = wishlist.includes(salon.id)
@@ -87,7 +88,7 @@ export default function SalonDetailHero({ salon }) {
                 ))}
               </div>
               <span className={styles.reviewCount}>
-                ({Array.isArray(salon.reviews) ? salon.reviews.length : salon.reviews} reviews)
+                {/* ({salon.reviews} reviews) */}
               </span>
             </div>
             <div className={styles.statDivider} />

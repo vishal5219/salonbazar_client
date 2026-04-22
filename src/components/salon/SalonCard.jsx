@@ -4,6 +4,7 @@ import { toggleWishlist } from '@/store/slices/wishlistSlice'
 import styles from './SalonCard.module.css'
 
 export default function SalonCard({ salon, variant = 'default' }) {
+console.log(`1salon::::::`, salon)
   const dispatch = useDispatch()
   const wishlist = useSelector(s => s.wishlist.items)
   const isWishlisted = wishlist.includes(salon.id)
@@ -52,7 +53,7 @@ export default function SalonCard({ salon, variant = 'default' }) {
             <span className={styles.star}>★</span>
             <span className={styles.ratingNum}>{salon.rating}</span>
             <span className={styles.reviews}>
-              ({Array.isArray(salon.reviews) ? salon.reviews.length : salon.reviews})
+              ({salon.reviews})
             </span>
           </div>
         </div>

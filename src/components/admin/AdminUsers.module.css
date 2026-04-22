@@ -1,0 +1,104 @@
+.wrap { display: flex; flex-direction: column; gap: 20px; }
+.pageHeader { display: flex; justify-content: space-between; align-items: flex-start; }
+.pageTitle  { font-family: var(--font-display); font-size: clamp(22px,3vw,34px); color: #FAF8F5; font-weight: 400; }
+.pageSub    { font-size: 13.5px; color: #5F5E5A; margin-top: 4px; font-family: var(--font-body); }
+
+.controls   { display: flex; gap: 14px; flex-wrap: wrap; align-items: center; }
+
+.searchWrap { position: relative; flex: 1; min-width: 240px; }
+.searchIcon { position: absolute; left: 13px; top: 50%; transform: translateY(-50%); color: #5F5E5A; pointer-events: none; }
+.searchInput {
+  width: 100%; padding: 10px 14px 10px 38px;
+  background: #1A1714; border: 1px solid #2C2825; border-radius: 10px;
+  font-size: 14px; font-family: var(--font-body); color: #FAF8F5;
+  outline: none; transition: border-color var(--transition-fast);
+}
+.searchInput:focus { border-color: var(--gold); }
+.searchInput::placeholder { color: #444441; }
+
+.roleTabs { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+.filterIcon { color: #5F5E5A; flex-shrink: 0; }
+
+.roleTab {
+  display: flex; align-items: center; gap: 5px;
+  padding: 7px 14px; border-radius: 8px;
+  background: #1A1714; border: 1px solid #2C2825;
+  font-size: 13px; font-weight: 500; font-family: var(--font-body);
+  color: #5F5E5A; cursor: pointer; transition: all var(--transition-fast);
+}
+.roleTab:hover { border-color: #444441; color: #B5AFA5; }
+.roleTabActive { background: var(--gold) !important; border-color: var(--gold) !important; color: #0F0D0B !important; }
+
+.tabCount {
+  padding: 1px 6px; border-radius: 100px;
+  background: rgba(255,255,255,.1); font-size: 10.5px; font-weight: 700;
+}
+.roleTabActive .tabCount { background: rgba(0,0,0,.2); }
+
+.table { background: #1A1714; border: 1px solid #2C2825; border-radius: 14px; overflow: hidden; }
+
+.tableHead {
+  display: grid;
+  grid-template-columns: 2fr 0.8fr 0.9fr 0.7fr 0.8fr 1fr 0.8fr 0.9fr;
+  gap: 12px; padding: 12px 18px;
+  background: #0F0D0B; border-bottom: 1px solid #2C2825;
+  font-size: 10.5px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+  color: #444441; font-family: var(--font-body);
+}
+
+.tableRow {
+  display: grid;
+  grid-template-columns: 2fr 0.8fr 0.9fr 0.7fr 0.8fr 1fr 0.8fr 0.9fr;
+  gap: 12px; padding: 13px 18px;
+  border-bottom: 1px solid #1F1C19; align-items: center;
+  transition: background var(--transition-fast);
+  animation: fadeIn .35s ease both;
+}
+@keyframes fadeIn { from{opacity:0} to{opacity:1} }
+.tableRow:last-child { border-bottom: none; }
+.tableRow:hover { background: rgba(255,255,255,.02); }
+
+.cell { font-size: 13.5px; color: #B5AFA5; font-family: var(--font-body); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.userCell { display: flex; align-items: center; gap: 10px; }
+
+.avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  background: #2C2825; color: var(--gold);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 700; flex-shrink: 0; font-family: var(--font-body);
+}
+
+.userName  { font-size: 14px; font-weight: 500; color: #FAF8F5; margin-bottom: 2px; }
+.userEmail { font-size: 11.5px; color: #5F5E5A; }
+
+.chip {
+  padding: 3px 9px; border-radius: 5px;
+  font-size: 10.5px; font-weight: 700;
+  text-transform: capitalize; font-family: var(--font-body); display: inline-block;
+}
+
+.actionCell { display: flex; }
+
+.actionBtn {
+  display: flex; align-items: center; gap: 5px;
+  padding: 6px 12px; border-radius: 7px; cursor: pointer;
+  font-size: 12.5px; font-weight: 500; font-family: var(--font-body);
+  transition: all var(--transition-fast); border: none;
+}
+
+.suspendBtn   { background: rgba(239,68,68,.1);  color: #FCA5A5; }
+.suspendBtn:hover { background: rgba(239,68,68,.25); }
+
+.reinstateBtn { background: rgba(16,185,129,.1); color: #6EE7B7; }
+.reinstateBtn:hover { background: rgba(16,185,129,.25); }
+
+.emptyRow {
+  text-align: center; padding: 36px;
+  font-size: 14px; color: #5F5E5A; font-style: italic; font-family: var(--font-display);
+}
+
+@media (max-width: 900px) {
+  .tableHead { display: none; }
+  .tableRow  { grid-template-columns: 1fr; gap: 8px; padding: 16px; border-bottom: 1px solid #2C2825; }
+}

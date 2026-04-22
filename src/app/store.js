@@ -6,6 +6,7 @@ import wishlistReducer from '../store/slices/wishlistSlice'
 import uiReducer from '../store/slices/uiSlice'
 import dashboardReducer from '../store/slices/dashboardSlice'
 import profileReducer from '../store/slices/profileSlice'
+import adminReducer from '../store/slices/adminSlice'
 
 export const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ export const store = configureStore({
     ui: uiReducer,
     dashboard: dashboardReducer,
     profile: profileReducer,
+    admin: adminReducer,
   },
 })
 

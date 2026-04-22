@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { FiClock, FiUser, FiCalendar, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
 import { openAuthModal } from '@/store/slices/uiSlice'
-import { setSelectedService, setSelectedSlot } from '@/store/slices/bookingSlice'
+import { setSelectedService, setSelectedSlot, setSelectedDate, setSelectedStaff } from '@/store/slices/bookingSlice'
 import styles from './BookingPanel.module.css'
 
 // ── Helpers ───────────────────────────────────────────────────
@@ -76,8 +76,17 @@ export default function BookingPanel({ salon, selectedService, onClearService })
     }
 
     dispatch(setSelectedService(selectedService))
-    dispatch(setSelectedSlot({ date: `${selDay} ${MONTH_NAMES[calMonth]} ${calYear}`, time: selSlot, staff: selStaff }))
-    navigate(`/booking/${salon.id}`)
+    dispatch(setSelectedDate({
+      day:         selDay,
+      month:       calMonth,
+      monthName:   MONTH_NAMES[calMonth],
+      monthFull:   MONTH_NAMES[calMonth],
+      year:        calYear,
+      displayDate: selDay + ' ' + MONTH_NAMES[calMonth] + ' ' + calYear,
+    }))
+    dispatch(setSelectedSlot(selSlot))
+    if (selStaff) dispatch(setSelectedStaff(selStaff))
+    navigate('/booking/' + salon.id)
   }
 
   const bookingTotal = selectedService?.price || 0
