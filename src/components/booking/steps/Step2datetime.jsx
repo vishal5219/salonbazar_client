@@ -5,20 +5,20 @@ import { FiChevronLeft, FiChevronRight, FiClock } from 'react-icons/fi'
 import { setSelectedDate, setSelectedSlot, goNextStep, goPrevStep } from '@/store/slices/bookingSlice'
 import styles from './Step2DateTime.module.css'
 
-const MONTHS    = ['January','February','March','April','May','June','July','August','September','October','November','December']
-const MONTH_ABR = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-const DAY_NAMES = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
+const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+const MONTH_ABR = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 
 // Mock slot data: key = "YYYY-M-D", value = array of available slots
 const BOOKED_SLOTS = {
-  default: new Set(['10:00 AM','12:30 PM','03:00 PM','06:00 PM']),
+  default: new Set(['10:00 AM', '12:30 PM', '03:00 PM', '06:00 PM']),
 }
 
 const ALL_SLOTS = [
-  { time: '10:00 AM', period: 'Morning'   },
-  { time: '10:30 AM', period: 'Morning'   },
-  { time: '11:00 AM', period: 'Morning'   },
-  { time: '11:30 AM', period: 'Morning'   },
+  { time: '10:00 AM', period: 'Morning' },
+  { time: '10:30 AM', period: 'Morning' },
+  { time: '11:00 AM', period: 'Morning' },
+  { time: '11:30 AM', period: 'Morning' },
   { time: '12:00 PM', period: 'Afternoon' },
   { time: '12:30 PM', period: 'Afternoon' },
   { time: '01:00 PM', period: 'Afternoon' },
@@ -27,13 +27,13 @@ const ALL_SLOTS = [
   { time: '02:30 PM', period: 'Afternoon' },
   { time: '03:00 PM', period: 'Afternoon' },
   { time: '03:30 PM', period: 'Afternoon' },
-  { time: '04:00 PM', period: 'Evening'   },
-  { time: '04:30 PM', period: 'Evening'   },
-  { time: '05:00 PM', period: 'Evening'   },
-  { time: '05:30 PM', period: 'Evening'   },
-  { time: '06:00 PM', period: 'Evening'   },
-  { time: '06:30 PM', period: 'Evening'   },
-  { time: '07:00 PM', period: 'Evening'   },
+  { time: '04:00 PM', period: 'Evening' },
+  { time: '04:30 PM', period: 'Evening' },
+  { time: '05:00 PM', period: 'Evening' },
+  { time: '05:30 PM', period: 'Evening' },
+  { time: '06:00 PM', period: 'Evening' },
+  { time: '06:30 PM', period: 'Evening' },
+  { time: '07:00 PM', period: 'Evening' },
 ]
 
 const PERIOD_ORDER = ['Morning', 'Afternoon', 'Evening']
@@ -49,23 +49,23 @@ export default function Step2DateTime() {
   const dispatch = useDispatch()
   const { selectedDate, selectedSlot, selectedService } = useSelector(s => s.booking)
 
-  const today    = new Date()
-  const [year,  setYear]  = useState(today.getFullYear())
+  const today = new Date()
+  const [year, setYear] = useState(today.getFullYear())
   const [month, setMonth] = useState(today.getMonth())
   const [hovDay, setHovDay] = useState(null)
 
   // Build calendar grid
   const calDays = useMemo(() => {
     const firstDay = new Date(year, month, 1).getDay()
-    const numDays  = new Date(year, month + 1, 0).getDate()
+    const numDays = new Date(year, month + 1, 0).getDate()
     return [...Array(firstDay).fill(null), ...Array.from({ length: numDays }, (_, i) => i + 1)]
   }, [year, month])
 
   const isPast = (day) => {
     if (!day) return false
     const d = new Date(year, month, day)
-    d.setHours(0,0,0,0)
-    const t = new Date(); t.setHours(0,0,0,0)
+    d.setHours(0, 0, 0, 0)
+    const t = new Date(); t.setHours(0, 0, 0, 0)
     return d < t
   }
 
@@ -80,8 +80,8 @@ export default function Step2DateTime() {
     dispatch(setSelectedDate({
       day,
       month,
-      monthName:   MONTH_ABR[month],
-      monthFull:   MONTHS[month],
+      monthName: MONTH_ABR[month],
+      monthFull: MONTHS[month],
       year,
       displayDate: `${day} ${MONTH_ABR[month]} ${year}`,
     }))
@@ -99,7 +99,7 @@ export default function Step2DateTime() {
 
   // Slots for selected day
   const bookedForDay = BOOKED_SLOTS.default
-  const slotGroups   = groupSlots(ALL_SLOTS)
+  const slotGroups = groupSlots(ALL_SLOTS)
 
   const canContinue = selectedDate && selectedSlot
 
@@ -140,20 +140,20 @@ export default function Step2DateTime() {
             ))}
 
             {calDays.map((day, i) => {
-              const past   = isPast(day)
+              const past = isPast(day)
               const today_ = isToday(day)
-              const sel    = isSelected(day)
-              const hov    = hovDay === day && !past && day
+              const sel = isSelected(day)
+              const hov = hovDay === day && !past && day
 
               return (
                 <button
                   key={i}
                   className={`
                     ${styles.calDay}
-                    ${!day    ? styles.calBlank    : ''}
-                    ${past    ? styles.calPast     : ''}
-                    ${today_  ? styles.calToday    : ''}
-                    ${sel     ? styles.calSelected : ''}
+                    ${!day ? styles.calBlank : ''}
+                    ${past ? styles.calPast : ''}
+                    ${today_ ? styles.calToday : ''}
+                    ${sel ? styles.calSelected : ''}
                   `}
                   onClick={() => handleDayClick(day)}
                   onMouseEnter={() => setHovDay(day)}
@@ -200,14 +200,15 @@ export default function Step2DateTime() {
                   <div className={styles.slotsGrid}>
                     {slotGroups[period].map(({ time }) => {
                       const booked = bookedForDay.has(time)
-                      const isSel  = selectedSlot === time
+                      const slotStr = typeof selectedSlot === 'string' ? selectedSlot : selectedSlot?.time
+                      const isSel = slotStr === time
                       return (
                         <button
                           key={time}
                           className={`
                             ${styles.slot}
                             ${booked ? styles.slotBooked : ''}
-                            ${isSel  ? styles.slotSel   : ''}
+                            ${isSel ? styles.slotSel : ''}
                           `}
                           onClick={() => !booked && dispatch(setSelectedSlot(time))}
                           disabled={booked}
@@ -236,7 +237,7 @@ export default function Step2DateTime() {
         <div className={styles.selectionSummary}>
           <span className={styles.summaryItem}>📅 {selectedDate.displayDate}</span>
           <span className={styles.summaryDot}>·</span>
-          <span className={styles.summaryItem}>⏰ {selectedSlot}</span>
+          <span className={styles.summaryItem}>⏰ {typeof selectedSlot === 'string' ? selectedSlot : selectedSlot?.time}</span>
         </div>
       )}
 

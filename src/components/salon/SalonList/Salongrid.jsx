@@ -25,7 +25,6 @@ function SalonListRow({ salon, onHover }) {
   const dispatch = useDispatch()
   const wishlist = useSelector(s => s.wishlist.items)
   const isWished = wishlist.includes(salon.id)
-console.log(`3salon::::::`, salon)
   return (
     <Link
       to={`/salons/${salon.id}`}
@@ -94,10 +93,11 @@ function SalonGridCard({ salon, onHover }) {
   const navigate = useNavigate()
   const wishlist = useSelector(s => s.wishlist.items)
   const isWished = wishlist.includes(salon.id)
-console.log(`4salon::::::`, salon)
+
   const handleBookNow = (e) => {
     e.preventDefault()
-    navigate(`/booking/${salon.id}`)
+    e.stopPropagation()
+    navigate(`/salons/${salon.id}`)
   }
 
   return (

@@ -7,21 +7,22 @@ import {
   goPrevStep, submitBooking,
 } from '@/store/slices/bookingSlice'
 import { RAZORPAY_KEY_ID } from '@/constants/config'
+import { showNotification } from '@/store/slices/uiSlice'
 import styles from './Step3Payment.module.css'
 
 const VALID_COUPONS = {
-  'FIRST50':  { discount: 50,  desc: '₹50 off your first booking!' },
-  'SALON20':  { discount: 20,  desc: '20% off (up to ₹200)'       },
+  'FIRST50': { discount: 50, desc: '₹50 off your first booking!' },
+  'SALON20': { discount: 20, desc: '20% off (up to ₹200)' },
   'BAZAR100': { discount: 100, desc: '₹100 off on orders above ₹500' },
 }
 
 const PAYMENT_METHODS = [
-  { id: 'online',  icon: '💳', label: 'Pay Online',         sub: 'UPI, Cards, Net Banking via Razorpay' },
-  { id: 'counter', icon: '🏪', label: 'Pay at Salon',       sub: 'Cash or card at the counter'          },
+  { id: 'online', icon: '💳', label: 'Pay Online', sub: 'UPI, Cards, Net Banking via Razorpay' },
+  { id: 'counter', icon: '🏪', label: 'Pay at Salon', sub: 'Cash or card at the counter' },
 ]
 
 export default function Step3Payment() {
-  const dispatch   = useDispatch()
+  const dispatch = useDispatch()
   const {
     selectedService, selectedDate, selectedSlot, selectedStaff,
     salonId, salonName, paymentMethod, couponCode, couponDiscount,
@@ -29,19 +30,19 @@ export default function Step3Payment() {
   } = useSelector(s => s.booking)
   const { user } = useSelector(s => s.auth)
 
-  const [couponInput,  setCouponInput]  = useState(couponCode || '')
-  const [couponError,  setCouponError]  = useState('')
-  const [couponApplied,setCouponApplied]= useState(!!couponCode)
-  const [agreeTerms,   setAgreeTerms]   = useState(false)
+  const [couponInput, setCouponInput] = useState(couponCode || '')
+  const [couponError, setCouponError] = useState('')
+  const [couponApplied, setCouponApplied] = useState(!!couponCode)
+  const [agreeTerms, setAgreeTerms] = useState(false)
 
-  const subtotal    = selectedService?.price || 0
-  const discount    = couponDiscount || 0
+  const subtotal = selectedService?.price || 0
+  const discount = couponDiscount || 0
   const platformFee = 19
-  const total       = Math.max(0, subtotal - discount + platformFee)
+  const total = Math.max(0, subtotal - discount + platformFee)
 
   // Apply coupon
   const handleApplyCoupon = () => {
-    const code   = couponInput.trim().toUpperCase()
+    const code = couponInput.trim().toUpperCase()
     const coupon = VALID_COUPONS[code]
     if (!code) { setCouponError('Enter a coupon code'); return }
     if (!coupon) { setCouponError('Invalid or expired coupon'); return }
@@ -62,26 +63,29 @@ export default function Step3Payment() {
   const buildPayload = () => ({
     salonId,
     salonName,
-    serviceId:    selectedService?.id,
-    serviceName:  selectedService?.name,
+    serviceId: selectedService?.id,
+    serviceName: selectedService?.name,
     servicePrice: selectedService?.price,
-    staffId:      selectedStaff?.id || null,
-    staffName:    selectedStaff?.name || 'Any Available',
-    date:         selectedDate?.displayDate,
-    time:         selectedSlot,
+    staffId: selectedStaff?.id || null,
+    staffName: selectedStaff?.name || 'Any Available',
+    date: selectedDate?.displayDate,
+    time: typeof selectedSlot === 'string' ? selectedSlot : selectedSlot?.time || '',
     paymentMethod,
-    couponCode:   couponApplied ? couponInput.toUpperCase() : null,
+    couponCode: couponApplied ? couponInput.toUpperCase() : null,
     discount,
     platformFee,
     total,
     customerName: user?.name,
-    customerEmail:user?.email,
-    bookingType:  'online',
+    customerEmail: user?.email,
+    bookingType: 'online',
   })
 
   // Pay online → Razorpay → verify → confirm
   const handleOnlinePayment = async () => {
-    if (!agreeTerms) { alert('Please agree to the cancellation policy'); return }
+    if (!agreeTerms) {
+      dispatch(showNotification({ message: 'Please agree to the cancellation policy', type: 'warning' }))
+      return
+    }
 
     if (!window.Razorpay) {
       // Razorpay SDK not loaded — proceed directly for dev
@@ -93,15 +97,15 @@ export default function Step3Payment() {
     const orderId = `order_${Date.now()}`
 
     const options = {
-      key:         RAZORPAY_KEY_ID || 'rzp_test_demo',
-      amount:      total * 100,
-      currency:    'INR',
-      name:        'SalonBazar',
+      key: RAZORPAY_KEY_ID || 'rzp_test_demo',
+      amount: total * 100,
+      currency: 'INR',
+      name: 'SalonBazar',
       description: `${selectedService?.name} at ${salonName}`,
-      order_id:    orderId,
+      order_id: orderId,
       prefill: {
-        name:    user?.name  || '',
-        email:   user?.email || '',
+        name: user?.name || '',
+        email: user?.email || '',
         contact: user?.phone || '',
       },
       theme: { color: '#C9A84C' },
@@ -109,23 +113,26 @@ export default function Step3Payment() {
         // Payment success → verify + confirm
         dispatch(submitBooking({
           ...buildPayload(),
-          razorpayPaymentId:  response.razorpay_payment_id,
-          razorpayOrderId:    response.razorpay_order_id,
-          razorpaySignature:  response.razorpay_signature,
+          razorpayPaymentId: response.razorpay_payment_id,
+          razorpayOrderId: response.razorpay_order_id,
+          razorpaySignature: response.razorpay_signature,
         }))
       },
     }
 
     const rzp = new window.Razorpay(options)
     rzp.on('payment.failed', () => {
-      alert('Payment failed. Please try again.')
+      dispatch(showNotification({ message: 'Payment failed. Please try again.', type: 'error' }))
     })
     rzp.open()
   }
 
   // Pay at counter → submit directly
   const handlePayAtCounter = () => {
-    if (!agreeTerms) { alert('Please agree to the cancellation policy'); return }
+    if (!agreeTerms) {
+      dispatch(showNotification({ message: 'Please agree to the cancellation policy', type: 'warning' }))
+      return
+    }
     dispatch(submitBooking(buildPayload()))
   }
 
@@ -156,7 +163,7 @@ export default function Step3Payment() {
           </div>
           <div className={styles.reviewRow}>
             <span className={styles.reviewLabel}>Time</span>
-            <span className={styles.reviewValue}>{selectedSlot || '—'}</span>
+            <span className={styles.reviewValue}>{typeof selectedSlot === 'string' ? selectedSlot : selectedSlot?.time || '—'}</span>
           </div>
           <div className={styles.reviewRow}>
             <span className={styles.reviewLabel}>Duration</span>

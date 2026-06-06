@@ -1,17 +1,23 @@
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { toggleWishlist } from '@/store/slices/wishlistSlice'
 import styles from './SalonCard.module.css'
 
 export default function SalonCard({ salon, variant = 'default' }) {
-console.log(`1salon::::::`, salon)
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const wishlist = useSelector(s => s.wishlist.items)
   const isWishlisted = wishlist.includes(salon.id)
 
   const handleWishlist = (e) => {
     e.preventDefault()
     dispatch(toggleWishlist(salon.id))
+  }
+
+  const handleBookNow = (e) => {
+    e.preventDefault()
+    e.stopPropagation()
+    navigate(`/salons/${salon.id}`)
   }
 
   return (
@@ -74,7 +80,7 @@ console.log(`1salon::::::`, salon)
             <span className={styles.priceLabel}>From</span>
             <span className={styles.priceValue}>{salon.price}</span>
           </div>
-          <button className={styles.bookBtn} onClick={e => { e.preventDefault(); }}>
+          <button className={styles.bookBtn} onClick={handleBookNow}>
             Book Now
           </button>
         </div>

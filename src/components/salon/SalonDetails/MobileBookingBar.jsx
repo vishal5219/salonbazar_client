@@ -2,9 +2,11 @@ import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { FiChevronUp, FiChevronDown, FiX } from 'react-icons/fi'
-import { openAuthModal } from '@/store/slices/uiSlice'
-import { setSelectedService, setSelectedSlot } from '@/store/slices/bookingSlice'
+import { openAuthModal, showNotification } from '@/store/slices/uiSlice'
+import { setSelectedService, setSelectedSlot, setSelectedDate, setStep } from '@/store/slices/bookingSlice'
 import styles from './MobileBookingBar.module.css'
+
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
 
 const TIME_SLOTS  = ['10:00 AM','11:00 AM','12:00 PM','01:00 PM','02:00 PM','03:00 PM','04:00 PM','05:00 PM','06:00 PM','07:00 PM']
 const UNAVAILABLE = new Set(['11:00 AM', '03:00 PM'])
@@ -19,22 +21,37 @@ export default function MobileBookingBar({ salon, selectedService, id }) {
 
   const handleBook = () => {
     if (!isAuthenticated) { dispatch(openAuthModal('login')); return }
-    if (!selectedService || !selSlot) return
+    if (!selectedService) {
+      dispatch(showNotification({ message: 'Please select a service first', type: 'warning' }))
+      return
+    }
+    if (!selSlot) {
+      dispatch(showNotification({ message: 'Please select a time slot', type: 'warning' }))
+      return
+    }
+
+    const today = new Date()
     dispatch(setSelectedService(selectedService))
-    dispatch(setSelectedSlot({ time: selSlot }))
+    dispatch(setSelectedDate({
+      day: today.getDate(),
+      month: today.getMonth(),
+      monthName: MONTH_NAMES[today.getMonth()],
+      monthFull: MONTH_NAMES[today.getMonth()],
+      year: today.getFullYear(),
+      displayDate: `${today.getDate()} ${MONTH_NAMES[today.getMonth()]} ${today.getFullYear()}`,
+    }))
+    dispatch(setSelectedSlot(selSlot))
+    dispatch(setStep(3))
     navigate(`/booking/${salon.id}`)
   }
 
   return (
     <>
-      {/* Backdrop */}
       {open && (
         <div className={styles.backdrop} onClick={() => setOpen(false)} />
       )}
 
-      {/* Sheet */}
       <div className={`${styles.sheet} ${open ? styles.sheetOpen : ''}`} id={id}>
-        {/* Handle / collapsed bar */}
         <div className={styles.bar} onClick={() => setOpen(v => !v)}>
           <div className={styles.barLeft}>
             {selectedService ? (
@@ -48,18 +65,17 @@ export default function MobileBookingBar({ salon, selectedService, id }) {
           </div>
           <div className={styles.barRight}>
             <button
-              className={`${styles.bookBtn} ${(!selectedService) ? styles.bookBtnDisabled : ''}`}
+              className={`${styles.bookBtn} ${!selectedService ? styles.bookBtnDisabled : ''}`}
               onClick={e => { e.stopPropagation(); if (selectedService) setOpen(v => !v) }}
             >
               Book Now
             </button>
             <span className={styles.chevron}>
-              {open ? <FiChevronDown size={16}/> : <FiChevronUp size={16}/>}
+              {open ? <FiChevronDown size={16} /> : <FiChevronUp size={16} />}
             </span>
           </div>
         </div>
 
-        {/* Expanded panel */}
         <div className={styles.expanded}>
           <div className={styles.expandedHeader}>
             <h4 className={styles.expandedTitle}>Choose a Time</h4>
@@ -104,7 +120,6 @@ export default function MobileBookingBar({ salon, selectedService, id }) {
               : 'Select a Time Slot'}
           </button>
 
-          {/* Walk-in option */}
           <button className={styles.walkinBtn}>
             📲 Join Walk-In Queue via QR
           </button>

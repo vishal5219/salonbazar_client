@@ -2,24 +2,23 @@ import { useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { FiClock, FiUser, FiCalendar, FiX, FiChevronLeft, FiChevronRight } from 'react-icons/fi'
-import { openAuthModal } from '@/store/slices/uiSlice'
-import { setSelectedService, setSelectedSlot, setSelectedDate, setSelectedStaff } from '@/store/slices/bookingSlice'
+import { openAuthModal, showNotification } from '@/store/slices/uiSlice'
+import { setSelectedService, setSelectedSlot, setSelectedDate, setSelectedStaff, setStep } from '@/store/slices/bookingSlice'
 import styles from './BookingPanel.module.css'
 
-// ── Helpers ───────────────────────────────────────────────────
 function getDaysInMonth(year, month) {
   return new Date(year, month + 1, 0).getDate()
 }
 
 function buildCalendar(year, month) {
   const firstDay = new Date(year, month, 1).getDay()
-  const days     = getDaysInMonth(year, month)
-  const blanks   = Array(firstDay).fill(null)
+  const days = getDaysInMonth(year, month)
+  const blanks = Array(firstDay).fill(null)
   return [...blanks, ...Array.from({ length: days }, (_, i) => i + 1)]
 }
 
-const MONTH_NAMES = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec']
-const DAY_NAMES   = ['Su','Mo','Tu','We','Th','Fr','Sa']
+const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+const DAY_NAMES = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa']
 
 const TIME_SLOTS = [
   '10:00 AM', '10:30 AM', '11:00 AM', '11:30 AM',
@@ -29,19 +28,18 @@ const TIME_SLOTS = [
   '06:30 PM', '07:00 PM',
 ]
 
-// Mock unavailable slots
 const UNAVAILABLE = new Set(['11:00 AM', '12:30 PM', '03:30 PM', '06:00 PM'])
 
 export default function BookingPanel({ salon, selectedService, onClearService }) {
-  const dispatch   = useDispatch()
-  const navigate   = useNavigate()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { isAuthenticated } = useSelector(s => s.auth)
 
   const today = new Date()
-  const [calYear,  setCalYear]  = useState(today.getFullYear())
+  const [calYear, setCalYear] = useState(today.getFullYear())
   const [calMonth, setCalMonth] = useState(today.getMonth())
-  const [selDay,   setSelDay]   = useState(today.getDate())
-  const [selSlot,  setSelSlot]  = useState(null)
+  const [selDay, setSelDay] = useState(today.getDate())
+  const [selSlot, setSelSlot] = useState(null)
   const [selStaff, setSelStaff] = useState(null)
 
   const calDays = useMemo(() => buildCalendar(calYear, calMonth), [calYear, calMonth])
@@ -61,39 +59,46 @@ export default function BookingPanel({ salon, selectedService, onClearService })
   const isPastDay = (day) => {
     if (!day) return false
     const d = new Date(calYear, calMonth, day)
-    d.setHours(0,0,0,0)
-    const t = new Date(); t.setHours(0,0,0,0)
+    d.setHours(0, 0, 0, 0)
+    const t = new Date(); t.setHours(0, 0, 0, 0)
     return d < t
   }
 
   const handleBook = () => {
-    if (!selectedService) { alert('Please select a service first'); return }
-    if (!selDay || !selSlot) { alert('Please select a date and time slot'); return }
+    if (!selectedService) {
+      dispatch(showNotification({ message: 'Please select a service first', type: 'warning' }))
+      return
+    }
+    if (!selDay || !selSlot) {
+      dispatch(showNotification({ message: 'Please select a date and time slot', type: 'warning' }))
+      return
+    }
 
     if (!isAuthenticated) {
       dispatch(openAuthModal('login'))
       return
     }
 
+    // ✅ Dispatch each piece of state separately with correct types
     dispatch(setSelectedService(selectedService))
     dispatch(setSelectedDate({
-      day:         selDay,
-      month:       calMonth,
-      monthName:   MONTH_NAMES[calMonth],
-      monthFull:   MONTH_NAMES[calMonth],
-      year:        calYear,
-      displayDate: selDay + ' ' + MONTH_NAMES[calMonth] + ' ' + calYear,
+      day: selDay,
+      month: calMonth,
+      monthName: MONTH_NAMES[calMonth],
+      monthFull: MONTH_NAMES[calMonth],
+      year: calYear,
+      displayDate: `${selDay} ${MONTH_NAMES[calMonth]} ${calYear}`,
     }))
     dispatch(setSelectedSlot(selSlot))
     if (selStaff) dispatch(setSelectedStaff(selStaff))
-    navigate('/booking/' + salon.id)
+    dispatch(setStep(3))
+    navigate(`/booking/${salon.id}`)
   }
 
   const bookingTotal = selectedService?.price || 0
 
   return (
     <div className={styles.panel}>
-      {/* Header */}
       <div className={styles.panelHeader}>
         <div>
           <div className={styles.panelTitle}>Book Appointment</div>
@@ -134,22 +139,19 @@ export default function BookingPanel({ salon, selectedService, onClearService })
             <FiCalendar size={13} /> Select Date
           </label>
           <div className={styles.calendar}>
-            {/* Month nav */}
             <div className={styles.calNav}>
               <button className={styles.calNavBtn} onClick={prevMonth}><FiChevronLeft size={16} /></button>
               <span className={styles.calMonthLabel}>{MONTH_NAMES[calMonth]} {calYear}</span>
               <button className={styles.calNavBtn} onClick={nextMonth}><FiChevronRight size={16} /></button>
             </div>
-
-            {/* Day headers */}
             <div className={styles.calGrid}>
               {DAY_NAMES.map(d => (
                 <div key={d} className={styles.calDayName}>{d}</div>
               ))}
               {calDays.map((day, i) => {
-                const past     = isPastDay(day)
-                const isToday  = day === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear()
-                const isSel    = day === selDay
+                const past = isPastDay(day)
+                const isToday = day === today.getDate() && calMonth === today.getMonth() && calYear === today.getFullYear()
+                const isSel = day === selDay
                 return (
                   <button
                     key={i}
@@ -181,7 +183,7 @@ export default function BookingPanel({ salon, selectedService, onClearService })
             <div className={styles.slotsGrid}>
               {TIME_SLOTS.map(slot => {
                 const unavail = UNAVAILABLE.has(slot)
-                const isSel   = selSlot === slot
+                const isSel = selSlot === slot
                 return (
                   <button
                     key={slot}
@@ -252,7 +254,11 @@ export default function BookingPanel({ salon, selectedService, onClearService })
           className={`${styles.bookBtn} ${(!selectedService || !selDay || !selSlot) ? styles.bookDisabled : ''}`}
           onClick={handleBook}
         >
-          {!isAuthenticated ? '🔐 Sign In to Book' : selectedService && selDay && selSlot ? `Confirm Booking · ₹${bookingTotal.toLocaleString()}` : 'Select Service & Time'}
+          {!isAuthenticated
+            ? '🔐 Sign In to Book'
+            : selectedService && selDay && selSlot
+              ? `Confirm Booking · ₹${bookingTotal.toLocaleString()}`
+              : 'Select Service & Time'}
         </button>
 
         {/* Walk-in option */}

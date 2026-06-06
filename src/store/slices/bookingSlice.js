@@ -90,6 +90,18 @@ const bookingSlice = createSlice({
       s.salonName  = a.payload.salonName
       s.salonImage = a.payload.salonImage || ''
     },
+    initializeBookingFlow: (s, a) => {
+      s.salonId    = a.payload.salonId
+      s.salonName  = a.payload.salonName
+      s.salonImage = a.payload.salonImage || ''
+      if (s.selectedService && s.selectedDate && s.selectedSlot) {
+        s.step = 3
+      } else if (s.selectedService) {
+        s.step = 2
+      } else {
+        s.step = 1
+      }
+    },
 
     // Step 2
     setSelectedDate: (s, a) => { s.selectedDate = a.payload; s.selectedSlot = null },
@@ -141,7 +153,7 @@ const bookingSlice = createSlice({
 
 export const {
   setStep, goNextStep, goPrevStep,
-  setSelectedService, setSelectedStaff, setSalonContext,
+  setSelectedService, setSelectedStaff, setSalonContext, initializeBookingFlow,
   setSelectedDate, setSelectedSlot,
   setPaymentMethod, applyCoupon, clearCoupon,
   setRazorpayOrder, markPaymentVerified,

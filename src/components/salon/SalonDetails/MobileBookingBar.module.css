@@ -90,7 +90,8 @@
 }
 
 .sheetOpen .expanded {
-  max-height: 480px;
+  max-height: 70vh;
+  overflow-y: auto;
   padding: 16px 20px 32px;
 }
 

@@ -7,7 +7,7 @@
 import { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { setSalonContext, resetBooking } from '@/store/slices/bookingSlice'
+import { initializeBookingFlow, resetBooking } from '@/store/slices/bookingSlice'
 import { MOCK_SALON_DETAIL } from '@/constants/mockSalonDetail'
 
 import BookingProgress  from '@/components/booking/BookingProgress'
@@ -41,16 +41,14 @@ export default function Booking() {
     }
   }, [isAuthenticated, salonId, navigate])
 
-  // Seed salon context (mock — replace with API call)
+  // Seed salon context and resume at the correct step (mock — replace with API call)
   useEffect(() => {
     const salon = MOCK_SALON_DETAIL
-    dispatch(setSalonContext({
+    dispatch(initializeBookingFlow({
       salonId:    salon.id,
       salonName:  salon.name,
       salonImage: salon.gallery[0]?.url || '',
     }))
-    // Cleanup on unmount
-    return () => dispatch(resetBooking())
   }, [salonId, dispatch])
 
   const renderStep = () => {
@@ -81,7 +79,10 @@ export default function Booking() {
         <div className={styles.progressInner}>
           <button
             className={styles.backLink}
-            onClick={() => navigate(`/salons/${salonId}`)}
+            onClick={() => {
+              dispatch(resetBooking())
+              navigate(`/salons/${salonId}`)
+            }}
           >
             ← Back to Salon
           </button>

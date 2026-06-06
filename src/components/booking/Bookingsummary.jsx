@@ -13,10 +13,10 @@ export default function BookingSummary() {
 
   const salon = MOCK_SALON_DETAIL
 
-  const subtotal    = selectedService?.price || 0
-  const discount    = couponDiscount || 0
+  const subtotal = selectedService?.price || 0
+  const discount = couponDiscount || 0
   const platformFee = subtotal > 0 ? 19 : 0
-  const total       = Math.max(0, subtotal - discount + platformFee)
+  const total = Math.max(0, subtotal - discount + platformFee)
 
   const hasDetails = selectedService || selectedDate || selectedSlot
 
@@ -74,7 +74,7 @@ export default function BookingSummary() {
             <div className={styles.detailIcon}><FiClock size={14} /></div>
             <div>
               <div className={styles.detailLabel}>Time</div>
-              <div className={styles.detailValue}>{selectedSlot}</div>
+              <div className={styles.detailValue}> {typeof selectedSlot === 'string' ? selectedSlot : selectedSlot?.time || '—'}</div>
             </div>
           </div>
         )}
