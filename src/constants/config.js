@@ -2,125 +2,126 @@
 export const APP_URL     = import.meta.env.VITE_APP_URL     || 'http://localhost:5173'
 export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
 
-// ── API Versioned Base ────────────────────────────────────────
-export const API_V1 = `${API_BASE_URL}/api/v1`
+// ── API Versioned Base (used by axios instance in services/api.js) ──
+export const API_V1 = API_BASE_URL ? `${API_BASE_URL}/api/v1` : '/api/v1'
 
+// Paths below are relative to API_V1 — do not prefix with /api/v1 again.
 // ── Auth Endpoints ────────────────────────────────────────────
 export const AUTH_ENDPOINTS = {
-  login:          `${API_V1}/auth/login`,
-  register:       `${API_V1}/auth/register`,
-  loginOTP:       `${API_V1}/auth/otp/send`,
-  verifyOTP:      `${API_V1}/auth/otp/verify`,
-  googleAuth:     `${API_V1}/auth/google`,
-  logout:         `${API_V1}/auth/logout`,
-  refreshToken:   `${API_V1}/auth/refresh`,
-  forgotPassword: `${API_V1}/auth/forgot-password`,
-  resetPassword:  `${API_V1}/auth/reset-password`,
+  login:          '/auth/login',
+  register:       '/auth/register',
+  loginOTP:       '/auth/otp/send',
+  verifyOTP:      '/auth/otp/verify',
+  googleAuth:     '/auth/google',
+  logout:         '/auth/logout',
+  refreshToken:   '/auth/refresh',
+  forgotPassword: '/auth/forgot-password',
+  resetPassword:  '/auth/reset-password',
 }
 
 // ── Salon Endpoints ───────────────────────────────────────────
 export const SALON_ENDPOINTS = {
-  list:     `${API_V1}/salons`,
-  featured: `${API_V1}/salons/featured`,
-  nearby:   `${API_V1}/salons/nearby`,
-  detail:   (id) => `${API_V1}/salons/${id}`,
-  search:   `${API_V1}/salons/search`,
-  register: `${API_V1}/salons/register`,
-  update:   (id) => `${API_V1}/salons/${id}`,
-  delete:   (id) => `${API_V1}/salons/${id}`,
-  qrCode:   (id) => `${API_V1}/salons/${id}/qr`,
+  list:     '/salons',
+  featured: '/salons/featured',
+  nearby:   '/salons/nearby',
+  detail:   (id) => `/salons/${id}`,
+  search:   '/salons/search',
+  register: '/salons/register',
+  update:   (id) => `/salons/${id}`,
+  delete:   (id) => `/salons/${id}`,
+  qrCode:   (id) => `/salons/${id}/qr`,
 }
 
 // ── Service Endpoints ─────────────────────────────────────────
 export const SERVICE_ENDPOINTS = {
-  bySalon: (salonId) => `${API_V1}/salons/${salonId}/services`,
-  create:  (salonId) => `${API_V1}/salons/${salonId}/services`,
-  update:  (salonId, id) => `${API_V1}/salons/${salonId}/services/${id}`,
-  delete:  (salonId, id) => `${API_V1}/salons/${salonId}/services/${id}`,
+  bySalon: (salonId) => `/salons/${salonId}/services`,
+  create:  (salonId) => `/salons/${salonId}/services`,
+  update:  (salonId, id) => `/salons/${salonId}/services/${id}`,
+  delete:  (salonId, id) => `/salons/${salonId}/services/${id}`,
 }
 
 // ── Booking Endpoints ─────────────────────────────────────────
 export const BOOKING_ENDPOINTS = {
-  create:      `${API_V1}/bookings`,
-  list:        `${API_V1}/bookings`,
-  detail:      (id) => `${API_V1}/bookings/${id}`,
-  cancel:      (id) => `${API_V1}/bookings/${id}/cancel`,
-  reschedule:  (id) => `${API_V1}/bookings/${id}/reschedule`,
-  byShop:      (salonId) => `${API_V1}/salons/${salonId}/bookings`,
-  slots:       (salonId) => `${API_V1}/salons/${salonId}/slots`,
-  backdated:   `${API_V1}/bookings/backdated`,
+  create:      '/bookings',
+  list:        '/bookings',
+  detail:      (id) => `/bookings/${id}`,
+  cancel:      (id) => `/bookings/${id}/cancel`,
+  reschedule:  (id) => `/bookings/${id}/reschedule`,
+  byShop:      (salonId) => `/salons/${salonId}/bookings`,
+  slots:       (salonId) => `/salons/${salonId}/slots`,
+  backdated:   '/bookings/backdated',
 }
 
 // ── Queue Endpoints ───────────────────────────────────────────
 export const QUEUE_ENDPOINTS = {
-  join:       (salonId) => `${API_V1}/salons/${salonId}/queue/join`,
-  status:     (salonId) => `${API_V1}/salons/${salonId}/queue`,
-  myPosition: (salonId) => `${API_V1}/salons/${salonId}/queue/me`,
-  leave:      (salonId) => `${API_V1}/salons/${salonId}/queue/leave`,
-  advance:    (salonId) => `${API_V1}/salons/${salonId}/queue/advance`,
-  manualAdd:  (salonId) => `${API_V1}/salons/${salonId}/queue/manual`,
+  join:       (salonId) => `/salons/${salonId}/queue/join`,
+  status:     (salonId) => `/salons/${salonId}/queue`,
+  myPosition: (salonId) => `/salons/${salonId}/queue/me`,
+  leave:      (salonId) => `/salons/${salonId}/queue/leave`,
+  advance:    (salonId) => `/salons/${salonId}/queue/advance`,
+  manualAdd:  (salonId) => `/salons/${salonId}/queue/manual`,
 }
 
 // ── Review Endpoints ──────────────────────────────────────────
 export const REVIEW_ENDPOINTS = {
-  bySalon: (salonId) => `${API_V1}/salons/${salonId}/reviews`,
-  create:  (salonId) => `${API_V1}/salons/${salonId}/reviews`,
-  delete:  (salonId, id) => `${API_V1}/salons/${salonId}/reviews/${id}`,
+  bySalon: (salonId) => `/salons/${salonId}/reviews`,
+  create:  (salonId) => `/salons/${salonId}/reviews`,
+  delete:  (salonId, id) => `/salons/${salonId}/reviews/${id}`,
 }
 
 // ── Wishlist Endpoints ────────────────────────────────────────
 export const WISHLIST_ENDPOINTS = {
-  list:   `${API_V1}/wishlist`,
-  add:    `${API_V1}/wishlist`,
-  remove: (salonId) => `${API_V1}/wishlist/${salonId}`,
+  list:   '/wishlist',
+  add:    '/wishlist',
+  remove: (salonId) => `/wishlist/${salonId}`,
 }
 
 // ── Staff Endpoints ───────────────────────────────────────────
 export const STAFF_ENDPOINTS = {
-  list:   (salonId) => `${API_V1}/salons/${salonId}/staff`,
-  create: (salonId) => `${API_V1}/salons/${salonId}/staff`,
-  update: (salonId, id) => `${API_V1}/salons/${salonId}/staff/${id}`,
-  delete: (salonId, id) => `${API_V1}/salons/${salonId}/staff/${id}`,
+  list:   (salonId) => `/salons/${salonId}/staff`,
+  create: (salonId) => `/salons/${salonId}/staff`,
+  update: (salonId, id) => `/salons/${salonId}/staff/${id}`,
+  delete: (salonId, id) => `/salons/${salonId}/staff/${id}`,
 }
 
 // ── Payment Endpoints ─────────────────────────────────────────
 export const PAYMENT_ENDPOINTS = {
-  createOrder:  `${API_V1}/payments/order`,
-  verify:       `${API_V1}/payments/verify`,
-  refund:       (id) => `${API_V1}/payments/${id}/refund`,
-  history:      `${API_V1}/payments/history`,
+  createOrder:  '/payments/order',
+  verify:       '/payments/verify',
+  refund:       (id) => `/payments/${id}/refund`,
+  history:      '/payments/history',
 }
 
 // ── User / Profile Endpoints ──────────────────────────────────
 export const USER_ENDPOINTS = {
-  profile:        `${API_V1}/users/me`,
-  updateProfile:  `${API_V1}/users/me`,
-  uploadAvatar:   `${API_V1}/users/me/avatar`,
-  bookings:       `${API_V1}/users/me/bookings`,
-  notifications:  `${API_V1}/users/me/notifications`,
+  profile:        '/users/me',
+  updateProfile:  '/users/me',
+  uploadAvatar:   '/users/me/avatar',
+  bookings:       '/users/me/bookings',
+  notifications:  '/users/me/notifications',
 }
 
 // ── Dashboard / Analytics Endpoints ──────────────────────────
 export const DASHBOARD_ENDPOINTS = {
-  overview:     (salonId) => `${API_V1}/salons/${salonId}/dashboard`,
-  earnings:     (salonId) => `${API_V1}/salons/${salonId}/analytics/earnings`,
-  peakHours:    (salonId) => `${API_V1}/salons/${salonId}/analytics/peak-hours`,
-  popularity:   (salonId) => `${API_V1}/salons/${salonId}/analytics/services`,
-  adminSummary: `${API_V1}/admin/analytics`,
+  overview:     (salonId) => `/salons/${salonId}/dashboard`,
+  earnings:     (salonId) => `/salons/${salonId}/analytics/earnings`,
+  peakHours:    (salonId) => `/salons/${salonId}/analytics/peak-hours`,
+  popularity:   (salonId) => `/salons/${salonId}/analytics/services`,
+  adminSummary: '/admin/analytics',
 }
 
 // ── Admin Endpoints ───────────────────────────────────────────
 export const ADMIN_ENDPOINTS = {
-  overview:    `${API_V1}/admin/overview`,
-  analytics:   `${API_V1}/admin/analytics`,
-  salons:      `${API_V1}/admin/salons`,
-  salonStatus: (id) => `${API_V1}/admin/salons/${id}/status`,
-  users:       `${API_V1}/admin/users`,
+  overview:    '/admin/overview',
+  analytics:   '/admin/analytics',
+  salons:      '/admin/salons',
+  salonStatus: (id) => `/admin/salons/${id}/status`,
+  users:       '/admin/users',
 }
 
 // ── Upload Endpoints ──────────────────────────────────────────
 export const UPLOAD_ENDPOINTS = {
-  image: `${API_V1}/upload/image`,
+  image: '/upload/image',
 }
 
 // ── Supabase ──────────────────────────────────────────────────
