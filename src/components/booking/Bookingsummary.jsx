@@ -1,6 +1,5 @@
 import { useSelector } from 'react-redux'
 import { FiCalendar, FiClock, FiUser, FiTag } from 'react-icons/fi'
-import { MOCK_SALON_DETAIL } from '@/constants/mockSalonDetail'
 import styles from './BookingSummary.module.css'
 
 export default function BookingSummary() {
@@ -10,8 +9,7 @@ export default function BookingSummary() {
     selectedDate, selectedSlot,
     couponDiscount, paymentMethod,
   } = useSelector(s => s.booking)
-
-  const salon = MOCK_SALON_DETAIL
+  const { selectedSalon } = useSelector(s => s.salons)
 
   const subtotal = selectedService?.price || 0
   const discount = couponDiscount || 0
@@ -32,7 +30,7 @@ export default function BookingSummary() {
         </div>
         <div>
           <div className={styles.salonName}>{salonName || 'Salon'}</div>
-          <div className={styles.salonSub}>{salon.location?.split(',')[0]}</div>
+          <div className={styles.salonSub}>{selectedSalon?.location?.split(',')[0] || ''}</div>
         </div>
       </div>
 

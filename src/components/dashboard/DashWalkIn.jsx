@@ -1,20 +1,21 @@
 import { useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { FiUser, FiPhone, FiScissors, FiUserCheck, FiCheck, FiArrowRight } from 'react-icons/fi'
 import { addManualCustomer, setActiveView } from '@/store/slices/dashboardSlice'
-import { MOCK_SALON_DETAIL } from '@/constants/mockSalonDetail'
 import styles from './DashWalkIn.module.css'
 
 export default function DashWalkIn() {
   const dispatch = useDispatch()
+  const { selectedSalon } = useSelector(s => s.salons)
+  const { salonId } = useSelector(s => s.dashboard)
 
   const [form, setForm]         = useState({ name: '', phone: '', serviceId: '', staffId: '' })
   const [loading, setLoading]   = useState(false)
   const [success, setSuccess]   = useState(false)
   const [addedName, setAddedName] = useState('')
 
-  const services  = MOCK_SALON_DETAIL.services.flatMap(cat => cat.items)
-  const staff     = MOCK_SALON_DETAIL.staff.filter(s => s.available)
+  const services  = selectedSalon?.services?.flatMap(cat => cat.items) || []
+  const staff     = selectedSalon?.staff?.filter(s => s.available) || []
 
   const selectedService = services.find(s => s.id === form.serviceId)
   const selectedStaff   = staff.find(s => String(s.id) === form.staffId)
@@ -26,9 +27,11 @@ export default function DashWalkIn() {
     if (!isValid) return
     setLoading(true)
     await dispatch(addManualCustomer({
+      salonId: salonId || selectedSalon?.id || 1,
       name:     form.name.trim(),
       phone:    form.phone.trim(),
       service:  selectedService?.name || '',
+      serviceId: selectedService?.id || '',
       duration: selectedService?.duration || 45,
       staff:    selectedStaff?.name || 'Any Available',
     }))
@@ -105,7 +108,7 @@ export default function DashWalkIn() {
                 <FiScissors size={13} /> Service <span className={styles.required}>*</span>
               </label>
               <div className={styles.serviceGrid}>
-                {MOCK_SALON_DETAIL.services.map(cat => (
+                {(selectedSalon?.services || []).map(cat => (
                   <div key={cat.id}>
                     <div className={styles.catLabel}>{cat.icon} {cat.category}</div>
                     {cat.items.slice(0, 3).map(svc => (

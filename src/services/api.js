@@ -7,8 +7,10 @@ import axios from 'axios'
 import { API_BASE_URL } from '@/constants/config'
 
 // ── Create instance ───────────────────────────────────────────
+const apiBase = API_BASE_URL ? `${API_BASE_URL}/api/v1` : '/api/v1'
+
 const api = axios.create({
-  baseURL: `${API_BASE_URL}/api/v1`,
+  baseURL: apiBase,
   timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
@@ -39,10 +41,7 @@ api.interceptors.response.use(
       original._retry = true
       try {
         const refreshToken = localStorage.getItem('sb_refresh_token')
-        const res = await axios.post(
-          `${API_BASE_URL}/api/v1/auth/refresh`,
-          { refreshToken }
-        )
+        const res = await axios.post(`${apiBase}/auth/refresh`, { refreshToken })
         const newToken = res.data.token
         localStorage.setItem('sb_token', newToken)
         original.headers.Authorization = `Bearer ${newToken}`

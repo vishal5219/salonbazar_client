@@ -69,6 +69,7 @@ export default function Step3Payment() {
     staffId: selectedStaff?.id || null,
     staffName: selectedStaff?.name || 'Any Available',
     date: selectedDate?.displayDate,
+    selectedDate,
     time: typeof selectedSlot === 'string' ? selectedSlot : selectedSlot?.time || '',
     paymentMethod,
     couponCode: couponApplied ? couponInput.toUpperCase() : null,

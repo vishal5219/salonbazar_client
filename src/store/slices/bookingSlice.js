@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import bookingService from '@/services/bookingService'
+import paymentService from '@/services/paymentService'
 
 // ── Steps ─────────────────────────────────────────────────────
 // 1 = Service Selection
@@ -7,20 +8,35 @@ import bookingService from '@/services/bookingService'
 // 3 = Payment
 // 4 = Confirmation
 
-// ── Async: Create booking on backend ─────────────────────────
+function buildApiPayload(bookingData) {
+  const selectedDate = bookingData.selectedDate
+  const scheduledDate = selectedDate
+    ? `${selectedDate.year}-${String(selectedDate.month + 1).padStart(2, '0')}-${String(selectedDate.day).padStart(2, '0')}`
+    : undefined
+
+  return {
+    salonId: bookingData.salonId,
+    serviceId: bookingData.serviceId,
+    staffId: bookingData.staffId || null,
+    scheduled_date: scheduledDate,
+    scheduled_time: bookingData.time,
+    display_date: bookingData.date,
+    payment_method: bookingData.paymentMethod,
+    coupon_code: bookingData.couponCode || null,
+    booking_type: bookingData.bookingType || 'online',
+    customer_name: bookingData.customerName,
+    customer_email: bookingData.customerEmail,
+  }
+}
+
 export const submitBooking = createAsyncThunk(
   'booking/submit',
   async (bookingData, { rejectWithValue }) => {
     try {
-      // TODO: replace with real call → bookingService.create(bookingData)
-      // Mock: simulate API latency
-      await new Promise(r => setTimeout(r, 1400))
-      const mockId = `SB-${Date.now().toString(36).toUpperCase()}`
+      const booking = await bookingService.create(buildApiPayload(bookingData))
       return {
-        id: mockId,
-        ...bookingData,
-        status: 'confirmed',
-        createdAt: new Date().toISOString(),
+        ...booking,
+        salonName: bookingData.salonName,
         queuePosition: Math.floor(Math.random() * 5) + 1,
       }
     } catch (err) {
@@ -29,14 +45,12 @@ export const submitBooking = createAsyncThunk(
   }
 )
 
-// ── Async: Verify Razorpay payment ────────────────────────────
 export const verifyPayment = createAsyncThunk(
   'booking/verifyPayment',
   async (paymentData, { rejectWithValue }) => {
     try {
-      // TODO: paymentService.verify(paymentData)
-      await new Promise(r => setTimeout(r, 800))
-      return { verified: true, paymentId: paymentData.razorpay_payment_id }
+      const result = await paymentService.verify(paymentData)
+      return { verified: true, paymentId: paymentData.razorpay_payment_id, ...result }
     } catch (err) {
       return rejectWithValue(err.message || 'Payment verification failed')
     }
@@ -44,32 +58,21 @@ export const verifyPayment = createAsyncThunk(
 )
 
 const initialState = {
-  // Step tracking
-  step: 1,           // 1 | 2 | 3 | 4
-
-  // Step 1: Service
+  step: 1,
   selectedService:  null,
   selectedStaff:    null,
   salonId:          null,
   salonName:        '',
   salonImage:       '',
-
-  // Step 2: Date & Time
-  selectedDate:     null,   // { day, month, monthName, year, displayDate }
-  selectedSlot:     null,   // '10:30 AM'
-
-  // Step 3: Payment
-  paymentMethod:    'online',  // 'online' | 'counter'
+  selectedDate:     null,
+  selectedSlot:     null,
+  paymentMethod:    'online',
   couponCode:       '',
   couponDiscount:   0,
   paymentVerified:  false,
   razorpayOrderId:  null,
-
-  // Step 4: Confirmation
-  currentBooking:   null,   // full booking object from API
+  currentBooking:   null,
   bookingHistory:   [],
-
-  // Meta
   loading:   false,
   error:     null,
 }
@@ -81,8 +84,6 @@ const bookingSlice = createSlice({
     setStep:          (s, a) => { s.step = a.payload; s.error = null },
     goNextStep:       (s)    => { if (s.step < 4) s.step++ },
     goPrevStep:       (s)    => { if (s.step > 1) s.step--; s.error = null },
-
-    // Step 1
     setSelectedService: (s, a) => { s.selectedService = a.payload },
     setSelectedStaff:   (s, a) => { s.selectedStaff   = a.payload },
     setSalonContext:    (s, a) => {
@@ -102,12 +103,8 @@ const bookingSlice = createSlice({
         s.step = 1
       }
     },
-
-    // Step 2
     setSelectedDate: (s, a) => { s.selectedDate = a.payload; s.selectedSlot = null },
     setSelectedSlot: (s, a) => { s.selectedSlot = a.payload },
-
-    // Step 3
     setPaymentMethod:  (s, a) => { s.paymentMethod   = a.payload },
     applyCoupon:       (s, a) => {
       s.couponCode     = a.payload.code
@@ -116,16 +113,12 @@ const bookingSlice = createSlice({
     clearCoupon:       (s)    => { s.couponCode = ''; s.couponDiscount = 0 },
     setRazorpayOrder:  (s, a) => { s.razorpayOrderId = a.payload },
     markPaymentVerified:(s)   => { s.paymentVerified = true },
-
-    // Misc
     addToHistory: (s, a) => { s.bookingHistory.unshift(a.payload) },
     clearError:   (s)    => { s.error = null },
     resetBooking: ()     => ({ ...initialState }),
   },
-
   extraReducers: builder => {
     builder
-      // submitBooking
       .addCase(submitBooking.pending,   s => { s.loading = true; s.error = null })
       .addCase(submitBooking.fulfilled, (s, a) => {
         s.loading        = false
@@ -137,8 +130,6 @@ const bookingSlice = createSlice({
         s.loading = false
         s.error   = a.payload
       })
-
-      // verifyPayment
       .addCase(verifyPayment.pending,   s => { s.loading = true })
       .addCase(verifyPayment.fulfilled, s => {
         s.loading         = false

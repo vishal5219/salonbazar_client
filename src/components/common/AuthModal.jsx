@@ -1,12 +1,13 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { closeAuthModal, setAuthModalTab } from '@/store/slices/uiSlice'
-import { loginSuccess } from '@/store/slices/authSlice'
+import { closeAuthModal, setAuthModalTab, showNotification } from '@/store/slices/uiSlice'
+import { loginUser, registerUser } from '@/store/slices/authSlice'
 import styles from './AuthModal.module.css'
 
 export default function AuthModal() {
   const dispatch = useDispatch()
   const { authModalOpen, authModalTab } = useSelector(s => s.ui)
+  const { loading } = useSelector(s => s.auth)
   const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' })
 
   if (!authModalOpen) return null
@@ -14,14 +15,24 @@ export default function AuthModal() {
   const handleClose = () => dispatch(closeAuthModal())
   const handleTab = (tab) => dispatch(setAuthModalTab(tab))
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Mock auth — replace with real API call
-    dispatch(loginSuccess({
-      user: { name: form.name || 'User', email: form.email },
-      role: 'customer',
-    }))
-    dispatch(closeAuthModal())
+    try {
+      if (authModalTab === 'login') {
+        await dispatch(loginUser({ email: form.email, password: form.password })).unwrap()
+      } else {
+        await dispatch(registerUser({
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          password: form.password,
+        })).unwrap()
+      }
+      dispatch(closeAuthModal())
+      dispatch(showNotification({ message: 'Welcome to SalonBazar!', type: 'success' }))
+    } catch (err) {
+      dispatch(showNotification({ message: err || 'Authentication failed', type: 'error' }))
+    }
   }
 
   return (
@@ -104,8 +115,8 @@ export default function AuthModal() {
             </div>
           )}
 
-          <button type="submit" className={styles.submitBtn}>
-            {authModalTab === 'login' ? 'Sign In' : 'Create Account'}
+          <button type="submit" className={styles.submitBtn} disabled={loading}>
+            {loading ? 'Please wait…' : authModalTab === 'login' ? 'Sign In' : 'Create Account'}
           </button>
 
           <div className={styles.divider}><span>or continue with</span></div>

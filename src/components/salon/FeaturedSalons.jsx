@@ -1,16 +1,22 @@
-import { useSelector } from 'react-redux'
+import { useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { fetchFeaturedSalons } from '@/store/slices/salonSlice'
 import SalonCard from '@/components/salon/SalonCard'
 import styles from './FeaturedSalons.module.css'
 
 export default function FeaturedSalons() {
-  const { salons } = useSelector(s => s.salons)
-  const topSalons = salons.slice(0, 3)
+  const dispatch = useDispatch()
+  const { featuredSalons, loading } = useSelector(s => s.salons)
+  const topSalons = featuredSalons.slice(0, 3)
+
+  useEffect(() => {
+    dispatch(fetchFeaturedSalons())
+  }, [dispatch])
 
   return (
     <section className={styles.section}>
       <div className={styles.inner}>
-        {/* Left sidebar label */}
         <div className={styles.sidebar}>
           <div className={styles.sidebarContent}>
             <span className="overline">Top Picks</span>
@@ -25,7 +31,6 @@ export default function FeaturedSalons() {
               <span className={styles.ctaArrow}>→</span>
             </Link>
 
-            {/* Gold decorative element */}
             <div className={styles.decoBlock}>
               <div className={styles.decoStat}>
                 <span className={styles.decoNum}>4.8+</span>
@@ -39,17 +44,20 @@ export default function FeaturedSalons() {
           </div>
         </div>
 
-        {/* Cards */}
         <div className={styles.cardsArea}>
-          {topSalons.map((salon, i) => (
-            <div
-              key={salon.id}
-              className={styles.cardWrap}
-              style={{ animationDelay: `${i * 0.12}s` }}
-            >
-              <SalonCard salon={salon} />
-            </div>
-          ))}
+          {loading && topSalons.length === 0 ? (
+            <p className={styles.desc}>Loading featured salons...</p>
+          ) : (
+            topSalons.map((salon, i) => (
+              <div
+                key={salon.id}
+                className={styles.cardWrap}
+                style={{ animationDelay: `${i * 0.12}s` }}
+              >
+                <SalonCard salon={salon} />
+              </div>
+            ))
+          )}
         </div>
       </div>
     </section>

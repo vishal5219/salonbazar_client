@@ -1,14 +1,9 @@
 // pages/Booking/index.jsx
-// 4-step booking flow:
-//   Step 1 → Service Selection
-//   Step 2 → Date & Time
-//   Step 3 → Payment
-//   Step 4 → Confirmation
 import { useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { initializeBookingFlow, resetBooking } from '@/store/slices/bookingSlice'
-import { MOCK_SALON_DETAIL } from '@/constants/mockSalonDetail'
+import { fetchSalonById } from '@/store/slices/salonSlice'
 
 import BookingProgress  from '@/components/booking/BookingProgress'
 import BookingSummary   from '@/components/booking/BookingSummary'
@@ -33,23 +28,26 @@ export default function Booking() {
 
   const { step, currentBooking } = useSelector(s => s.booking)
   const { isAuthenticated }      = useSelector(s => s.auth)
+  const { selectedSalon }        = useSelector(s => s.salons)
 
-  // Guard: must be logged in
   useEffect(() => {
     if (!isAuthenticated) {
       navigate(`/salons/${salonId}?auth=login`)
     }
   }, [isAuthenticated, salonId, navigate])
 
-  // Seed salon context and resume at the correct step (mock — replace with API call)
   useEffect(() => {
-    const salon = MOCK_SALON_DETAIL
-    dispatch(initializeBookingFlow({
-      salonId:    salon.id,
-      salonName:  salon.name,
-      salonImage: salon.gallery[0]?.url || '',
-    }))
+    if (salonId) dispatch(fetchSalonById(salonId))
   }, [salonId, dispatch])
+
+  useEffect(() => {
+    if (!selectedSalon) return
+    dispatch(initializeBookingFlow({
+      salonId:    selectedSalon.id,
+      salonName:  selectedSalon.name,
+      salonImage: selectedSalon.gallery?.[0]?.url || selectedSalon.image || '',
+    }))
+  }, [selectedSalon, dispatch])
 
   const renderStep = () => {
     switch (step) {
@@ -61,7 +59,6 @@ export default function Booking() {
     }
   }
 
-  // Step 4 is full-page — no sidebar
   if (step === 4) {
     return (
       <div className={styles.page}>
@@ -74,7 +71,6 @@ export default function Booking() {
 
   return (
     <div className={styles.page}>
-      {/* Progress header */}
       <div className={styles.progressBar}>
         <div className={styles.progressInner}>
           <button
@@ -90,16 +86,13 @@ export default function Booking() {
         </div>
       </div>
 
-      {/* Body: form + summary sidebar */}
       <div className={styles.body}>
-        {/* Step content */}
         <div className={styles.stepArea}>
           <div className={styles.stepContent}>
             {renderStep()}
           </div>
         </div>
 
-        {/* Sticky summary sidebar */}
         <aside className={styles.sidebar}>
           <BookingSummary />
         </aside>

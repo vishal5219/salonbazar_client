@@ -1,21 +1,28 @@
 // Step 1: Service Selection
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { FiClock, FiCheck, FiChevronRight } from 'react-icons/fi'
 import {
   setSelectedService, setSelectedStaff, goNextStep,
 } from '@/store/slices/bookingSlice'
-import { MOCK_SALON_DETAIL } from '@/constants/mockSalonDetail'
 import styles from './Step1Service.module.css'
 
 export default function Step1Service() {
-  const dispatch         = useDispatch()
+  const dispatch = useDispatch()
   const { selectedService, selectedStaff } = useSelector(s => s.booking)
+  const { selectedSalon } = useSelector(s => s.salons)
 
-  const [activeCat, setActiveCat]   = useState(MOCK_SALON_DETAIL.services[0].id)
-  const [staffOpen, setStaffOpen]   = useState(false)
+  const services = selectedSalon?.services || []
+  const staffList = selectedSalon?.staff || []
 
-  const currentCat = MOCK_SALON_DETAIL.services.find(c => c.id === activeCat)
+  const [activeCat, setActiveCat] = useState(services[0]?.id || '')
+  const [staffOpen, setStaffOpen] = useState(false)
+
+  useEffect(() => {
+    if (services[0]?.id) setActiveCat(services[0].id)
+  }, [selectedSalon?.id, services])
+
+  const currentCat = services.find(c => c.id === activeCat)
 
   const handleSelect = (service) => {
     dispatch(setSelectedService(
@@ -33,6 +40,10 @@ export default function Step1Service() {
     if (selectedService) dispatch(goNextStep())
   }
 
+  if (!selectedSalon) {
+    return <div className={styles.wrap}><p className={styles.sub}>Loading salon services...</p></div>
+  }
+
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
@@ -41,9 +52,8 @@ export default function Step1Service() {
         <p className={styles.sub}>Select one service to continue. You can add more later.</p>
       </div>
 
-      {/* Category tabs */}
       <div className={styles.catTabs}>
-        {MOCK_SALON_DETAIL.services.map(cat => (
+        {services.map(cat => (
           <button
             key={cat.id}
             className={`${styles.catTab} ${activeCat === cat.id ? styles.catActive : ''}`}
@@ -55,7 +65,6 @@ export default function Step1Service() {
         ))}
       </div>
 
-      {/* Services */}
       <div className={styles.serviceList}>
         {currentCat?.items.map((service, i) => {
           const isSel = selectedService?.id === service.id
@@ -66,7 +75,6 @@ export default function Step1Service() {
               onClick={() => handleSelect(service)}
               style={{ animationDelay: `${i * 0.04}s` }}
             >
-              {/* Selection indicator */}
               <div className={`${styles.selIndicator} ${isSel ? styles.selActive : ''}`}>
                 {isSel && <FiCheck size={13} />}
               </div>
@@ -95,7 +103,6 @@ export default function Step1Service() {
         })}
       </div>
 
-      {/* Staff preference (collapsible) */}
       <div className={styles.staffSection}>
         <button
           className={styles.staffToggle}
@@ -118,7 +125,6 @@ export default function Step1Service() {
 
         {staffOpen && (
           <div className={styles.staffGrid}>
-            {/* Any available option */}
             <button
               className={`${styles.staffCard} ${!selectedStaff ? styles.staffSelected : ''}`}
               onClick={() => dispatch(setSelectedStaff(null))}
@@ -128,8 +134,7 @@ export default function Step1Service() {
               <div className={styles.staffRole}>Best match</div>
             </button>
 
-            {/* Individual staff */}
-            {MOCK_SALON_DETAIL.staff
+            {staffList
               .filter(s => s.available)
               .map(member => {
                 const isSel = selectedStaff?.id === member.id
@@ -162,7 +167,6 @@ export default function Step1Service() {
         )}
       </div>
 
-      {/* CTA */}
       <div className={styles.ctaRow}>
         <div className={styles.ctaSummary}>
           {selectedService

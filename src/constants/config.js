@@ -1,6 +1,6 @@
 // ── Domains ──────────────────────────────────────────────────
-export const APP_URL     = import.meta.env.VITE_APP_URL     || 'https://salonbazar.shop'
-export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || 'https://api.salonbazar.shop'
+export const APP_URL     = import.meta.env.VITE_APP_URL     || 'http://localhost:5173'
+export const API_BASE_URL = import.meta.env.VITE_API_BASE_URL || ''
 
 // ── API Versioned Base ────────────────────────────────────────
 export const API_V1 = `${API_BASE_URL}/api/v1`
@@ -107,6 +107,15 @@ export const DASHBOARD_ENDPOINTS = {
   peakHours:    (salonId) => `${API_V1}/salons/${salonId}/analytics/peak-hours`,
   popularity:   (salonId) => `${API_V1}/salons/${salonId}/analytics/services`,
   adminSummary: `${API_V1}/admin/analytics`,
+}
+
+// ── Admin Endpoints ───────────────────────────────────────────
+export const ADMIN_ENDPOINTS = {
+  overview:    `${API_V1}/admin/overview`,
+  analytics:   `${API_V1}/admin/analytics`,
+  salons:      `${API_V1}/admin/salons`,
+  salonStatus: (id) => `${API_V1}/admin/salons/${id}/status`,
+  users:       `${API_V1}/admin/users`,
 }
 
 // ── Upload Endpoints ──────────────────────────────────────────
