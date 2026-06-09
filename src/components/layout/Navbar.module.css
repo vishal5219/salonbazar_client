@@ -172,6 +172,16 @@
   transition: all var(--transition-fast);
 }
 
+/* Invisible bridge so hover isn't lost in the gap above the menu */
+.dropdown::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 0;
+  right: 0;
+  height: 12px;
+}
+
 .userMenu:hover .dropdown {
   opacity: 1;
   pointer-events: auto;

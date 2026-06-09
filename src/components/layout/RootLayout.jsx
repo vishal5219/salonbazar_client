@@ -6,6 +6,7 @@ import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import AuthModal from '@/components/common/AuthModal'
 import Notification from '@/components/common/Notification'
+import ScrollToTop from '@/components/common/ScrollToTop'
 
 export default function RootLayout() {
   const [searchParams, setSearchParams] = useSearchParams()
@@ -23,6 +24,7 @@ export default function RootLayout() {
 
   return (
     <>
+      <ScrollToTop />
       <Navbar />
       <main>
         <Outlet />
