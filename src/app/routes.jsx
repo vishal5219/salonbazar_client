@@ -10,7 +10,7 @@ import Admin from '@/pages/Admin/index.jsx'
 
 const router = createBrowserRouter([
   {
-    path: '/',  
+    path: '/',   
     element: <RootLayout />,
     children: [
       { index: true, element: <Home /> },
