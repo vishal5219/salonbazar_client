@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { fetchProfile, setActiveTab } from '@/store/slices/profileSlice'
 
-import ProfileHero     from '@/components/profile/ProfileHero'
-import ProfileTabs     from '@/components/profile/ProfileTabs'
-import BookingHistory  from '@/components/profile/BookingHistory'
-import WishlistTab     from '@/components/profile/WishlistTab'
-import SettingsTab     from '@/components/profile/SettingsTab'
-import ProfileSkeleton from '@/components/profile/ProfileSkeleton'
+import ProfileHero     from '@/components/Profile/ProfileHero'
+import ProfileTabs     from '@/components/Profile/ProfileTabs'
+import BookingHistory  from '@/components/Profile/BookingHistory'
+import WishlistTab     from '@/components/Profile/WishlistTab'
+import SettingsTab     from '@/components/Profile/SettingsTab'
+import ProfileSkeleton from '@/components/Profile/ProfileSkeleton'
 
 import styles from './Profile.module.css'
 

@@ -1,12 +1,12 @@
 import { createBrowserRouter } from 'react-router-dom'
 import RootLayout from '@/components/layout/RootLayout'
 import Home from '@/pages/Home'
-import SalonList from '@/pages/SalonList'
+import SalonList from '@/pages/SalonList/index.jsx'
 import SalonDetails from '@/pages/SalonDetails/index.jsx'
 import Booking from '@/pages/Booking/index.jsx'
-import Dashboard from '@/pages/Dashboard'
-import Profile from '@/pages/Profile'
-import Admin from '@/pages/Admin'
+import Dashboard from '@/pages/Dashboard/index.jsx'
+import Profile from '@/pages/Profile/index.jsx'
+import Admin from '@/pages/Admin/index.jsx'
 
 const router = createBrowserRouter([
   {
