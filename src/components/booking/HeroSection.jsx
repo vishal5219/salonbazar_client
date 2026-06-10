@@ -36,6 +36,8 @@ export default function HeroSection() {
         {heroImages.map((img, i) => (
           <div
             key={i}
+            role="img"
+            aria-label={`Salon interior showcase ${i + 1}`}
             className={`${styles.bgImg} ${i === activeImg ? styles.bgActive : ''}`}
             style={{ backgroundImage: `url(${img})` }}
           />

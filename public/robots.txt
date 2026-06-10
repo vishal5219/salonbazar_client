@@ -1,0 +1,14 @@
+# SalonBazar — https://salonbazar.shop
+User-agent: *
+Allow: /
+Allow: /salons
+Allow: /about
+
+Disallow: /dashboard
+Disallow: /profile
+Disallow: /admin
+Disallow: /bookings
+Disallow: /wishlist
+Disallow: /booking/
+
+Sitemap: https://salonbazar.shop/sitemap.xml

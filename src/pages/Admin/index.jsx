@@ -10,6 +10,8 @@ import AdminAnalytics  from '@/components/admin/AdminAnalytics'
 import AdminSettings   from '@/components/admin/AdminSettings'
 import AdminSkeleton   from '@/components/admin/AdminSkeleton'
 
+import SEO from '@/components/seo/SEO'
+import { PAGE_SEO, buildCanonical } from '@/constants/seo'
 import styles from './Admin.module.css'
 
 export default function Admin() {
@@ -36,8 +38,16 @@ export default function Admin() {
     }
   }
 
+  const seo = PAGE_SEO.admin
+
   return (
     <div className={styles.page}>
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        canonical={buildCanonical(seo.path)}
+        noindex={seo.noindex}
+      />
       {sidebarOpen && (
         <div className={styles.overlay} onClick={() => setSidebarOpen(false)} />
       )}

@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { FiHeart } from 'react-icons/fi'
+import SEO from '@/components/seo/SEO'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import { PAGE_SEO, buildCanonical } from '@/constants/seo'
 import { fetchWishlist } from '@/store/slices/wishlistSlice'
 import WishlistTab from '@/components/Profile/WishlistTab'
 import styles from './Wishlist.module.css'
@@ -24,16 +26,26 @@ export default function Wishlist() {
     dispatch(fetchWishlist())
   }, [dispatch])
 
+  const seo = PAGE_SEO.wishlist
+
   return (
     <div className={styles.page}>
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        canonical={buildCanonical(seo.path)}
+        noindex={seo.noindex}
+      />
       <section className={styles.hero}>
         <div className={styles.heroBg} />
         <div className={`container-custom ${styles.heroInner}`}>
-          <nav className={styles.breadcrumb}>
-            <Link to="/">Home</Link>
-            <span className={styles.sep}>›</span>
-            <span>Wishlist</span>
-          </nav>
+          <Breadcrumbs
+            className={styles.breadcrumb}
+            items={[
+              { label: 'Home', to: '/' },
+              { label: 'Wishlist' },
+            ]}
+          />
 
           <span className="overline">Saved Salons</span>
           <h1 className={styles.heroTitle}>My <em>Wishlist</em></h1>

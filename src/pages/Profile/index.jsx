@@ -11,6 +11,9 @@ import WishlistTab     from '@/components/Profile/WishlistTab'
 import SettingsTab     from '@/components/Profile/SettingsTab'
 import ProfileSkeleton from '@/components/Profile/ProfileSkeleton'
 
+import SEO from '@/components/seo/SEO'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import { PAGE_SEO, buildCanonical } from '@/constants/seo'
 import styles from './Profile.module.css'
 
 export default function Profile() {
@@ -53,9 +56,24 @@ export default function Profile() {
     }
   }
 
+  const seo = PAGE_SEO.profile
+
   return (
     <div className={styles.page}>
-      {/* Hero / profile header */}
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        canonical={buildCanonical(seo.path)}
+        noindex={seo.noindex}
+      />
+      <div className="container-custom" style={{ paddingTop: 'calc(var(--nav-height) + 16px)' }}>
+        <Breadcrumbs
+          items={[
+            { label: 'Home', to: '/' },
+            { label: 'My Profile' },
+          ]}
+        />
+      </div>
       <ProfileHero
         user={user}
         loyaltyPoints={loyaltyPoints}

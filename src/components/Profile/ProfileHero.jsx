@@ -39,7 +39,7 @@ export default function ProfileHero({ user, loyaltyPoints, totalSpent, totalVisi
           <div className={styles.avatarWrap}>
             <div className={styles.avatarRing}>
               {avatar ? (
-                <img src={avatar} alt="Profile" className={styles.avatarImg} />
+                <img src={avatar} alt={`${user?.name || 'User'} profile photo`} className={styles.avatarImg} />
               ) : (
                 <div className={styles.avatarInitials}>{initials}</div>
               )}

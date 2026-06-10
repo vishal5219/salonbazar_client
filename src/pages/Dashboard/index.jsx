@@ -12,6 +12,8 @@ import DashAnalytics from '@/components/dashboard/DashAnalytics'
 import DashWalkIn    from '@/components/dashboard/DashWalkIn'
 import DashSkeleton  from '@/components/dashboard/DashSkeleton'
 
+import SEO from '@/components/seo/SEO'
+import { PAGE_SEO, buildCanonical } from '@/constants/seo'
 import styles from './Dashboard.module.css'
 
 export default function Dashboard() {
@@ -49,8 +51,16 @@ export default function Dashboard() {
     }
   }
 
+  const seo = PAGE_SEO.dashboard
+
   return (
     <div className={styles.page}>
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        canonical={buildCanonical(seo.path)}
+        noindex={seo.noindex}
+      />
       {sidebarOpen && (
         <div className={styles.mobileOverlay} onClick={() => setSidebarOpen(false)} />
       )}

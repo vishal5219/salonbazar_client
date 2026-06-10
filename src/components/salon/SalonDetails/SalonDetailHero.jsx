@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { FiHeart, FiShare2, FiMapPin, FiPhone, FiClock, FiStar, FiGrid } from 'react-icons/fi'
 import useWishlistToggle from '@/hooks/useWishlistToggle'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import { getSalonDisplayGallery } from '@/utils/salonImages'
 import { showNotification } from '@/store/slices/uiSlice'
 import styles from './SalonDetailHero.module.css'
 
@@ -20,8 +22,8 @@ export default function SalonDetailHero({ salon }) {
     }
   }
 
-  // Show 5 images in mosaic; full gallery opened separately
-  const mosaicImages = salon.gallery.slice(0, 5)
+  const displayGallery = getSalonDisplayGallery(salon)
+  const mosaicImages = displayGallery.slice(0, 5)
 
   return (
     <div className={styles.hero}>
@@ -35,10 +37,10 @@ export default function SalonDetailHero({ salon }) {
           {mosaicImages.slice(1, 5).map((img, i) => (
             <div key={img.id} className={styles.thumb}>
               <img src={img.url} alt={img.caption} />
-              {i === 3 && salon.gallery.length > 5 && (
+              {i === 3 && displayGallery.length > 5 && (
                 <div className={styles.moreOverlay}>
                   <FiGrid size={20} />
-                  <span>+{salon.gallery.length - 5} more</span>
+                  <span>+{displayGallery.length - 5} more</span>
                 </div>
               )}
             </div>
@@ -52,10 +54,14 @@ export default function SalonDetailHero({ salon }) {
       {/* Info bar below mosaic */}
       <div className={styles.infoBar}>
         <div className={styles.infoLeft}>
-          {/* Breadcrumb */}
-          <div className={styles.breadcrumb}>
-            <a href="/">Home</a> › <a href="/salons">Salons</a> › {salon.name}
-          </div>
+          <Breadcrumbs
+            className={styles.breadcrumb}
+            items={[
+              { label: 'Home', to: '/' },
+              { label: 'Salons', to: '/salons' },
+              { label: salon.name },
+            ]}
+          />
 
           <div className={styles.titleRow}>
             <div>
@@ -141,9 +147,9 @@ export default function SalonDetailHero({ salon }) {
         <div className={styles.lightbox} onClick={() => setShowAll(false)}>
           <button className={styles.lightboxClose} onClick={() => setShowAll(false)}>✕</button>
           <div className={styles.lightboxGrid} onClick={e => e.stopPropagation()}>
-            <h3 className={styles.lightboxTitle}>All Photos · {salon.gallery.length}</h3>
+            <h3 className={styles.lightboxTitle}>All Photos · {displayGallery.length}</h3>
             <div className={styles.lightboxImgs}>
-              {salon.gallery.map(img => (
+              {displayGallery.map(img => (
                 <div key={img.id} className={styles.lightboxImg}>
                   <img src={img.url} alt={img.caption} />
                   <span className={styles.lightboxCaption}>{img.caption}</span>

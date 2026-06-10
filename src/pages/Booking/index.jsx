@@ -12,6 +12,9 @@ import Step2DateTime    from '@/components/booking/steps/Step2DateTime'
 import Step3Payment     from '@/components/booking/steps/Step3Payment'
 import Step4Confirm     from '@/components/booking/steps/Step4Confirm'
 
+import SEO from '@/components/seo/SEO'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import { buildCanonical, buildBookingSeo } from '@/constants/seo'
 import styles from './Booking.module.css'
 
 const STEPS = [
@@ -52,9 +55,17 @@ export default function Booking() {
     }
   }
 
+  const bookingSeo = buildBookingSeo(selectedSalon?.name, salonId)
+
   if (step === 4) {
     return (
       <div className={styles.page}>
+        <SEO
+          title={`Booking Confirmed${selectedSalon?.name ? ` – ${selectedSalon.name}` : ''} | SalonBazar`}
+          description={bookingSeo.description}
+          canonical={buildCanonical(bookingSeo.path)}
+          noindex
+        />
         <div className={styles.confirmWrap}>
           {renderStep()}
         </div>
@@ -64,8 +75,22 @@ export default function Booking() {
 
   return (
     <div className={styles.page}>
+      <SEO
+        title={bookingSeo.title}
+        description={bookingSeo.description}
+        canonical={buildCanonical(bookingSeo.path)}
+        noindex
+      />
       <div className={styles.progressBar}>
         <div className={styles.progressInner}>
+          <Breadcrumbs
+            items={[
+              { label: 'Home', to: '/' },
+              { label: 'Salons', to: '/salons' },
+              ...(selectedSalon ? [{ label: selectedSalon.name, to: `/salons/${salonId}` }] : []),
+              { label: 'Book Appointment' },
+            ]}
+          />
           <button
             className={styles.backLink}
             onClick={() => {

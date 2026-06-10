@@ -12,6 +12,7 @@ export default function Footer() {
         <div className={styles.linksGrid}>
           <div>
             <h6>Discover</h6>
+            <Link to="/">Home</Link>
             <Link to="/salons">All Salons</Link>
             <Link to="/salons?category=unisex">Unisex Salons</Link>
             <Link to="/salons?category=mens">Men's Grooming</Link>
@@ -35,6 +36,7 @@ export default function Footer() {
       <div className={styles.bottomBar}>
         <span>© 2025 SalonBazar. All rights reserved.</span>
         <div className={styles.legal}>
+          <Link to="/sitemap.xml">Sitemap</Link>
           <Link to="/privacy">Privacy Policy</Link>
           <Link to="/terms">Terms of Service</Link>
         </div>

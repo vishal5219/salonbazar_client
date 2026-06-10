@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { FiSearch, FiMapPin, FiGrid, FiList, FiMap, FiSliders } from 'react-icons/fi'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import styles from './SalonListHeader.module.css'
 
 export default function SalonListHeader({
@@ -21,15 +22,19 @@ export default function SalonListHeader({
   return (
     <div className={styles.header}>
       <div className={styles.inner}>
-        {/* Breadcrumb */}
-        <div className={styles.breadcrumb}>
-          <a href="/">Home</a>
-          <span className={styles.sep}>›</span>
-          <span>Explore Salons</span>
+        <div className={styles.breadcrumbRow}>
+          <Breadcrumbs
+            items={[
+              { label: 'Home', to: '/' },
+              { label: 'Explore Salons' },
+            ]}
+          />
           {totalCount > 0 && (
             <span className={styles.countBadge}>{totalCount} results</span>
           )}
         </div>
+
+        <h1 className={styles.pageTitle}>Explore Salons in Ahmedabad</h1>
 
         {/* Search + controls row */}
         <div className={styles.controlsRow}>

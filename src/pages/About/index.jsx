@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import SEO from '@/components/seo/SEO'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import { PAGE_SEO, buildCanonical } from '@/constants/seo'
 import { APP_NAME, APP_TAGLINE, CONTACT_EMAIL } from '@/constants/config'
 import TestimonialsSection from '@/components/common/TestimonialsSection'
 import HowItWorks from '@/components/common/HowItWorks'
@@ -42,18 +45,27 @@ const milestones = [
 ]
 
 export default function About() {
+  const seo = PAGE_SEO.about
+
   return (
     <div className={styles.page}>
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        canonical={buildCanonical(seo.path)}
+      />
       {/* Hero */}
       <section className={styles.hero}>
         <div className={styles.heroBg} />
         <div className={styles.heroGrain} />
         <div className={`container-custom ${styles.heroInner}`}>
-          <nav className={styles.breadcrumb}>
-            <Link to="/">Home</Link>
-            <span className={styles.sep}>›</span>
-            <span>About Us</span>
-          </nav>
+          <Breadcrumbs
+            className={styles.breadcrumb}
+            items={[
+              { label: 'Home', to: '/' },
+              { label: 'About Us' },
+            ]}
+          />
 
           <span className="overline">Our Story</span>
           <h1 className={styles.heroTitle}>

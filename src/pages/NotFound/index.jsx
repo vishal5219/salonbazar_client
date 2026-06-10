@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import SEO from '@/components/seo/SEO'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import { PAGE_SEO, buildCanonical } from '@/constants/seo'
 import { APP_TAGLINE } from '@/constants/config'
 import styles from './NotFound.module.css'
 
@@ -9,17 +12,27 @@ const quickLinks = [
 ]
 
 export default function NotFound() {
+  const seo = PAGE_SEO.notFound
+
   return (
     <div className={styles.page}>
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        canonical={buildCanonical(seo.path)}
+        noindex={seo.noindex}
+      />
       <div className={styles.bgDecor} />
       <div className={styles.grain} />
 
       <div className={`container-custom ${styles.inner}`}>
-        <nav className={styles.breadcrumb}>
-          <Link to="/">Home</Link>
-          <span className={styles.sep}>›</span>
-          <span>Page Not Found</span>
-        </nav>
+        <Breadcrumbs
+          className={styles.breadcrumb}
+          items={[
+            { label: 'Home', to: '/' },
+            { label: 'Page Not Found' },
+          ]}
+        />
 
         <div className={styles.content}>
           <span className="overline">Error 404</span>

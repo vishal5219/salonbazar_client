@@ -1,10 +1,12 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
 import { FiCalendar, FiCheckCircle, FiClock, FiXCircle } from 'react-icons/fi'
 import { fetchBookings } from '@/store/slices/profileSlice'
 import BookingHistory from '@/components/Profile/BookingHistory'
 import ProfileSkeleton from '@/components/Profile/ProfileSkeleton'
+import SEO from '@/components/seo/SEO'
+import Breadcrumbs from '@/components/seo/Breadcrumbs'
+import { PAGE_SEO, buildCanonical } from '@/constants/seo'
 import styles from './Bookings.module.css'
 
 export default function Bookings() {
@@ -22,16 +24,26 @@ export default function Bookings() {
     { label: 'Cancelled', value: bookingSummary.cancelled, icon: FiXCircle },
   ]
 
+  const seo = PAGE_SEO.bookings
+
   return (
     <div className={styles.page}>
+      <SEO
+        title={seo.title}
+        description={seo.description}
+        canonical={buildCanonical(seo.path)}
+        noindex={seo.noindex}
+      />
       <section className={styles.hero}>
         <div className={styles.heroBg} />
         <div className={`container-custom ${styles.heroInner}`}>
-          <nav className={styles.breadcrumb}>
-            <Link to="/">Home</Link>
-            <span className={styles.sep}>›</span>
-            <span>My Bookings</span>
-          </nav>
+          <Breadcrumbs
+            className={styles.breadcrumb}
+            items={[
+              { label: 'Home', to: '/' },
+              { label: 'My Bookings' },
+            ]}
+          />
 
           <span className="overline">Appointments</span>
           <h1 className={styles.heroTitle}>My <em>Bookings</em></h1>

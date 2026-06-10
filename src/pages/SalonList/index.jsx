@@ -12,6 +12,8 @@ import MapView           from '@/components/salon/SalonList/MapView'
 import SortBar           from '@/components/salon/SalonList/SortBar'
 import ActiveFilters     from '@/components/salon/SalonList/ActiveFilters'
 import MobileFilterSheet from '@/components/salon/SalonList/MobileFilterSheet'
+import SEO from '@/components/seo/SEO'
+import { buildCanonical, buildSalonListSeo } from '@/constants/seo'
 import styles from './SalonList.module.css'
 
 export default function SalonList() {
@@ -80,9 +82,15 @@ export default function SalonList() {
     filters.rating > 0 || searchQuery ||
     filters.priceRange[0] > 0 || filters.priceRange[1] < 5000
 
+  const listSeo = buildSalonListSeo(searchQuery, filters.category)
+
   return (
     <div className={styles.page}>
-      {/* Top search + hero bar */}
+      <SEO
+        title={listSeo.title}
+        description={listSeo.description}
+        canonical={buildCanonical(listSeo.path)}
+      />
       <SalonListHeader
         onSearch={handleSearch}
         onOpenMobileFilters={() => setMobileSidebarOpen(true)}

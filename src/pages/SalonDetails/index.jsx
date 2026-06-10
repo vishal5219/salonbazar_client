@@ -16,6 +16,9 @@ import BookingPanel        from '@/components/salon/SalonDetails/BookingPanel'
 import MobileBookingBar    from '@/components/salon/SalonDetails/MobileBookingBar'
 import SalonDetailSkeleton from '@/components/salon/SalonDetails/SalonDetailSkeleton'
 
+import SEO from '@/components/seo/SEO'
+import { buildCanonical, buildSalonSeo, localBusinessJsonLd } from '@/constants/seo'
+import { getSalonDisplayGallery } from '@/utils/salonImages'
 import styles from './SalonDetails.module.css'
 
 const NAV_SECTIONS = ['Gallery', 'Services', 'Staff', 'Reviews', 'Location']
@@ -76,10 +79,31 @@ export default function SalonDetails() {
   }
 
   if (loading && !salon) return <SalonDetailSkeleton />
-  if (!salon)  return <div style={{ padding: '120px 24px', textAlign: 'center' }}>Salon not found.</div>
+  if (!salon) {
+    return (
+      <>
+        <SEO
+          title="Salon Not Found | SalonBazar"
+          description="This salon could not be found. Browse verified salons in Ahmedabad on SalonBazar."
+          canonical={buildCanonical('/salons')}
+          noindex
+        />
+        <div style={{ padding: '120px 24px', textAlign: 'center' }}>Salon not found.</div>
+      </>
+    )
+  }
+
+  const salonSeo = buildSalonSeo(salon)
 
   return (
     <div className={styles.page}>
+      <SEO
+        title={salonSeo.title}
+        description={salonSeo.description}
+        canonical={buildCanonical(salonSeo.path)}
+        image={salonSeo.image}
+        jsonLd={localBusinessJsonLd(salon)}
+      />
       <div ref={heroRef}>
         <SalonDetailHero salon={salon} />
       </div>
@@ -98,7 +122,7 @@ export default function SalonDetails() {
             ref={el => sectionRefs.current['Gallery'] = el}
             className={styles.section}
           >
-            <GallerySection images={salon.gallery} name={salon.name} />
+            <GallerySection images={getSalonDisplayGallery(salon)} name={salon.name} />
           </section>
 
           <section className={styles.section}>

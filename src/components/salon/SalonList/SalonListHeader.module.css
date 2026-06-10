@@ -13,27 +13,26 @@
     padding: 16px 24px 0;
   }
   
-  /* Breadcrumb */
-  .breadcrumb {
+  .breadcrumbRow {
     display: flex;
     align-items: center;
-    gap: 8px;
-    font-size: 12.5px;
-    color: var(--smoke);
-    margin-bottom: 14px;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 8px;
   }
-  
-  .breadcrumb a {
-    color: var(--smoke);
-    transition: color var(--transition-fast);
+
+  .pageTitle {
+    font-family: var(--font-display);
+    font-size: clamp(22px, 3vw, 32px);
+    font-weight: 400;
+    color: var(--charcoal);
+    margin: 0 0 14px;
+    line-height: 1.15;
   }
-  
-  .breadcrumb a:hover { color: var(--gold-dark); }
-  
-  .sep { color: var(--smoke-light); }
   
   .countBadge {
-    margin-left: 4px;
+    margin-left: auto;
+    flex-shrink: 0;
     padding: 2px 8px;
     background: var(--cream);
     border-radius: 100px;
