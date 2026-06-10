@@ -44,6 +44,7 @@ export const SERVICE_ENDPOINTS = {
 export const BOOKING_ENDPOINTS = {
   create:      '/bookings',
   list:        '/bookings',
+  summary:     '/bookings/summary',
   detail:      (id) => `/bookings/${id}`,
   cancel:      (id) => `/bookings/${id}/cancel`,
   reschedule:  (id) => `/bookings/${id}/reschedule`,
@@ -72,6 +73,8 @@ export const REVIEW_ENDPOINTS = {
 // ── Wishlist Endpoints ────────────────────────────────────────
 export const WISHLIST_ENDPOINTS = {
   list:   '/wishlist',
+  ids:    '/wishlist/ids',
+  check:  (salonId) => `/wishlist/${salonId}/check`,
   add:    '/wishlist',
   remove: (salonId) => `/wishlist/${salonId}`,
 }

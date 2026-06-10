@@ -17,7 +17,7 @@ import styles from './Dashboard.module.css'
 export default function Dashboard() {
   const dispatch  = useDispatch()
   const navigate  = useNavigate()
-  const { isAuthenticated, role, user } = useSelector(s => s.auth)
+  const { isAuthenticated, initializing, role, user } = useSelector(s => s.auth)
   const { loading, activeView }   = useSelector(s => s.dashboard)
   const { selectedSalon }         = useSelector(s => s.salons)
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -28,8 +28,9 @@ export default function Dashboard() {
     : { id: salonId, name: user?.name ? `${user.name}'s Salon` : 'Salon Dashboard', image: '' }
 
   useEffect(() => {
-    if (!isAuthenticated) { navigate('/'); return }
-  }, [isAuthenticated, role, navigate])
+    if (initializing || isAuthenticated) return
+    navigate('/')
+  }, [initializing, isAuthenticated, navigate])
 
   useEffect(() => {
     dispatch(fetchSalonById(salonId))

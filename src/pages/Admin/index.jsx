@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate } from 'react-router-dom'
 import { fetchAdminData, setActiveView } from '@/store/slices/adminSlice'
 
 import AdminSidebar    from '@/components/admin/AdminSidebar'
@@ -15,16 +14,15 @@ import styles from './Admin.module.css'
 
 export default function Admin() {
   const dispatch  = useDispatch()
-  const navigate  = useNavigate()
-  const { isAuthenticated } = useSelector(s => s.auth)
+  const { isAuthenticated, initializing } = useSelector(s => s.auth)
   const { loading, activeView } = useSelector(s => s.admin)
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // Admin guard — in production check role === 'admin'
   useEffect(() => {
-    if (!isAuthenticated) { navigate('/'); return }
+    if (initializing || !isAuthenticated) return
     dispatch(fetchAdminData())
-  }, [isAuthenticated, dispatch, navigate])
+  }, [initializing, isAuthenticated, dispatch])
 
   const renderView = () => {
     if (loading) return <AdminSkeleton />

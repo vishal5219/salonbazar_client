@@ -54,7 +54,7 @@ export default function Navbar() {
               </button>
               <div className={styles.dropdown}>
                 <Link to="/profile" className={styles.dropItem}>My Profile</Link>
-                <Link to="/bookings" className={styles.dropItem}>Bookings</Link>
+                <Link to="/bookings" className={styles.dropItem}>My Bookings</Link>
                 <Link to="/wishlist" className={styles.dropItem}>Wishlist</Link>
                 <div className={styles.dropDivider} />
                 <button className={styles.dropItem} onClick={() => dispatch(logout())}>
@@ -101,6 +101,7 @@ export default function Navbar() {
           <>
             <Link to="/profile" className={styles.mobileLink}>My Profile</Link>
             <Link to="/bookings" className={styles.mobileLink}>My Bookings</Link>
+            <Link to="/wishlist" className={styles.mobileLink}>Wishlist</Link>
             <button className={styles.mobileLink} onClick={() => dispatch(logout())}>Sign Out</button>
           </>
         ) : (

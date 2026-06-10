@@ -1,14 +1,14 @@
 import { useState } from 'react'
-import { useDispatch, useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { FiHeart, FiShare2, FiMapPin, FiPhone, FiClock, FiStar, FiGrid } from 'react-icons/fi'
-import { toggleWishlist } from '@/store/slices/wishlistSlice'
+import useWishlistToggle from '@/hooks/useWishlistToggle'
 import { showNotification } from '@/store/slices/uiSlice'
 import styles from './SalonDetailHero.module.css'
 
 export default function SalonDetailHero({ salon }) {
   const dispatch   = useDispatch()
-  const wishlist   = useSelector(s => s.wishlist.items)
-  const isWished   = wishlist.includes(salon.id)
+  const { isWishlisted, toggle } = useWishlistToggle()
+  const isWished   = isWishlisted(salon.id)
   const [showAll,  setShowAll] = useState(false)
 
   const handleShare = () => {
@@ -66,7 +66,7 @@ export default function SalonDetailHero({ salon }) {
             <div className={styles.actionBtns}>
               <button
                 className={`${styles.iconBtn} ${isWished ? styles.wished : ''}`}
-                onClick={() => dispatch(toggleWishlist(salon.id))}
+                onClick={() => toggle(salon.id)}
                 aria-label="Wishlist"
               >
                 <FiHeart size={17} fill={isWished ? 'currentColor' : 'none'} />

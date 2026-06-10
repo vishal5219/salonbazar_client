@@ -1,17 +1,13 @@
-import { useDispatch, useSelector } from 'react-redux'
 import { Link, useNavigate } from 'react-router-dom'
-import { toggleWishlist } from '@/store/slices/wishlistSlice'
+import useWishlistToggle from '@/hooks/useWishlistToggle'
 import styles from './SalonCard.module.css'
 
 export default function SalonCard({ salon, variant = 'default' }) {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const wishlist = useSelector(s => s.wishlist.items)
-  const isWishlisted = wishlist.includes(salon.id)
+  const { isWishlisted, toggle } = useWishlistToggle()
 
   const handleWishlist = (e) => {
-    e.preventDefault()
-    dispatch(toggleWishlist(salon.id))
+    toggle(salon.id, e)
   }
 
   const handleBookNow = (e) => {
@@ -34,11 +30,11 @@ export default function SalonCard({ salon, variant = 'default' }) {
 
         {/* Wishlist button */}
         <button
-          className={`${styles.wishBtn} ${isWishlisted ? styles.wishlisted : ''}`}
+          className={`${styles.wishBtn} ${isWishlisted(salon.id) ? styles.wishlisted : ''}`}
           onClick={handleWishlist}
           aria-label="Toggle wishlist"
         >
-          {isWishlisted ? '♥' : '♡'}
+          {isWishlisted(salon.id) ? '♥' : '♡'}
         </button>
 
         {/* Wait time */}

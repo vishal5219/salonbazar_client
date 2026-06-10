@@ -1,21 +1,22 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { Link } from 'react-router-dom'
 import { FiHeart, FiMapPin, FiStar, FiClock, FiArrowRight } from 'react-icons/fi'
-import { toggleWishlist } from '@/store/slices/wishlistSlice'
+import { removeWishlistItem } from '@/store/slices/wishlistSlice'
 import { showNotification } from '@/store/slices/uiSlice'
 import styles from './WishlistTab.module.css'
 
 export default function WishlistTab() {
   const dispatch       = useDispatch()
-  const { wishlistSalons } = useSelector(s => s.profile)
-  const wishlist           = useSelector(s => s.wishlist.items)
+  const { salons } = useSelector(s => s.wishlist)
+  const saved = salons
 
-  // Filter to only currently wishlisted salons
-  const saved = wishlistSalons.filter(s => wishlist.includes(s.id))
-
-  const handleRemove = (salonId, salonName) => {
-    dispatch(toggleWishlist(salonId))
-    dispatch(showNotification({ message: `${salonName} removed from wishlist.`, type: 'success' }))
+  const handleRemove = async (salonId, salonName) => {
+    try {
+      await dispatch(removeWishlistItem(salonId)).unwrap()
+      dispatch(showNotification({ message: `${salonName} removed from wishlist.`, type: 'success' }))
+    } catch (err) {
+      dispatch(showNotification({ message: err || 'Could not remove salon.', type: 'error' }))
+    }
   }
 
   return (

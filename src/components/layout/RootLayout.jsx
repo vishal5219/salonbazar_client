@@ -1,7 +1,9 @@
 import { useEffect } from 'react'
 import { Outlet, useSearchParams } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { openAuthModal } from '@/store/slices/uiSlice'
+import { restoreSession } from '@/store/slices/authSlice'
+import { fetchWishlist, clearWishlist } from '@/store/slices/wishlistSlice'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import AuthModal from '@/components/common/AuthModal'
@@ -11,6 +13,17 @@ import ScrollToTop from '@/components/common/ScrollToTop'
 export default function RootLayout() {
   const [searchParams, setSearchParams] = useSearchParams()
   const dispatch = useDispatch()
+  const { isAuthenticated, initializing } = useSelector(s => s.auth)
+
+  useEffect(() => {
+    dispatch(restoreSession())
+  }, [dispatch])
+
+  useEffect(() => {
+    if (initializing) return
+    if (isAuthenticated) dispatch(fetchWishlist())
+    else dispatch(clearWishlist())
+  }, [isAuthenticated, initializing, dispatch])
 
   useEffect(() => {
     const auth = searchParams.get('auth')

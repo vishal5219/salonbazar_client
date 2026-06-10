@@ -27,14 +27,7 @@ export default function Booking() {
   const navigate    = useNavigate()
 
   const { step, currentBooking } = useSelector(s => s.booking)
-  const { isAuthenticated }      = useSelector(s => s.auth)
   const { selectedSalon }        = useSelector(s => s.salons)
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      navigate(`/salons/${salonId}?auth=login`)
-    }
-  }, [isAuthenticated, salonId, navigate])
 
   useEffect(() => {
     if (salonId) dispatch(fetchSalonById(salonId))

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from '@/services/authService'
+import userService from '@/services/userService'
 
 // ── Async thunks — call https://api.salonbazar.shop ──────────
 
@@ -63,12 +64,29 @@ export const logoutUser = createAsyncThunk(
   }
 )
 
+export const restoreSession = createAsyncThunk(
+  'auth/restoreSession',
+  async (_, { rejectWithValue }) => {
+    const token = authService.getToken()
+    if (!token) return null
+
+    try {
+      const user = await userService.getProfile()
+      return { user, role: user.role || 'customer' }
+    } catch (err) {
+      authService.clearTokens()
+      return rejectWithValue(err.message)
+    }
+  }
+)
+
 // ── Slice ─────────────────────────────────────────────────────
 const initialState = {
   user:            null,
   isAuthenticated: false,
   role:            null,   // 'customer' | 'shop_owner' | 'admin'
   loading:         false,
+  initializing:    !!authService.getToken(),
   error:           null,
 }
 
@@ -115,6 +133,23 @@ const authSlice = createSlice({
       .addCase(googleLogin.rejected,  rejected)
       .addCase(logoutUser.fulfilled,  (state) => {
         state.user = null; state.isAuthenticated = false; state.role = null
+      })
+      .addCase(restoreSession.pending, (state) => {
+        state.initializing = true
+      })
+      .addCase(restoreSession.fulfilled, (state, action) => {
+        state.initializing = false
+        if (action.payload) {
+          state.isAuthenticated = true
+          state.user            = action.payload.user
+          state.role            = action.payload.role
+        }
+      })
+      .addCase(restoreSession.rejected, (state) => {
+        state.initializing    = false
+        state.isAuthenticated = false
+        state.user            = null
+        state.role            = null
       })
   },
 })

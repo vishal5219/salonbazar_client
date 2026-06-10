@@ -4,6 +4,7 @@
 // ─────────────────────────────────────────────────────────────
 import api from './api'
 import { BOOKING_ENDPOINTS } from '@/constants/config'
+import { mapProfileBooking } from '@/utils/bookingMapper'
 
 export const bookingService = {
 
@@ -19,9 +20,15 @@ export const bookingService = {
     }
   */
 
+  /** Booking counts by status */
+  getSummary: () =>
+    api.get(BOOKING_ENDPOINTS.summary),
+
   /** Get all bookings for logged-in customer */
-  getMyBookings: (params = {}) =>
-    api.get(BOOKING_ENDPOINTS.list, { params }),
+  getMyBookings: async (params = {}) => {
+    const rows = await api.get(BOOKING_ENDPOINTS.list, { params })
+    return (rows || []).map(mapProfileBooking)
+  },
 
   /** Get single booking detail */
   getById: (id) =>

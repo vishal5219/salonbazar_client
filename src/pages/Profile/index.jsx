@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useSearchParams } from 'react-router-dom'
 import { fetchProfile, setActiveTab } from '@/store/slices/profileSlice'
+import { fetchWishlist } from '@/store/slices/wishlistSlice'
 
 import ProfileHero     from '@/components/Profile/ProfileHero'
 import ProfileTabs     from '@/components/Profile/ProfileTabs'
@@ -14,18 +15,18 @@ import styles from './Profile.module.css'
 
 export default function Profile() {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
   const [searchParams, setSearchParams] = useSearchParams()
 
-  const { isAuthenticated, user }            = useSelector(s => s.auth)
+  const { isAuthenticated, initializing, user } = useSelector(s => s.auth)
   const { loading, activeTab, loyaltyPoints,
           totalSpent, totalVisits, bookings } = useSelector(s => s.profile)
 
   // Auth guard
   useEffect(() => {
-    if (!isAuthenticated) { navigate('/?auth=login'); return }
+    if (initializing || !isAuthenticated) return
     dispatch(fetchProfile())
-  }, [isAuthenticated, dispatch, navigate])
+    dispatch(fetchWishlist())
+  }, [initializing, isAuthenticated, dispatch])
 
   // Sync tab from URL param
   useEffect(() => {
@@ -40,7 +41,7 @@ export default function Profile() {
     setSearchParams({ tab })
   }
 
-  if (!isAuthenticated) return null
+  if (initializing || !isAuthenticated) return null
   if (loading) return <ProfileSkeleton />
 
   const renderTab = () => {

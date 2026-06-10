@@ -1,0 +1,137 @@
+.page {
+  min-height: 100vh;
+  background: var(--warm-white);
+  padding-top: var(--nav-height);
+}
+
+.hero {
+  position: relative;
+  padding: 48px 0 56px;
+  overflow: hidden;
+  background: var(--charcoal);
+}
+
+.heroBg {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, rgba(26, 23, 20, 0.94) 0%, rgba(44, 40, 37, 0.9) 100%),
+    url('https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=1400&q=80') center / cover no-repeat;
+}
+
+.heroInner {
+  position: relative;
+  z-index: 1;
+}
+
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12.5px;
+  color: var(--smoke);
+  margin-bottom: 24px;
+}
+
+.breadcrumb a {
+  color: var(--smoke-light);
+  transition: color var(--transition-fast);
+}
+
+.breadcrumb a:hover { color: var(--gold-light); }
+
+.sep { color: var(--charcoal-3); }
+
+.hero .overline { color: var(--gold) !important; }
+
+.heroTitle {
+  font-size: clamp(36px, 5vw, 56px);
+  color: var(--warm-white);
+  margin-top: 10px;
+  margin-bottom: 14px;
+}
+
+.heroTitle em {
+  color: var(--gold-light);
+  font-style: italic;
+}
+
+.heroSubtitle {
+  font-size: 16px;
+  color: var(--smoke-light);
+  line-height: 1.7;
+  max-width: 520px;
+}
+
+.content {
+  max-width: var(--container-max);
+  margin: 0 auto;
+  padding: 32px 24px 80px;
+}
+
+.statsGrid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-bottom: 32px;
+}
+
+.statCard {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 20px 22px;
+  background: #fff;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 14px;
+  box-shadow: var(--shadow-card);
+}
+
+.statIcon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: var(--gold-muted);
+  color: var(--gold-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.statValue {
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--charcoal);
+  line-height: 1;
+}
+
+.statLabel {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--smoke);
+  margin-top: 4px;
+}
+
+.contentInner {
+  animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  .statsGrid { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (max-width: 640px) {
+  .hero { padding: 36px 0 44px; }
+  .content { padding: 24px 16px 60px; }
+  .statsGrid { grid-template-columns: 1fr 1fr; gap: 10px; }
+  .statCard { padding: 16px; }
+  .statValue { font-size: 24px; }
+}

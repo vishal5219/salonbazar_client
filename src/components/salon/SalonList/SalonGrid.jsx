@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom'
-import { useDispatch, useSelector } from 'react-redux'
-import { toggleWishlist } from '@/store/slices/wishlistSlice'
+import useWishlistToggle from '@/hooks/useWishlistToggle'
 import { FiHeart, FiMapPin, FiClock, FiStar, FiArrowRight } from 'react-icons/fi'
 import styles from './SalonGrid.module.css'
 import { useNavigate } from 'react-router-dom'
@@ -22,9 +21,8 @@ function SkeletonCard({ viewMode }) {
 
 // ── List-view salon row ───────────────────────────────────────
 function SalonListRow({ salon, onHover }) {
-  const dispatch = useDispatch()
-  const wishlist = useSelector(s => s.wishlist.items)
-  const isWished = wishlist.includes(salon.id)
+  const { isWishlisted, toggle } = useWishlistToggle()
+  const isWished = isWishlisted(salon.id)
   return (
     <Link
       to={`/salons/${salon.id}`}
@@ -75,7 +73,7 @@ function SalonListRow({ salon, onHover }) {
         </div>
         <button
           className={`${styles.wishBtn} ${isWished ? styles.wished : ''}`}
-          onClick={e => { e.preventDefault(); dispatch(toggleWishlist(salon.id)) }}
+          onClick={e => toggle(salon.id, e)}
         >
           <FiHeart size={14} fill={isWished ? 'currentColor' : 'none'} />
         </button>
@@ -89,10 +87,9 @@ function SalonListRow({ salon, onHover }) {
 
 // ── Grid card ─────────────────────────────────────────────────
 function SalonGridCard({ salon, onHover }) {
-  const dispatch = useDispatch()
   const navigate = useNavigate()
-  const wishlist = useSelector(s => s.wishlist.items)
-  const isWished = wishlist.includes(salon.id)
+  const { isWishlisted, toggle } = useWishlistToggle()
+  const isWished = isWishlisted(salon.id)
 
   const handleBookNow = (e) => {
     e.preventDefault()
@@ -119,7 +116,7 @@ function SalonGridCard({ salon, onHover }) {
 
         <button
           className={`${styles.heartBtn} ${isWished ? styles.hearted : ''}`}
-          onClick={e => { e.preventDefault(); dispatch(toggleWishlist(salon.id)) }}
+          onClick={e => toggle(salon.id, e)}
           aria-label="Wishlist"
         >
           <FiHeart size={15} fill={isWished ? 'currentColor' : 'none'} />

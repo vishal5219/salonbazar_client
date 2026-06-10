@@ -1,5 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import userService from '@/services/userService'
+import bookingService from '@/services/bookingService'
+
+export const fetchBookings = createAsyncThunk(
+  'profile/fetchBookings',
+  async (_, { rejectWithValue }) => {
+    try {
+      const [bookings, summary] = await Promise.all([
+        userService.getBookings(),
+        bookingService.getSummary(),
+      ])
+      return { bookings, summary }
+    } catch (err) { return rejectWithValue(err.message) }
+  }
+)
 
 export const fetchProfile = createAsyncThunk(
   'profile/fetch',
@@ -54,11 +68,13 @@ const profileSlice = createSlice({
   name: 'profile',
   initialState: {
     bookings:       [],
+    bookingSummary: { total: 0, upcoming: 0, completed: 0, cancelled: 0 },
     wishlistSalons: [],
     loyaltyPoints:  0,
     totalSpent:     0,
     totalVisits:    0,
     loading:        false,
+    bookingsLoading: false,
     saving:         false,
     error:          null,
     activeTab:      'bookings',
@@ -78,6 +94,14 @@ const profileSlice = createSlice({
         s.totalVisits    = a.payload.totalVisits
       })
       .addCase(fetchProfile.rejected,  (s, a) => { s.loading = false; s.error = a.payload })
+
+      .addCase(fetchBookings.pending, s => { s.bookingsLoading = true })
+      .addCase(fetchBookings.fulfilled, (s, a) => {
+        s.bookingsLoading = false
+        s.bookings = a.payload.bookings
+        s.bookingSummary = a.payload.summary || s.bookingSummary
+      })
+      .addCase(fetchBookings.rejected, (s, a) => { s.bookingsLoading = false; s.error = a.payload })
 
       .addCase(updateProfile.pending,   s => { s.saving = true })
       .addCase(updateProfile.fulfilled, s => { s.saving = false })
