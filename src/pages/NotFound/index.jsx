@@ -9,6 +9,7 @@ const quickLinks = [
   { to: '/', label: 'Home', icon: '🏠' },
   { to: '/salons', label: 'Explore Salons', icon: '✦' },
   { to: '/about', label: 'About Us', icon: 'ℹ️' },
+  { to: '/offers', label: 'Offers', icon: '🏷️' },
 ]
 
 export default function NotFound() {

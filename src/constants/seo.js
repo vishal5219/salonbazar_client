@@ -25,6 +25,11 @@ export const PAGE_SEO = {
     description: 'Learn how SalonBazar connects customers with premium salons across Ahmedabad. Our mission, values, and story behind India\'s smartest salon booking marketplace.',
     path: '/about',
   },
+  offers: {
+    title: 'Salon Offers & Coupon Codes | Save on Bookings | SalonBazar',
+    description: 'Grab exclusive SalonBazar coupon codes and spotlight deals from top-rated salons. Save on haircuts, facials, spa and grooming — apply at checkout.',
+    path: '/offers',
+  },
   bookings: {
     title: 'My Bookings | SalonBazar',
     description: 'View and manage your salon appointments. Track upcoming visits, past bookings and cancellations on SalonBazar.',

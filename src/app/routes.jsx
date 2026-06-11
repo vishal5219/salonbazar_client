@@ -9,6 +9,7 @@ import Dashboard from '@/pages/Dashboard/index.jsx'
 import Profile from '@/pages/Profile/index.jsx'
 import Admin from '@/pages/Admin/index.jsx'
 import About from '@/pages/About/index.jsx'
+import Offers from '@/pages/Offers/index.jsx'
 import NotFound from '@/pages/NotFound/index.jsx'
 import Bookings from '@/pages/Bookings/index.jsx'
 import Wishlist from '@/pages/Wishlist/index.jsx'
@@ -28,6 +29,7 @@ const router = createBrowserRouter([
       { path: 'wishlist',  element: <ProtectedRoute><Wishlist /></ProtectedRoute> },
       { path: 'admin',     element: <ProtectedRoute><Admin /></ProtectedRoute> },
       { path: 'about',     element: <About /> },
+      { path: 'offers',    element: <Offers /> },
       { path: '*',         element: <NotFound /> },
     ],
   },
