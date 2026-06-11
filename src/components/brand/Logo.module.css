@@ -1,0 +1,128 @@
+.logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 11px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.mark {
+  width: 38px;
+  height: 38px;
+  flex-shrink: 0;
+  filter: drop-shadow(0 2px 8px rgba(201, 168, 76, 0.28));
+}
+
+.wordmark {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1;
+  gap: 3px;
+}
+
+.brandLine {
+  display: flex;
+  align-items: baseline;
+  gap: 0;
+}
+
+.salon {
+  font-family: var(--font-display);
+  font-size: 21px;
+  font-weight: 300;
+  letter-spacing: 0.06em;
+  color: var(--charcoal);
+  text-transform: capitalize;
+}
+
+.bazar {
+  font-family: var(--font-display);
+  font-size: 24px;
+  font-weight: 600;
+  font-style: italic;
+  letter-spacing: 0.01em;
+  background: linear-gradient(120deg, #9E7E30 0%, #C9A84C 38%, #F0DCA0 58%, #B8923F 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  margin-left: 1px;
+}
+
+.crest {
+  font-family: var(--font-body);
+  font-size: 7px;
+  font-weight: 600;
+  letter-spacing: 0.42em;
+  text-transform: uppercase;
+  color: var(--gold-dark);
+  opacity: 0.72;
+  padding-left: 1px;
+}
+
+.variant_inverse .salon {
+  color: rgba(250, 248, 245, 0.92);
+}
+
+.variant_inverse .bazar {
+  background: linear-gradient(120deg, #F8EED0 0%, #E8C97A 45%, #C9A84C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.variant_inverse .crest {
+  color: rgba(232, 201, 122, 0.78);
+}
+
+.variant_footer .salon {
+  color: rgba(250, 248, 245, 0.9);
+}
+
+.variant_footer .bazar {
+  background: linear-gradient(120deg, #F5E6B8 0%, #E8C97A 50%, #C9A84C 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.variant_footer .crest {
+  color: rgba(232, 201, 122, 0.65);
+}
+
+.variant_modal .salon {
+  color: var(--charcoal);
+}
+
+.variant_modal .bazar {
+  background: linear-gradient(120deg, #9E7E30 0%, #C9A84C 50%, #E8C97A 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.variant_modal .crest {
+  color: var(--gold-dark);
+  opacity: 0.65;
+}
+
+@media (max-width: 900px) {
+  .crest {
+    display: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .mark {
+    width: 34px;
+    height: 34px;
+  }
+
+  .salon {
+    font-size: 18px;
+  }
+
+  .bazar {
+    font-size: 21px;
+  }
+}

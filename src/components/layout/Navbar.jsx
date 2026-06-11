@@ -5,6 +5,7 @@ import { openAuthModal } from '@/store/slices/uiSlice'
 import { logout } from '@/store/slices/authSlice'
 import { ROLES } from '@/constants/roles'
 import { isSuperAdmin, isSalonTeam } from '@/utils/roleAccess'
+import Logo from '@/components/brand/Logo'
 import styles from './Navbar.module.css'
 
 export default function Navbar() {
@@ -36,10 +37,7 @@ export default function Navbar() {
   return (
     <nav className={`${styles.nav} ${solidNav ? styles.scrolled : ''}`}>
       <div className={styles.inner}>
-        <Link to="/" className={styles.logo}>
-          <span className={styles.logoIcon}><img src="/logo/salon-bazar-logo-bg.png" alt="SalonBazar" width={32} height={32} /></span>
-          <span><em>Salon Bazar</em></span>
-        </Link>
+        <Logo to="/" variant={solidNav ? 'default' : 'inverse'} />
 
         <ul className={styles.links}>
           <li>

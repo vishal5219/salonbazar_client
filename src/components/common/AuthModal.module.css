@@ -45,12 +45,8 @@
 }
 
 .logoMark {
-  font-family: var(--font-display);
-  font-size: 20px;
-  color: var(--warm-white);
+  justify-content: center;
 }
-
-.logoMark em { color: var(--gold); font-style: italic; }
 
 .closeBtn {
   position: absolute;

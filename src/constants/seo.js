@@ -4,7 +4,7 @@ export const SEO_DEFAULTS = {
   siteName: APP_NAME,
   tagline: APP_TAGLINE,
   baseUrl: APP_URL.replace(/\/$/, ''),
-  defaultImage: `${APP_URL.replace(/\/$/, '')}/logo/salon-bazar-logo-bg.png`,
+  defaultImage: `${APP_URL.replace(/\/$/, '')}/logo/salonbazar-mark.png`,
   twitterHandle: '@salonbazar',
   locale: 'en_IN',
 }

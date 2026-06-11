@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom'
+import Logo from '@/components/brand/Logo'
 import styles from './Footer.module.css'
 
 export default function Footer() {
@@ -6,7 +7,7 @@ export default function Footer() {
     <footer className={styles.footer}>
       <div className={styles.topBar}>
         <div className={styles.brand}>
-          <span className={styles.logo}>✦ Salon<em>Bazar</em></span>
+          <Logo to="/" variant="footer" className={styles.logo} />
           <p>India's most trusted salon booking marketplace. Discover, book, and experience premium grooming.</p>
         </div>
         <div className={styles.linksGrid}>

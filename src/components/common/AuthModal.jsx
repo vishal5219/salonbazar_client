@@ -5,6 +5,7 @@ import { closeAuthModal, setAuthModalTab, showNotification } from '@/store/slice
 import { loginUser, registerUser } from '@/store/slices/authSlice'
 import { ROLES } from '@/constants/roles'
 import { getPostAuthPath } from '@/utils/authRedirect'
+import Logo from '@/components/brand/Logo'
 import styles from './AuthModal.module.css'
 
 export default function AuthModal() {
@@ -52,7 +53,7 @@ export default function AuthModal() {
       <div className={styles.modal} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true">
         <div className={styles.modalHeader}>
           <div className={styles.topDeco}>
-            <span className={styles.logoMark}>✦ Salon<em>Bazar</em></span>
+            <Logo linked={false} variant="modal" className={styles.logoMark} />
           </div>
           <button type="button" className={styles.closeBtn} onClick={handleClose} aria-label="Close">✕</button>
           <div className={styles.tabs}>

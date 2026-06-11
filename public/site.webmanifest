@@ -8,14 +8,22 @@
   "background_color": "#FAF8F5",
   "icons": [
     {
-      "src": "/logo/salon-bazar-logo-bg.png",
-      "sizes": "192x192",
-      "type": "image/png"
+      "src": "/logo/salonbazar-mark.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
     },
     {
-      "src": "/logo/salon-bazar-logo-bg.png",
+      "src": "/android-chrome-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/android-chrome-512x512.png",
       "sizes": "512x512",
-      "type": "image/png"
+      "type": "image/png",
+      "purpose": "any"
     }
   ]
 }
