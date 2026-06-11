@@ -19,6 +19,14 @@ export const userService = {
 
   submitReview: (salonId, { rating, text, serviceName }) =>
     api.post(REVIEW_ENDPOINTS.create(salonId), { rating, text, serviceName }),
+
+  getStaff: () => api.get(USER_ENDPOINTS.staffList),
+
+  createStaff: (data) => api.post(USER_ENDPOINTS.staffCreate, data),
+
+  updateStaff: (staffId, data) => api.patch(USER_ENDPOINTS.staffUpdate(staffId), data),
+
+  removeStaff: (staffId) => api.delete(USER_ENDPOINTS.staffRemove(staffId)),
 }
 
 export default userService

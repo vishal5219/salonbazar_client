@@ -1,14 +1,20 @@
 import { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeAuthModal, setAuthModalTab, showNotification } from '@/store/slices/uiSlice'
 import { loginUser, registerUser } from '@/store/slices/authSlice'
+import { ROLES } from '@/constants/roles'
+import { getPostAuthPath } from '@/utils/authRedirect'
 import styles from './AuthModal.module.css'
 
 export default function AuthModal() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { authModalOpen, authModalTab } = useSelector(s => s.ui)
   const { loading } = useSelector(s => s.auth)
-  const [form, setForm] = useState({ name: '', email: '', phone: '', password: '' })
+  const [form, setForm] = useState({
+    name: '', email: '', phone: '', password: '', accountType: ROLES.CUSTOMER,
+  })
 
   if (!authModalOpen) return null
 
@@ -18,18 +24,24 @@ export default function AuthModal() {
   const handleSubmit = async (e) => {
     e.preventDefault()
     try {
+      let authResult
       if (authModalTab === 'login') {
-        await dispatch(loginUser({ email: form.email, password: form.password })).unwrap()
+        authResult = await dispatch(loginUser({ email: form.email, password: form.password })).unwrap()
       } else {
-        await dispatch(registerUser({
+        authResult = await dispatch(registerUser({
           name: form.name,
           email: form.email,
           phone: form.phone,
           password: form.password,
+          role: form.accountType,
         })).unwrap()
       }
       dispatch(closeAuthModal())
       dispatch(showNotification({ message: 'Welcome to SalonBazar!', type: 'success' }))
+
+      const role = authResult?.role || authResult?.user?.role
+      const salonId = authResult?.user?.salonId
+      navigate(getPostAuthPath(role, salonId))
     } catch (err) {
       dispatch(showNotification({ message: err || 'Authentication failed', type: 'error' }))
     }
@@ -37,28 +49,28 @@ export default function AuthModal() {
 
   return (
     <div className={styles.overlay} onClick={handleClose}>
-      <div className={styles.modal} onClick={e => e.stopPropagation()}>
-        {/* Decorative top */}
-        <div className={styles.topDeco}>
-          <span className={styles.logoMark}>✦ Salon<em>Bazar</em></span>
-        </div>
-
-        <button className={styles.closeBtn} onClick={handleClose}>✕</button>
-
-        {/* Tabs */}
-        <div className={styles.tabs}>
-          <button
-            className={`${styles.tab} ${authModalTab === 'login' ? styles.activeTab : ''}`}
-            onClick={() => handleTab('login')}
-          >
-            Sign In
-          </button>
-          <button
-            className={`${styles.tab} ${authModalTab === 'register' ? styles.activeTab : ''}`}
-            onClick={() => handleTab('register')}
-          >
-            Join Free
-          </button>
+      <div className={styles.modal} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true">
+        <div className={styles.modalHeader}>
+          <div className={styles.topDeco}>
+            <span className={styles.logoMark}>✦ Salon<em>Bazar</em></span>
+          </div>
+          <button type="button" className={styles.closeBtn} onClick={handleClose} aria-label="Close">✕</button>
+          <div className={styles.tabs}>
+            <button
+              type="button"
+              className={`${styles.tab} ${authModalTab === 'login' ? styles.activeTab : ''}`}
+              onClick={() => handleTab('login')}
+            >
+              Sign In
+            </button>
+            <button
+              type="button"
+              className={`${styles.tab} ${authModalTab === 'register' ? styles.activeTab : ''}`}
+              onClick={() => handleTab('register')}
+            >
+              Sign Up
+            </button>
+          </div>
         </div>
 
         <form onSubmit={handleSubmit} className={styles.form}>
@@ -85,6 +97,30 @@ export default function AuthModal() {
               required
             />
           </div>
+
+          {authModalTab === 'register' && (
+            <div className={styles.field}>
+              <label>I am signing up as</label>
+              <div className={styles.accountTypes}>
+                <button
+                  type="button"
+                  className={`${styles.accountType} ${form.accountType === ROLES.CUSTOMER ? styles.accountTypeActive : ''}`}
+                  onClick={() => setForm(f => ({ ...f, accountType: ROLES.CUSTOMER }))}
+                >
+                  <span className={styles.accountTypeTitle}>Customer</span>
+                  <span className={styles.accountTypeDesc}>Book salons & save favourites</span>
+                </button>
+                <button
+                  type="button"
+                  className={`${styles.accountType} ${form.accountType === ROLES.SHOP_OWNER ? styles.accountTypeActive : ''}`}
+                  onClick={() => setForm(f => ({ ...f, accountType: ROLES.SHOP_OWNER }))}
+                >
+                  <span className={styles.accountTypeTitle}>Salon Owner</span>
+                  <span className={styles.accountTypeDesc}>List & manage your salon</span>
+                </button>
+              </div>
+            </div>
+          )}
 
           {authModalTab === 'register' && (
             <div className={styles.field}>

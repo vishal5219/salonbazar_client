@@ -1,5 +1,7 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { setActiveView, advanceQueue } from '@/store/slices/dashboardSlice'
+import { useNavigate } from 'react-router-dom'
+import { advanceQueue } from '@/store/slices/dashboardSlice'
+import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
 import { FiTrendingUp, FiUsers, FiCalendar, FiDollarSign, FiArrowRight, FiClock } from 'react-icons/fi'
 import styles from './DashOverview.module.css'
 
@@ -23,8 +25,9 @@ function KpiCard({ icon: Icon, label, value, sub, trend, color }) {
   )
 }
 
-export default function DashOverview({ salon }) {
+export default function DashOverview() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { queue, bookings, earnings, queueLoading } = useSelector(s => s.dashboard)
 
   const todayBookings = bookings.filter(b => b.date === 'Today')
@@ -43,7 +46,7 @@ export default function DashOverview({ salon }) {
         </div>
         <button
           className={styles.walkInBtn}
-          onClick={() => dispatch(setActiveView('walkin'))}
+          onClick={() => navigate(DASHBOARD_PATHS.walkIn)}
         >
           + Add Walk-In
         </button>
@@ -64,7 +67,7 @@ export default function DashOverview({ salon }) {
             <h2 className={styles.sectionTitle}>Live Queue</h2>
             <span className={styles.livePill}><span className={styles.liveDot} />LIVE</span>
           </div>
-          <button className={styles.viewAllBtn} onClick={() => dispatch(setActiveView('queue'))}>
+          <button className={styles.viewAllBtn} onClick={() => navigate(DASHBOARD_PATHS.queue)}>
             Manage Queue <FiArrowRight size={13} />
           </button>
         </div>
@@ -125,7 +128,7 @@ export default function DashOverview({ salon }) {
       <div className={styles.section}>
         <div className={styles.sectionHeader}>
           <h2 className={styles.sectionTitle}>Today's Appointments</h2>
-          <button className={styles.viewAllBtn} onClick={() => dispatch(setActiveView('bookings'))}>
+          <button className={styles.viewAllBtn} onClick={() => navigate(DASHBOARD_PATHS.appointments)}>
             All Appointments <FiArrowRight size={13} />
           </button>
         </div>

@@ -1,11 +1,14 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { FiUser, FiPhone, FiScissors, FiUserCheck, FiCheck, FiArrowRight } from 'react-icons/fi'
-import { addManualCustomer, setActiveView } from '@/store/slices/dashboardSlice'
+import { addManualCustomer } from '@/store/slices/dashboardSlice'
+import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
 import styles from './DashWalkIn.module.css'
 
 export default function DashWalkIn() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { selectedSalon } = useSelector(s => s.salons)
   const { salonId } = useSelector(s => s.dashboard)
 
@@ -48,7 +51,7 @@ export default function DashWalkIn() {
           <h1 className={styles.pageTitle}>Walk-In Entry</h1>
           <p className={styles.pageSub}>Add a customer manually to the live queue</p>
         </div>
-        <button className={styles.viewQueueBtn} onClick={() => dispatch(setActiveView('queue'))}>
+        <button className={styles.viewQueueBtn} onClick={() => navigate(DASHBOARD_PATHS.queue)}>
           View Live Queue <FiArrowRight size={14} />
         </button>
       </div>

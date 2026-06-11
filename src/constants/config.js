@@ -102,6 +102,10 @@ export const USER_ENDPOINTS = {
   uploadAvatar:   '/users/me/avatar',
   bookings:       '/users/me/bookings',
   notifications:  '/users/me/notifications',
+  staffList:      '/users/staff',
+  staffCreate:    '/users/staff',
+  staffUpdate:    (staffId) => `/users/staff/${staffId}`,
+  staffRemove:    (staffId) => `/users/staff/${staffId}`,
 }
 
 // ── Dashboard / Analytics Endpoints ──────────────────────────

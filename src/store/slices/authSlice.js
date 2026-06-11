@@ -1,6 +1,7 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import authService from '@/services/authService'
 import userService from '@/services/userService'
+import { normalizeAuthPayload } from '@/utils/authRedirect'
 
 // ── Async thunks — call https://api.salonbazar.shop ──────────
 
@@ -72,7 +73,7 @@ export const restoreSession = createAsyncThunk(
 
     try {
       const user = await userService.getProfile()
-      return { user, role: user.role || 'customer' }
+      return normalizeAuthPayload({ user, role: user?.role })
     } catch (err) {
       authService.clearTokens()
       return rejectWithValue(err.message)
@@ -95,10 +96,21 @@ const authSlice = createSlice({
   initialState,
   reducers: {
     loginSuccess: (state, action) => {
+      const session = normalizeAuthPayload(action.payload)
+      if (!session) return
+      if (session.token) authService.saveTokens(session.token)
       state.isAuthenticated = true
-      state.user            = action.payload.user
-      state.role            = action.payload.role
+      state.user            = session.user
+      state.role            = session.role
       state.loading         = false
+    },
+    setSession: (state, action) => {
+      const session = normalizeAuthPayload(action.payload)
+      if (!session) return
+      if (session.token) authService.saveTokens(session.token)
+      state.isAuthenticated = true
+      state.user            = session.user
+      state.role            = session.role
     },
     logout: (state) => {
       state.user            = null
@@ -111,10 +123,12 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     const pending   = (state) => { state.loading = true; state.error = null }
     const fulfilled = (state, action) => {
-      state.loading         = false
+      const session = normalizeAuthPayload(action.payload)
+      state.loading = false
+      if (!session) return
       state.isAuthenticated = true
-      state.user            = action.payload?.user
-      state.role            = action.payload?.role || 'customer'
+      state.user            = session.user
+      state.role            = session.role
     }
     const rejected  = (state, action) => { state.loading = false; state.error = action.payload }
 
@@ -139,10 +153,11 @@ const authSlice = createSlice({
       })
       .addCase(restoreSession.fulfilled, (state, action) => {
         state.initializing = false
-        if (action.payload) {
+        const session = normalizeAuthPayload(action.payload)
+        if (session) {
           state.isAuthenticated = true
-          state.user            = action.payload.user
-          state.role            = action.payload.role
+          state.user            = session.user
+          state.role            = session.role
         }
       })
       .addCase(restoreSession.rejected, (state) => {
@@ -154,5 +169,5 @@ const authSlice = createSlice({
   },
 })
 
-export const { loginSuccess, logout, clearError } = authSlice.actions
+export const { loginSuccess, setSession, logout, clearError } = authSlice.actions
 export default authSlice.reducer

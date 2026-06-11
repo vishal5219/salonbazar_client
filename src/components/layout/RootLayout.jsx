@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { openAuthModal } from '@/store/slices/uiSlice'
 import { restoreSession } from '@/store/slices/authSlice'
 import { fetchWishlist, clearWishlist } from '@/store/slices/wishlistSlice'
+import { ROLES } from '@/constants/roles'
 import Navbar from '@/components/layout/Navbar'
 import Footer from '@/components/layout/Footer'
 import AuthModal from '@/components/common/AuthModal'
@@ -13,7 +14,7 @@ import ScrollToTop from '@/components/common/ScrollToTop'
 export default function RootLayout() {
   const [searchParams, setSearchParams] = useSearchParams()
   const dispatch = useDispatch()
-  const { isAuthenticated, initializing } = useSelector(s => s.auth)
+  const { isAuthenticated, initializing, role } = useSelector(s => s.auth)
 
   useEffect(() => {
     dispatch(restoreSession())
@@ -21,9 +22,9 @@ export default function RootLayout() {
 
   useEffect(() => {
     if (initializing) return
-    if (isAuthenticated) dispatch(fetchWishlist())
+    if (isAuthenticated && role === ROLES.CUSTOMER) dispatch(fetchWishlist())
     else dispatch(clearWishlist())
-  }, [isAuthenticated, initializing, dispatch])
+  }, [isAuthenticated, initializing, role, dispatch])
 
   useEffect(() => {
     const auth = searchParams.get('auth')

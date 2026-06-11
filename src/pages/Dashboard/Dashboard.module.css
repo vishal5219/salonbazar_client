@@ -4,6 +4,29 @@
     background: var(--cream);
     padding-top: var(--nav-height);
   }
+
+  .noSalon {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 48px 24px;
+    text-align: center;
+    gap: 12px;
+  }
+
+  .noSalon h2 { font-size: 24px; color: var(--charcoal); }
+  .noSalon p { color: var(--smoke); }
+
+  .noSalonBtn {
+    margin-top: 8px;
+    padding: 12px 22px;
+    background: var(--charcoal);
+    color: var(--warm-white);
+    border-radius: 100px;
+    font-weight: 500;
+  }
   
   .sidebar {
     width: 260px;

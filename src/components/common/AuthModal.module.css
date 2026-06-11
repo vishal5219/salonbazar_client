@@ -5,9 +5,11 @@
   backdrop-filter: blur(6px);
   z-index: 2000;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
-  padding: 24px;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
   animation: fadeIn 0.2s ease;
 }
 
@@ -18,9 +20,20 @@
   border-radius: 20px;
   width: 100%;
   max-width: 420px;
+  margin: auto;
   position: relative;
+  display: flex;
+  flex-direction: column;
+  max-height: min(calc(100dvh - 32px), 640px);
   overflow: hidden;
+  box-shadow: 0 24px 64px rgba(26, 23, 20, 0.35);
   animation: slideUp 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  flex-shrink: 0;
+}
+
+.modalHeader {
+  flex-shrink: 0;
+  position: relative;
 }
 
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
@@ -82,11 +95,17 @@
   border-bottom-color: var(--gold) !important;
 }
 
-/* Form */
-.form { padding: 24px 28px 28px; }
+/* Form — scrollable body when register fields overflow */
+.form {
+  padding: 20px 24px 24px;
+  overflow-y: auto;
+  flex: 1;
+  min-height: 0;
+  -webkit-overflow-scrolling: touch;
+}
 
 .field {
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .field label {
@@ -151,7 +170,7 @@
 .divider {
   text-align: center;
   position: relative;
-  margin: 20px 0;
+  margin: 16px 0;
   color: var(--smoke);
   font-size: 12.5px;
 }
@@ -194,4 +213,64 @@
 .socialBtn:hover {
   border-color: var(--gold);
   background: var(--cream);
+}
+
+.accountTypes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.accountType {
+  text-align: left;
+  padding: 12px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 12px;
+  background: #fff;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+}
+
+.accountType:hover { border-color: var(--gold); }
+
+.accountTypeActive {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.accountTypeTitle {
+  display: block;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--charcoal);
+  margin-bottom: 4px;
+}
+
+.accountTypeDesc {
+  display: block;
+  font-size: 11.5px;
+  color: var(--smoke);
+  line-height: 1.4;
+}
+
+@media (max-width: 480px) {
+  .overlay {
+    padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
+  }
+
+  .modal {
+    max-height: calc(100dvh - 24px);
+    border-radius: 16px;
+  }
+
+  .form {
+    padding: 16px 18px 20px;
+  }
+
+  .accountTypes {
+    grid-template-columns: 1fr;
+  }
+
+  .socials {
+    grid-template-columns: 1fr;
+  }
 }

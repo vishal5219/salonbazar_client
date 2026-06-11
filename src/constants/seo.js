@@ -30,6 +30,12 @@ export const PAGE_SEO = {
     description: 'Grab exclusive SalonBazar coupon codes and spotlight deals from top-rated salons. Save on haircuts, facials, spa and grooming — apply at checkout.',
     path: '/offers',
   },
+  registerSalon: {
+    title: 'Register Your Salon | SalonBazar',
+    description: 'List your salon on SalonBazar. Manage bookings, live queue, and staff from your owner dashboard.',
+    path: '/register-salon',
+    noindex: true,
+  },
   bookings: {
     title: 'My Bookings | SalonBazar',
     description: 'View and manage your salon appointments. Track upcoming visits, past bookings and cancellations on SalonBazar.',

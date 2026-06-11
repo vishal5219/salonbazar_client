@@ -5,9 +5,11 @@ import { showNotification } from '@/store/slices/uiSlice'
 import styles from './AdminUsers.module.css'
 
 const ROLE_COLORS   = {
-  customer:   { bg: 'rgba(59,130,246,.12)',  color: '#60A5FA' },
-  shop_owner: { bg: 'rgba(201,168,76,.15)',  color: '#C9A84C' },
-  admin:      { bg: 'rgba(139,92,246,.12)',  color: '#A78BFA' },
+  customer:     { bg: 'rgba(59,130,246,.12)',  color: '#60A5FA' },
+  shop_owner:   { bg: 'rgba(201,168,76,.15)',  color: '#C9A84C' },
+  shop_staff:   { bg: 'rgba(16,185,129,.12)',  color: '#34D399' },
+  super_admin:  { bg: 'rgba(139,92,246,.12)',  color: '#A78BFA' },
+  admin:        { bg: 'rgba(139,92,246,.12)',  color: '#A78BFA' },
 }
 
 const STATUS_COLORS = {
@@ -15,7 +17,7 @@ const STATUS_COLORS = {
   suspended: { bg: 'rgba(239,68,68,.12)',   color: '#FCA5A5' },
 }
 
-const ROLE_FILTERS = ['all', 'customer', 'shop_owner']
+const ROLE_FILTERS = ['all', 'customer', 'shop_owner', 'shop_staff']
 
 export default function AdminUsers() {
   const dispatch = useDispatch()
@@ -66,7 +68,7 @@ export default function AdminUsers() {
               className={`${styles.roleTab} ${userFilter === r ? styles.roleTabActive : ''}`}
               onClick={() => dispatch(setUserFilter(r))}
             >
-              {r === 'shop_owner' ? 'Shop Owners' : r.charAt(0).toUpperCase() + r.slice(1)}
+              {r === 'shop_owner' ? 'Shop Owners' : r === 'shop_staff' ? 'Staff' : r.charAt(0).toUpperCase() + r.slice(1)}
               <span className={styles.tabCount}>
                 {r === 'all' ? users.length : users.filter(u => u.role === r).length}
               </span>

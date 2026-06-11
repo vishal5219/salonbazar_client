@@ -62,14 +62,12 @@ const initialState = {
   loading:      false,
   queueLoading: false,
   error:        null,
-  activeView:   'overview',
 }
 
 const dashboardSlice = createSlice({
   name: 'dashboard',
   initialState,
   reducers: {
-    setActiveView:    (s, a) => { s.activeView = a.payload },
     removeFromQueue:  (s, a) => {
       s.queue = s.queue.filter(q => q.id !== a.payload)
         .map((q, i) => ({ ...q, position: i + 1 }))
@@ -121,5 +119,5 @@ const dashboardSlice = createSlice({
   },
 })
 
-export const { setActiveView, removeFromQueue, markCompleted } = dashboardSlice.actions
+export const { removeFromQueue, markCompleted } = dashboardSlice.actions
 export default dashboardSlice.reducer

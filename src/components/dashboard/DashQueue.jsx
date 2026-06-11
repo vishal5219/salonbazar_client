@@ -1,6 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { FiPhone, FiTrash2, FiClock, FiUserPlus } from 'react-icons/fi'
-import { advanceQueue, removeFromQueue, setActiveView } from '@/store/slices/dashboardSlice'
+import { advanceQueue, removeFromQueue } from '@/store/slices/dashboardSlice'
+import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
 import styles from './DashQueue.module.css'
 
 const TYPE_COLORS = {
@@ -11,6 +13,7 @@ const TYPE_COLORS = {
 
 export default function DashQueue() {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   const { queue, queueLoading } = useSelector(s => s.dashboard)
 
   const inProgress = queue.find(q => q.status === 'in_progress')
@@ -24,7 +27,7 @@ export default function DashQueue() {
           <p className={styles.pageSub}>{queue.length} customer{queue.length !== 1 ? 's' : ''} in queue</p>
         </div>
         <div className={styles.headerActions}>
-          <button className={styles.addBtn} onClick={() => dispatch(setActiveView('walkin'))}>
+          <button className={styles.addBtn} onClick={() => navigate(DASHBOARD_PATHS.walkIn)}>
             <FiUserPlus size={15} /> Add Walk-In
           </button>
           <button

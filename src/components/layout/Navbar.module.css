@@ -72,8 +72,29 @@
 }
 
 .link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--warm-white);
+}
+
+.linkActive {
+  background: rgba(255, 255, 255, 0.14);
+  color: var(--warm-white);
+  font-weight: 500;
+}
+
+.nav.scrolled .link {
+  color: var(--charcoal-3);
+}
+
+.nav.scrolled .link:hover {
   background: var(--cream);
   color: var(--gold-dark);
+}
+
+.nav.scrolled .linkActive {
+  background: var(--cream);
+  color: var(--gold-dark);
+  font-weight: 600;
 }
 
 .linkPartner {
@@ -105,12 +126,27 @@
   font-size: 13.5px;
   font-weight: 500;
   color: var(--warm-white);
+  border: 1.5px solid rgba(255, 255, 255, 0.75);
   border-radius: 8px;
   transition: all var(--transition-fast);
 }
 
 .btnLogin:hover {
-  background: var(--gold-dark);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: var(--warm-white);
+  color: var(--warm-white);
+}
+
+.nav.scrolled .btnLogin {
+  color: var(--charcoal);
+  border-color: var(--cream-2);
+  background: transparent;
+}
+
+.nav.scrolled .btnLogin:hover {
+  background: var(--cream);
+  border-color: var(--gold);
+  color: var(--gold-dark);
 }
 
 .btnRegister {
@@ -276,6 +312,11 @@
   color: var(--gold-dark);
 }
 
+.mobileLinkActive {
+  color: var(--gold-dark);
+  font-weight: 600;
+}
+
 .mobileDivider {
   height: 1px;
   background: var(--cream-2);
@@ -293,6 +334,18 @@
   flex: 1;
   padding: 12px;
   text-align: center;
+}
+
+.mobileAuth .btnLogin {
+  color: var(--charcoal);
+  border: 1.5px solid var(--cream-2);
+  background: transparent;
+}
+
+.mobileAuth .btnLogin:hover {
+  background: var(--cream);
+  border-color: var(--gold);
+  color: var(--gold-dark);
 }
 
 @media (max-width: 768px) {

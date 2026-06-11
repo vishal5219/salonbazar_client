@@ -29,6 +29,19 @@
     display: block;
     border: 2px solid var(--charcoal-3);
   }
+
+  .salonImgPlaceholder {
+    width: 44px;
+    height: 44px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--charcoal-3);
+    color: var(--gold);
+    font-size: 18px;
+    border: 2px solid var(--charcoal-3);
+  }
   
   .liveIndicator {
     position: absolute;
@@ -161,6 +174,7 @@
     transition: all var(--transition-fast);
     text-align: left;
     position: relative;
+    text-decoration: none;
   }
   
   .navItem:hover {
