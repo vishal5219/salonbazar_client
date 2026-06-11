@@ -241,6 +241,13 @@
     color: var(--smoke);
     transition: all var(--transition-fast);
     text-align: left;
+    text-decoration: none;
   }
   
   .bottomItem:hover { background: var(--charcoal-2); color: var(--warm-white); }
+
+  .bottomItemActive {
+    background: var(--charcoal-2);
+    color: var(--warm-white);
+    border-left: 2px solid var(--gold);
+  }

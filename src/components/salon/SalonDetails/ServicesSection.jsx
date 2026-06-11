@@ -2,10 +2,11 @@ import { useState } from 'react'
 import { FiClock, FiPlus, FiCheck } from 'react-icons/fi'
 import styles from './ServicesSection.module.css'
 
-export default function ServicesSection({ categories, selectedService, onSelect }) {
-  const [activeCategory, setActiveCategory] = useState(categories[0]?.id)
+export default function ServicesSection({ categories = [], selectedService, onSelect }) {
+  const serviceCategories = categories || []
+  const [activeCategory, setActiveCategory] = useState(serviceCategories[0]?.id)
 
-  const currentCat = categories.find(c => c.id === activeCategory) || categories[0]
+  const currentCat = serviceCategories.find(c => c.id === activeCategory) || serviceCategories[0]
 
   return (
     <div className={styles.wrap}>
@@ -16,7 +17,10 @@ export default function ServicesSection({ categories, selectedService, onSelect 
 
       {/* Category tabs */}
       <div className={styles.catTabs}>
-        {categories.map(cat => (
+        {serviceCategories.length === 0 && (
+          <p className={styles.empty}>Services will be listed here soon.</p>
+        )}
+        {serviceCategories.map(cat => (
           <button
             key={cat.id}
             className={`${styles.catTab} ${activeCategory === cat.id ? styles.catActive : ''}`}
@@ -30,7 +34,7 @@ export default function ServicesSection({ categories, selectedService, onSelect 
 
       {/* Services list */}
       <div className={styles.servicesList}>
-        {currentCat?.items.map((service, i) => {
+        {(currentCat?.items || []).map((service, i) => {
           const isSelected = selectedService?.id === service.id
           return (
             <div

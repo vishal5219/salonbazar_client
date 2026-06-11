@@ -1,0 +1,146 @@
+.wrap { padding: 8px 0 40px; }
+
+.header { margin-bottom: 24px; }
+
+.title {
+  font-size: clamp(26px, 3vw, 34px);
+  color: var(--charcoal);
+  margin: 8px 0 10px;
+}
+
+.title em { color: var(--gold-dark); font-style: italic; }
+
+.sub {
+  font-size: 14px;
+  color: var(--smoke);
+  line-height: 1.65;
+  max-width: 560px;
+}
+
+.loading {
+  padding: 32px;
+  color: var(--smoke);
+}
+
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.statusLabel {
+  font-size: 13px;
+  color: var(--smoke);
+  font-weight: 500;
+}
+
+.statusBadge {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: capitalize;
+  padding: 5px 12px;
+  border-radius: 999px;
+}
+
+.status_active { background: rgba(16, 185, 129, 0.12); color: #059669; }
+.status_pending { background: rgba(249, 115, 22, 0.12); color: #EA580C; }
+.status_suspended { background: rgba(239, 68, 68, 0.12); color: #DC2626; }
+
+.form {
+  background: #fff;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 14px;
+  padding: 22px;
+}
+
+.sectionTitle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15px;
+  color: var(--charcoal);
+  margin: 20px 0 14px;
+}
+
+.sectionTitle:first-of-type { margin-top: 0; }
+
+.formGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 14px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--charcoal-3);
+}
+
+.field input,
+.field select,
+.field textarea {
+  padding: 11px 14px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: var(--font-body);
+}
+
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.fieldFull { grid-column: 1 / -1; }
+
+.toggleRow {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin: 20px 0;
+  font-size: 14px;
+  color: var(--charcoal-3);
+  cursor: pointer;
+}
+
+.toggleRow input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--gold-dark);
+}
+
+.saveBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.saveBtn:hover:not(:disabled) { background: var(--gold-dark); }
+
+.hint {
+  margin-top: 14px;
+  font-size: 13px;
+  color: var(--smoke);
+}
+
+@media (max-width: 700px) {
+  .formGrid { grid-template-columns: 1fr; }
+}

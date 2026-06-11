@@ -189,6 +189,12 @@
   border-color: var(--charcoal) !important;
 }
 
+.empty {
+  padding: 24px 0;
+  color: var(--smoke);
+  font-size: 14px;
+}
+
 @media (max-width: 640px) {
   .serviceCard { flex-direction: column; align-items: flex-start; gap: 14px; }
   .serviceRight { flex-direction: row; align-items: center; width: 100%; justify-content: space-between; }

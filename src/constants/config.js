@@ -61,6 +61,10 @@ export const QUEUE_ENDPOINTS = {
   leave:      (salonId) => `/salons/${salonId}/queue/leave`,
   advance:    (salonId) => `/salons/${salonId}/queue/advance`,
   manualAdd:  (salonId) => `/salons/${salonId}/queue/manual`,
+  reorder:    (salonId) => `/salons/${salonId}/queue/reorder`,
+  completed:  (salonId) => `/salons/${salonId}/queue/completed`,
+  update:     (salonId, entryId) => `/salons/${salonId}/queue/${entryId}`,
+  remove:     (salonId, entryId) => `/salons/${salonId}/queue/${entryId}`,
 }
 
 // ── Review Endpoints ──────────────────────────────────────────

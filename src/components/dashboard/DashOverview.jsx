@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { advanceQueue } from '@/store/slices/dashboardSlice'
 import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
-import { FiTrendingUp, FiUsers, FiCalendar, FiDollarSign, FiArrowRight, FiClock } from 'react-icons/fi'
+import { FiTrendingUp, FiUsers, FiCalendar, FiDollarSign, FiArrowRight, FiClock, FiCheckCircle } from 'react-icons/fi'
 import styles from './DashOverview.module.css'
 
 function KpiCard({ icon: Icon, label, value, sub, trend, color }) {
@@ -28,11 +28,12 @@ function KpiCard({ icon: Icon, label, value, sub, trend, color }) {
 export default function DashOverview() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { queue, bookings, earnings, queueLoading } = useSelector(s => s.dashboard)
+  const { queue, bookings, earnings, queueLoading, queueStats } = useSelector(s => s.dashboard)
 
   const todayBookings = bookings.filter(b => b.date === 'Today')
   const inProgress    = queue.find(q => q.status === 'in_progress')
   const waitingCount  = queue.filter(q => q.status === 'waiting').length
+  const completedToday = queueStats?.completedToday ?? 0
 
   return (
     <div className={styles.wrap}>
@@ -56,8 +57,9 @@ export default function DashOverview() {
       <div className={styles.kpiGrid}>
         <KpiCard icon={FiDollarSign} label="Today's Revenue"    value={`₹${earnings?.today?.toLocaleString()}`} sub="vs ₹21.2K yesterday" trend="+12%"   color="#C9A84C" />
         <KpiCard icon={FiCalendar}   label="Today's Bookings"   value={todayBookings.length}                      sub={`${todayBookings.filter(b=>b.status==='confirmed').length} confirmed`} trend="+3"    color="#3B82F6" />
-        <KpiCard icon={FiUsers}      label="In Queue Now"        value={queue.length}                              sub={`${waitingCount} waiting`}            trend={null}   color="#10B981" />
-        <KpiCard icon={FiTrendingUp} label="This Month"          value={`₹${(earnings?.thisMonth/1000).toFixed(0)}K`} sub="vs last month"  trend="+18%"   color="#8B5CF6" />
+        <KpiCard icon={FiUsers}         label="In Queue Now"     value={queue.length}                              sub={`${waitingCount} waiting`}                         trend={null}   color="#10B981" />
+        <KpiCard icon={FiCheckCircle}   label="Completed Today" value={completedToday}                            sub="customers served"                                  trend={null}   color="#2563EB" />
+        <KpiCard icon={FiTrendingUp}    label="This Month"      value={`₹${((earnings?.thisMonth || 0)/1000).toFixed(0)}K`} sub="vs last month"                         trend="+18%"   color="#8B5CF6" />
       </div>
 
       {/* Live queue snapshot */}
@@ -67,9 +69,14 @@ export default function DashOverview() {
             <h2 className={styles.sectionTitle}>Live Queue</h2>
             <span className={styles.livePill}><span className={styles.liveDot} />LIVE</span>
           </div>
-          <button className={styles.viewAllBtn} onClick={() => navigate(DASHBOARD_PATHS.queue)}>
-            Manage Queue <FiArrowRight size={13} />
-          </button>
+          <div className={styles.sectionActions}>
+            <button className={styles.viewAllBtn} onClick={() => navigate(DASHBOARD_PATHS.queueCompleted)}>
+              Completed ({completedToday}) <FiCheckCircle size={13} />
+            </button>
+            <button className={styles.viewAllBtn} onClick={() => navigate(DASHBOARD_PATHS.queue)}>
+              Manage Queue <FiArrowRight size={13} />
+            </button>
+          </div>
         </div>
 
         {queue.length === 0 ? (

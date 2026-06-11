@@ -126,16 +126,16 @@ export default function SalonDetailHero({ salon }) {
             </span>
             <span className={styles.infoPill}>
               <FiClock size={12} />
-              {salon.workingHours.find(h => h.day === new Date().toLocaleString('en', { weekday: 'long' }))?.open || '10:00 AM'}
+              {(salon.workingHours || []).find(h => h.day === new Date().toLocaleString('en', { weekday: 'long' }))?.open || '10:00 AM'}
               {' – '}
-              {salon.workingHours.find(h => h.day === new Date().toLocaleString('en', { weekday: 'long' }))?.close || '8:00 PM'}
+              {(salon.workingHours || []).find(h => h.day === new Date().toLocaleString('en', { weekday: 'long' }))?.close || '8:00 PM'}
             </span>
             <span className={styles.infoPill}>Est. {salon.established}</span>
           </div>
 
           {/* Amenity tags */}
           <div className={styles.amenities}>
-            {salon.amenities.map(a => (
+            {(salon.amenities || []).map(a => (
               <span key={a} className={styles.amenityTag}>✓ {a}</span>
             ))}
           </div>

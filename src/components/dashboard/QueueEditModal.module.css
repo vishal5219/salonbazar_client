@@ -1,0 +1,134 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(26, 22, 18, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  z-index: 1000;
+}
+
+.modal {
+  width: 100%;
+  max-width: 440px;
+  background: var(--warm-white);
+  border-radius: 16px;
+  border: 1.5px solid var(--cream-2);
+  box-shadow: 0 24px 60px rgba(26, 22, 18, 0.18);
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 20px 12px;
+  border-bottom: 1px solid var(--cream-2);
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 400;
+  color: var(--charcoal);
+}
+
+.closeBtn {
+  width: 34px;
+  height: 34px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--smoke);
+  background: transparent;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.closeBtn:hover { background: var(--cream); color: var(--charcoal); }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  padding: 18px 20px 20px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field span {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--smoke);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-family: var(--font-body);
+}
+
+.field input,
+.field select {
+  padding: 10px 12px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 10px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  color: var(--charcoal);
+  background: #fff;
+}
+
+.field input:focus,
+.field select:focus {
+  outline: none;
+  border-color: var(--gold);
+}
+
+.row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 4px;
+}
+
+.cancelBtn,
+.saveBtn {
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.cancelBtn {
+  border: 1.5px solid var(--cream-2);
+  background: #fff;
+  color: var(--charcoal);
+}
+
+.cancelBtn:hover:not(:disabled) { border-color: var(--gold); }
+
+.saveBtn {
+  border: none;
+  background: var(--charcoal);
+  color: var(--warm-white);
+}
+
+.saveBtn:hover:not(:disabled) { background: #2a2520; }
+.saveBtn:disabled,
+.cancelBtn:disabled { opacity: 0.55; cursor: not-allowed; }
+
+@media (max-width: 480px) {
+  .row { grid-template-columns: 1fr; }
+}

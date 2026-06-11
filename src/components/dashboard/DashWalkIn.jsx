@@ -1,48 +1,100 @@
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { FiUser, FiPhone, FiScissors, FiUserCheck, FiCheck, FiArrowRight } from 'react-icons/fi'
 import { addManualCustomer } from '@/store/slices/dashboardSlice'
+import { fetchSalonById } from '@/store/slices/salonSlice'
+import { showNotification } from '@/store/slices/uiSlice'
 import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
+import { FALLBACK_WALK_IN_SERVICES } from '@/constants/walkInServices'
 import styles from './DashWalkIn.module.css'
+
+function flattenSalonServices(salon) {
+  return (salon?.services || []).flatMap(cat =>
+    (cat.items || []).map(item => ({
+      id: item.id,
+      name: item.name,
+      duration: item.duration,
+      price: item.price,
+      category: cat.category,
+      categoryIcon: cat.icon,
+    }))
+  )
+}
 
 export default function DashWalkIn() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { user } = useSelector(s => s.auth)
   const { selectedSalon } = useSelector(s => s.salons)
-  const { salonId } = useSelector(s => s.dashboard)
+  const { salonId: dashboardSalonId } = useSelector(s => s.dashboard)
 
-  const [form, setForm]         = useState({ name: '', phone: '', serviceId: '', staffId: '' })
-  const [loading, setLoading]   = useState(false)
-  const [success, setSuccess]   = useState(false)
+  const salonId = dashboardSalonId || user?.salonId
+
+  const [form, setForm] = useState({ name: '', phone: '', serviceId: '', staffId: '' })
+  const [loading, setLoading] = useState(false)
+  const [success, setSuccess] = useState(false)
   const [addedName, setAddedName] = useState('')
 
-  const services  = selectedSalon?.services?.flatMap(cat => cat.items) || []
-  const staff     = selectedSalon?.staff?.filter(s => s.available) || []
+  useEffect(() => {
+    if (!salonId) return
+    if (!selectedSalon || String(selectedSalon.id) !== String(salonId)) {
+      dispatch(fetchSalonById(salonId))
+    }
+  }, [salonId, selectedSalon, dispatch])
 
-  const selectedService = services.find(s => s.id === form.serviceId)
-  const selectedStaff   = staff.find(s => String(s.id) === form.staffId)
+  const catalogServices = useMemo(
+    () => flattenSalonServices(selectedSalon),
+    [selectedSalon]
+  )
 
-  const isValid = form.name.trim() && form.serviceId
+  const usingFallback = catalogServices.length === 0
+  const services = usingFallback ? FALLBACK_WALK_IN_SERVICES : catalogServices
+
+  const staff = (selectedSalon?.staff || []).filter(s => s.available)
+
+  const selectedService = services.find(s => String(s.id) === String(form.serviceId))
+  const selectedStaff = staff.find(s => String(s.id) === String(form.staffId))
+
+  const isValid = Boolean(form.name.trim() && form.serviceId)
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    if (!isValid) return
+    if (!isValid || !salonId) return
     setLoading(true)
-    await dispatch(addManualCustomer({
-      salonId: salonId || selectedSalon?.id || 1,
-      name:     form.name.trim(),
-      phone:    form.phone.trim(),
-      service:  selectedService?.name || '',
-      serviceId: selectedService?.id || '',
-      duration: selectedService?.duration || 45,
-      staff:    selectedStaff?.name || 'Any Available',
-    }))
-    setAddedName(form.name.trim())
-    setSuccess(true)
-    setLoading(false)
-    setForm({ name: '', phone: '', serviceId: '', staffId: '' })
+    try {
+      await dispatch(addManualCustomer({
+        salonId,
+        name: form.name.trim(),
+        phone: form.phone.trim(),
+        service: selectedService?.name || '',
+        serviceId: usingFallback ? null : (selectedService?.id || null),
+        duration: selectedService?.duration || 45,
+        staff: selectedStaff?.name || 'Any Available',
+      })).unwrap()
+      setAddedName(form.name.trim())
+      setSuccess(true)
+      setForm({ name: '', phone: '', serviceId: '', staffId: '' })
+      dispatch(showNotification({ message: 'Customer added to queue', type: 'success' }))
+    } catch (err) {
+      dispatch(showNotification({
+        message: err?.message || err || 'Could not add to queue',
+        type: 'error',
+      }))
+    } finally {
+      setLoading(false)
+    }
   }
+
+  const servicesByCategory = useMemo(() => {
+    const groups = {}
+    for (const svc of services) {
+      const key = svc.category || 'Services'
+      if (!groups[key]) groups[key] = []
+      groups[key].push(svc)
+    }
+    return groups
+  }, [services])
 
   return (
     <div className={styles.wrap}>
@@ -51,19 +103,18 @@ export default function DashWalkIn() {
           <h1 className={styles.pageTitle}>Walk-In Entry</h1>
           <p className={styles.pageSub}>Add a customer manually to the live queue</p>
         </div>
-        <button className={styles.viewQueueBtn} onClick={() => navigate(DASHBOARD_PATHS.queue)}>
+        <button type="button" className={styles.viewQueueBtn} onClick={() => navigate(DASHBOARD_PATHS.queue)}>
           View Live Queue <FiArrowRight size={14} />
         </button>
       </div>
 
       <div className={styles.layout}>
-        {/* Form */}
         <div className={styles.formCard}>
           <div className={styles.formHeader}>
             <div className={styles.formIcon}>🏪</div>
             <div>
               <div className={styles.formTitle}>POS Entry Mode</div>
-              <div className={styles.formSub}>Customer at counter — no phone needed</div>
+              <div className={styles.formSub}>Select a service, then add the customer to the queue</div>
             </div>
           </div>
 
@@ -71,17 +122,17 @@ export default function DashWalkIn() {
             <div className={styles.successBanner}>
               <FiCheck size={16} />
               <span><strong>{addedName}</strong> has been added to the queue!</span>
-              <button className={styles.successClose} onClick={() => setSuccess(false)}>✕</button>
+              <button type="button" className={styles.successClose} onClick={() => setSuccess(false)}>✕</button>
             </div>
           )}
 
           <form className={styles.form} onSubmit={handleSubmit}>
-            {/* Name */}
             <div className={styles.field}>
-              <label className={styles.fieldLabel}>
+              <label className={styles.fieldLabel} htmlFor="walkin-name">
                 <FiUser size={13} /> Customer Name <span className={styles.required}>*</span>
               </label>
               <input
+                id="walkin-name"
                 type="text"
                 className={styles.input}
                 placeholder="e.g. Rohan Mehta"
@@ -91,12 +142,12 @@ export default function DashWalkIn() {
               />
             </div>
 
-            {/* Phone (optional) */}
             <div className={styles.field}>
-              <label className={styles.fieldLabel}>
+              <label className={styles.fieldLabel} htmlFor="walkin-phone">
                 <FiPhone size={13} /> Phone Number <span className={styles.optional}>(optional)</span>
               </label>
               <input
+                id="walkin-phone"
                 type="tel"
                 className={styles.input}
                 placeholder="+91 98765 43210"
@@ -105,32 +156,53 @@ export default function DashWalkIn() {
               />
             </div>
 
-            {/* Service selection */}
             <div className={styles.field}>
-              <label className={styles.fieldLabel}>
+              <label className={styles.fieldLabel} id="walkin-service-label">
                 <FiScissors size={13} /> Service <span className={styles.required}>*</span>
               </label>
-              <div className={styles.serviceGrid}>
-                {(selectedSalon?.services || []).map(cat => (
-                  <div key={cat.id}>
-                    <div className={styles.catLabel}>{cat.icon} {cat.category}</div>
-                    {cat.items.slice(0, 3).map(svc => (
-                      <button
-                        key={svc.id}
-                        type="button"
-                        className={`${styles.serviceChip} ${form.serviceId === svc.id ? styles.serviceChipActive : ''}`}
-                        onClick={() => setForm(f => ({ ...f, serviceId: svc.id }))}
-                      >
-                        <span className={styles.chipName}>{svc.name}</span>
-                        <span className={styles.chipMeta}>{svc.duration}m · ₹{svc.price}</span>
-                      </button>
-                    ))}
-                  </div>
-                ))}
+
+              <div className={styles.servicePicker} role="listbox" aria-label="Select a service">
+                <div className={styles.servicePickerHeader}>
+                  <span>Tap a service below</span>
+                  <span>{services.length} options</span>
+                </div>
+                <div className={styles.servicePickerScroll}>
+                  {Object.entries(servicesByCategory).map(([category, items]) => (
+                    <div key={category} className={styles.serviceGroup}>
+                      <div className={styles.catLabel}>
+                        {items[0]?.categoryIcon || '✦'} {category}
+                      </div>
+                      {items.map(svc => {
+                        const isSelected = String(form.serviceId) === String(svc.id)
+                        return (
+                          <button
+                            key={svc.id}
+                            type="button"
+                            role="option"
+                            aria-selected={isSelected}
+                            className={`${styles.serviceOption} ${isSelected ? styles.serviceOptionActive : ''}`}
+                            onClick={() => setForm(f => ({ ...f, serviceId: String(svc.id) }))}
+                          >
+                            <span className={styles.serviceOptionMain}>
+                              <span className={styles.chipName}>{svc.name}</span>
+                              <span className={styles.chipMeta}>{svc.duration} min · ₹{svc.price}</span>
+                            </span>
+                            {isSelected && <FiCheck size={16} className={styles.serviceCheck} />}
+                          </button>
+                        )
+                      })}
+                    </div>
+                  ))}
+                </div>
               </div>
+
+              {usingFallback && (
+                <p className={styles.serviceHint}>
+                  Using quick services until your salon catalog is set up. Add services in Salon Settings later.
+                </p>
+              )}
             </div>
 
-            {/* Staff */}
             <div className={styles.field}>
               <label className={styles.fieldLabel}>
                 <FiUserCheck size={13} /> Assign Staff <span className={styles.optional}>(optional)</span>
@@ -156,6 +228,12 @@ export default function DashWalkIn() {
               </div>
             </div>
 
+            <p className={styles.submitHint}>
+              {!form.name.trim() && 'Enter customer name. '}
+              {form.name.trim() && !form.serviceId && 'Select a service to enable the button.'}
+              {isValid && 'Ready to add this walk-in to the live queue.'}
+            </p>
+
             <button
               type="submit"
               className={`${styles.submitBtn} ${(!isValid || loading) ? styles.submitDisabled : ''}`}
@@ -170,7 +248,6 @@ export default function DashWalkIn() {
           </form>
         </div>
 
-        {/* Preview card */}
         <div className={styles.previewCol}>
           <div className={styles.previewCard}>
             <div className={styles.previewTitle}>Queue Ticket Preview</div>
@@ -201,14 +278,12 @@ export default function DashWalkIn() {
             </div>
           </div>
 
-          {/* Tips */}
           <div className={styles.tipsCard}>
             <div className={styles.tipsTitle}>Quick Tips</div>
             <div className={styles.tips}>
-              <div className={styles.tip}><span>📲</span> Show QR code at counter for self-service</div>
-              <div className={styles.tip}><span>☎</span> Phone is optional — great for quick walk-ins</div>
+              <div className={styles.tip}><span>✂️</span> Scroll the list and tap a service to select</div>
+              <div className={styles.tip}><span>☎</span> Phone is optional for quick walk-ins</div>
               <div className={styles.tip}><span>⚡</span> Customer is added instantly to the live queue</div>
-              <div className={styles.tip}><span>🔔</span> If phone given, they'll receive a wait-time SMS</div>
             </div>
           </div>
         </div>

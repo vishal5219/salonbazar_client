@@ -15,13 +15,15 @@ function RatingBar({ star, count, total }) {
   )
 }
 
-export default function ReviewsSection({ reviews, rating, totalReviews, breakdown }) {
+export default function ReviewsSection({ reviews = [], rating, totalReviews, breakdown = {} }) {
   const [sortBy,  setSortBy]  = useState('recent')
   const [showAll, setShowAll] = useState(false)
 
-  const totalCount = Object.values(breakdown).reduce((a, b) => a + b, 0)
+  const reviewList = reviews || []
+  const ratingBreakdown = breakdown || {}
+  const totalCount = Object.values(ratingBreakdown).reduce((a, b) => a + b, 0)
 
-  const sorted = [...reviews].sort((a, b) => {
+  const sorted = [...reviewList].sort((a, b) => {
     if (sortBy === 'highest') return b.rating - a.rating
     if (sortBy === 'lowest')  return a.rating - b.rating
     return 0  // 'recent' — already in order
@@ -52,7 +54,7 @@ export default function ReviewsSection({ reviews, rating, totalReviews, breakdow
         {/* Bars */}
         <div className={styles.bars}>
           {[5,4,3,2,1].map(s => (
-            <RatingBar key={s} star={s} count={breakdown[s] || 0} total={totalCount} />
+            <RatingBar key={s} star={s} count={ratingBreakdown[s] || 0} total={totalCount} />
           ))}
         </div>
 

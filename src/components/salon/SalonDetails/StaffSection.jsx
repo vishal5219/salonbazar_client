@@ -1,7 +1,9 @@
 import styles from './StaffSection.module.css'
 import { FiStar } from 'react-icons/fi'
 
-export default function StaffSection({ staff }) {
+export default function StaffSection({ staff = [] }) {
+  const team = staff || []
+
   return (
     <div className={styles.wrap}>
       <div className={styles.header}>
@@ -10,7 +12,10 @@ export default function StaffSection({ staff }) {
       </div>
 
       <div className={styles.grid}>
-        {staff.map((member, i) => (
+        {team.length === 0 && (
+          <p className={styles.empty}>Team profiles will appear here soon.</p>
+        )}
+        {team.map((member, i) => (
           <div
             key={member.id}
             className={`${styles.card} ${!member.available ? styles.unavailable : ''}`}
@@ -48,7 +53,7 @@ export default function StaffSection({ staff }) {
 
               {/* Specialties */}
               <div className={styles.specialties}>
-                {member.specialties.map(s => (
+                {(member.specialties || []).map(s => (
                   <span key={s} className={styles.specialty}>{s}</span>
                 ))}
               </div>

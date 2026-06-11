@@ -23,6 +23,9 @@ export const queueService = {
   getQueue: (salonId) =>
     api.get(QUEUE_ENDPOINTS.status(salonId)),
 
+  getCompleted: (salonId) =>
+    api.get(QUEUE_ENDPOINTS.completed(salonId)),
+
   /** Get logged-in customer's own queue position */
   getMyPosition: (salonId) =>
     api.get(QUEUE_ENDPOINTS.myPosition(salonId)),
@@ -38,9 +41,15 @@ export const queueService = {
   /** Owner manually adds a customer to queue (no phone / POS mode) */
   manualAdd: (salonId, data) =>
     api.post(QUEUE_ENDPOINTS.manualAdd(salonId), data),
-  /*
-    data: { customer_name, phone?, service_id }
-  */
+
+  updateEntry: (salonId, entryId, data) =>
+    api.patch(QUEUE_ENDPOINTS.update(salonId, entryId), data),
+
+  removeEntry: (salonId, entryId) =>
+    api.delete(QUEUE_ENDPOINTS.remove(salonId, entryId)),
+
+  reorder: (salonId, order) =>
+    api.put(QUEUE_ENDPOINTS.reorder(salonId), { order }),
 }
 
 export default queueService

@@ -1,0 +1,222 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.pageHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.backLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--smoke);
+  margin-bottom: 8px;
+  font-family: var(--font-body);
+  transition: color var(--transition-fast);
+}
+
+.backLink:hover { color: var(--gold-dark); }
+
+.pageTitle {
+  font-family: var(--font-display);
+  font-size: clamp(24px, 3vw, 34px);
+  color: var(--charcoal);
+  font-weight: 400;
+}
+
+.pageSub {
+  font-size: 14px;
+  color: var(--smoke);
+  margin-top: 4px;
+}
+
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.countPill {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563EB;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: var(--font-body);
+}
+
+.refreshBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 10px;
+  background: var(--warm-white);
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--charcoal);
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.refreshBtn:hover:not(:disabled) { border-color: var(--gold); }
+.refreshBtn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.section {
+  background: var(--warm-white);
+  border: 1.5px solid var(--cream-2);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 14px 16px;
+  background: var(--cream);
+  border-radius: 12px;
+  border: 1.5px solid transparent;
+  animation: fadeUp 0.35s ease both;
+}
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.checkIcon {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.12);
+  color: #2563EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cardInfo { flex: 1; min-width: 0; }
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 4px;
+  flex-wrap: wrap;
+}
+
+.cardName {
+  font-size: 14.5px;
+  font-weight: 500;
+  color: var(--charcoal);
+}
+
+.typeBadge {
+  padding: 2px 7px;
+  border-radius: 5px;
+  font-size: 10.5px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: var(--font-body);
+}
+
+.cardService {
+  font-size: 13px;
+  color: var(--charcoal-3);
+  margin-bottom: 5px;
+}
+
+.cardMeta {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  font-size: 12px;
+  color: var(--smoke);
+}
+
+.cardMeta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+}
+
+.doneBadge {
+  flex-shrink: 0;
+  padding: 5px 10px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563EB;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  font-family: var(--font-body);
+}
+
+.emptyState {
+  text-align: center;
+  padding: 40px 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  color: var(--smoke);
+  font-size: 15px;
+}
+
+.emptyIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: rgba(37, 99, 235, 0.1);
+  color: #2563EB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 600;
+}
+
+.emptyLink {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--gold-dark);
+  font-weight: 500;
+}
+
+.spinning {
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (max-width: 640px) {
+  .card { flex-wrap: wrap; }
+  .doneBadge { margin-left: 50px; }
+}

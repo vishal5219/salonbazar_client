@@ -5,8 +5,9 @@ const TODAY = new Date().toLocaleString('en', { weekday: 'long' })
 
 export default function AboutSection({ salon }) {
   const [expanded, setExpanded] = useState(false)
-  const text  = salon.about
+  const text = salon.about || 'Welcome to our salon. We are preparing more details about our services and story — check back soon.'
   const short = text.slice(0, 280)
+  const workingHours = salon.workingHours || []
 
   return (
     <div className={styles.wrap}>
@@ -35,7 +36,13 @@ export default function AboutSection({ salon }) {
               </span>
             </div>
             <div className={styles.hoursList}>
-              {salon.workingHours.map(h => (
+              {workingHours.length === 0 && (
+                <div className={styles.hourRow}>
+                  <span className={styles.dayName}>Hours</span>
+                  <span className={styles.dayHours}>Contact salon for timings</span>
+                </div>
+              )}
+              {workingHours.map(h => (
                 <div key={h.day} className={`${styles.hourRow} ${h.day === TODAY ? styles.todayRow : ''}`}>
                   <span className={styles.dayName}>{h.day}</span>
                   <span className={styles.dayHours}>

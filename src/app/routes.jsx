@@ -18,10 +18,12 @@ import Bookings from '@/pages/Bookings/index.jsx'
 import Wishlist from '@/pages/Wishlist/index.jsx'
 import DashOverview from '@/components/dashboard/DashOverview'
 import DashQueue from '@/components/dashboard/DashQueue'
+import DashQueueCompleted from '@/components/dashboard/DashQueueCompleted'
 import DashBookings from '@/components/dashboard/DashBookings'
 import DashWalkIn from '@/components/dashboard/DashWalkIn'
 import DashAnalytics from '@/components/dashboard/DashAnalytics'
 import DashStaff from '@/components/dashboard/DashStaff'
+import DashSettings from '@/components/dashboard/DashSettings'
 import DashboardOwnerRoute from '@/components/dashboard/DashboardOwnerRoute'
 import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
 
@@ -51,6 +53,7 @@ const router = createBrowserRouter([
           { index: true, element: <Navigate to="overview" replace /> },
           { path: 'overview', element: <DashOverview /> },
           { path: 'queue', element: <DashQueue /> },
+          { path: 'queue/completed', element: <DashQueueCompleted /> },
           { path: 'appointments', element: <DashBookings /> },
           { path: 'walk-in', element: <DashWalkIn /> },
           {
@@ -66,6 +69,14 @@ const router = createBrowserRouter([
             element: (
               <DashboardOwnerRoute>
                 <DashStaff />
+              </DashboardOwnerRoute>
+            ),
+          },
+          {
+            path: 'settings',
+            element: (
+              <DashboardOwnerRoute>
+                <DashSettings />
               </DashboardOwnerRoute>
             ),
           },

@@ -213,7 +213,7 @@ export default function BookingPanel({ salon, selectedService, onClearService })
             >
               Any Available
             </button>
-            {salon.staff.filter(s => s.available).map(s => (
+            {(salon.staff || []).filter(s => s.available).map(s => (
               <button
                 key={s.id}
                 className={`${styles.staffChip} ${selStaff?.id === s.id ? styles.staffActive : ''}`}

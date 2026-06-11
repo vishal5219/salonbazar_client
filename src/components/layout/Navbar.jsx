@@ -5,6 +5,7 @@ import { openAuthModal } from '@/store/slices/uiSlice'
 import { logout } from '@/store/slices/authSlice'
 import { ROLES } from '@/constants/roles'
 import { isSuperAdmin, isSalonTeam } from '@/utils/roleAccess'
+import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
 import Logo from '@/components/brand/Logo'
 import styles from './Navbar.module.css'
 
@@ -26,13 +27,24 @@ export default function Navbar() {
   }, [location])
 
   const showOwnerRegister = isAuthenticated && role === ROLES.SHOP_OWNER && !user?.salonId
+  const showSalonNav = isAuthenticated && isSalonTeam(role)
+  const salonNavPath = user?.salonId ? DASHBOARD_PATHS.overview : '/register-salon'
   const solidNav = scrolled || location.pathname !== '/'
+
+  const isSalonNavActive = ({ isActive }) =>
+    isActive || (user?.salonId && location.pathname.startsWith('/dashboard'))
 
   const linkClass = ({ isActive }) =>
     isActive ? `${styles.link} ${styles.linkActive}` : styles.link
 
+  const salonLinkClass = (nav) =>
+    isSalonNavActive(nav) ? `${styles.link} ${styles.linkActive}` : styles.link
+
   const mobileLinkClass = ({ isActive }) =>
     isActive ? `${styles.mobileLink} ${styles.mobileLinkActive}` : styles.mobileLink
+
+  const salonMobileLinkClass = (nav) =>
+    isSalonNavActive(nav) ? `${styles.mobileLink} ${styles.mobileLinkActive}` : styles.mobileLink
 
   return (
     <nav className={`${styles.nav} ${solidNav ? styles.scrolled : ''}`}>
@@ -49,6 +61,11 @@ export default function Navbar() {
           <li>
             <NavLink to="/about" className={linkClass}>About</NavLink>
           </li>
+          {showSalonNav && (
+            <li>
+              <NavLink to={salonNavPath} className={salonLinkClass}>Salon</NavLink>
+            </li>
+          )}
           {!isAuthenticated && (
             <li>
               <Link to="/?auth=register" className={styles.linkPartner}>
@@ -120,6 +137,9 @@ export default function Navbar() {
         <NavLink to="/salons" className={mobileLinkClass}>Explore Salons</NavLink>
         <NavLink to="/offers" className={mobileLinkClass}>Offers</NavLink>
         <NavLink to="/about" className={mobileLinkClass}>About</NavLink>
+        {showSalonNav && (
+          <NavLink to={salonNavPath} className={salonMobileLinkClass}>Salon</NavLink>
+        )}
         {!isAuthenticated && (
           <Link to="/?auth=register" className={styles.mobileLink}>List Your Salon</Link>
         )}
