@@ -248,6 +248,102 @@
   line-height: 1.4;
 }
 
+.methodToggle {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.methodBtn {
+  padding: 11px 14px;
+  border: 1.5px solid var(--cream-2);
+  border-radius: 10px;
+  background: #fff;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: var(--font-body);
+  color: var(--charcoal);
+  transition: all var(--transition-fast);
+}
+
+.methodBtn:hover { border-color: var(--gold); }
+
+.methodBtnActive {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.fieldHint {
+  margin-top: 6px;
+  font-size: 12px;
+  color: var(--smoke);
+  line-height: 1.4;
+}
+
+.verifyBanner {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px;
+  background: var(--cream);
+  border-radius: 12px;
+  margin-bottom: 16px;
+  font-size: 13.5px;
+  color: var(--charcoal-3);
+  line-height: 1.5;
+}
+
+.verifyIcon {
+  font-size: 22px;
+  flex-shrink: 0;
+}
+
+.devHint {
+  padding: 10px 12px;
+  background: rgba(37, 99, 235, 0.08);
+  border: 1px solid rgba(37, 99, 235, 0.2);
+  border-radius: 8px;
+  font-size: 12px;
+  color: #1D4ED8;
+  margin-bottom: 14px;
+  word-break: break-all;
+}
+
+.devHint a { color: #1D4ED8; text-decoration: underline; }
+
+.otpInput {
+  letter-spacing: 0.35em;
+  text-align: center;
+  font-size: 20px !important;
+  font-weight: 600;
+}
+
+.emailNote {
+  font-size: 13px;
+  color: var(--smoke);
+  text-align: center;
+  margin-bottom: 12px;
+}
+
+.verifyActions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+.textBtn {
+  font-size: 13px;
+  color: var(--gold-dark);
+  font-family: var(--font-body);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.textBtn:hover { opacity: 0.7; }
+.textBtn:disabled { opacity: 0.4; cursor: not-allowed; }
+
 @media (max-width: 480px) {
   .overlay {
     padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom));
@@ -263,6 +359,10 @@
   }
 
   .accountTypes {
+    grid-template-columns: 1fr;
+  }
+
+  .methodToggle {
     grid-template-columns: 1fr;
   }
 

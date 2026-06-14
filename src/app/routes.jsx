@@ -25,6 +25,7 @@ import DashAnalytics from '@/components/dashboard/DashAnalytics'
 import DashStaff from '@/components/dashboard/DashStaff'
 import DashSettings from '@/components/dashboard/DashSettings'
 import DashboardOwnerRoute from '@/components/dashboard/DashboardOwnerRoute'
+import VerifyEmail from '@/pages/VerifyEmail/index.jsx'
 import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
 
 const router = createBrowserRouter([
@@ -37,6 +38,7 @@ const router = createBrowserRouter([
       { path: 'salons/:id', element: <SalonDetails /> },
       { path: 'offers', element: <Offers /> },
       { path: 'about', element: <About /> },
+      { path: 'verify-email', element: <VerifyEmail /> },
       { path: 'unauthorized', element: <Unauthorized /> },
       {
         path: 'booking/:salonId',

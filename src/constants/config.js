@@ -10,6 +10,10 @@ export const API_V1 = API_BASE_URL ? `${API_BASE_URL}/api/v1` : '/api/v1'
 export const AUTH_ENDPOINTS = {
   login:          '/auth/login',
   register:       '/auth/register',
+  registerInitiate: '/auth/register/initiate',
+  registerVerifyOtp: '/auth/register/verify-otp',
+  registerVerifyEmail: '/auth/register/verify-email',
+  registerResend: '/auth/register/resend',
   loginOTP:       '/auth/otp/send',
   verifyOTP:      '/auth/otp/verify',
   googleAuth:     '/auth/google',

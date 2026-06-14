@@ -1,0 +1,90 @@
+.page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: var(--cream);
+}
+
+.card {
+  width: 100%;
+  max-width: 420px;
+  background: var(--warm-white);
+  border: 1.5px solid var(--cream-2);
+  border-radius: 20px;
+  padding: 40px 32px;
+  text-align: center;
+  box-shadow: 0 16px 48px rgba(26, 22, 18, 0.08);
+}
+
+.logo {
+  justify-content: center;
+  margin-bottom: 28px;
+}
+
+.title {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 400;
+  color: var(--charcoal);
+  margin-bottom: 8px;
+}
+
+.sub {
+  font-size: 14px;
+  color: var(--smoke);
+  line-height: 1.5;
+}
+
+.spinner {
+  width: 36px;
+  height: 36px;
+  margin: 0 auto 20px;
+  border: 3px solid var(--cream-2);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.successIcon,
+.errorIcon {
+  width: 52px;
+  height: 52px;
+  margin: 0 auto 20px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: 700;
+}
+
+.successIcon {
+  background: rgba(16, 185, 129, 0.12);
+  color: #059669;
+}
+
+.errorIcon {
+  background: rgba(239, 68, 68, 0.1);
+  color: #DC2626;
+}
+
+.btn {
+  display: inline-block;
+  margin-top: 20px;
+  padding: 11px 22px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  border-radius: 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.btn:hover {
+  background: var(--gold-dark);
+}

@@ -2,51 +2,305 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
 import { closeAuthModal, setAuthModalTab, showNotification } from '@/store/slices/uiSlice'
-import { loginUser, registerUser } from '@/store/slices/authSlice'
+import {
+  loginUser,
+  initiateSignup,
+  verifySignupOtp,
+  resendSignupVerification,
+} from '@/store/slices/authSlice'
 import { ROLES } from '@/constants/roles'
 import { getPostAuthPath } from '@/utils/authRedirect'
 import Logo from '@/components/brand/Logo'
 import styles from './AuthModal.module.css'
+
+const emptyForm = {
+  name: '',
+  email: '',
+  phone: '',
+  password: '',
+  accountType: ROLES.CUSTOMER,
+  verifyMethod: 'email',
+}
 
 export default function AuthModal() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { authModalOpen, authModalTab } = useSelector(s => s.ui)
   const { loading } = useSelector(s => s.auth)
-  const [form, setForm] = useState({
-    name: '', email: '', phone: '', password: '', accountType: ROLES.CUSTOMER,
-  })
+
+  const [form, setForm] = useState(emptyForm)
+  const [loginId, setLoginId] = useState('')
+  const [loginPassword, setLoginPassword] = useState('')
+  const [signupStep, setSignupStep] = useState('details')
+  const [verificationId, setVerificationId] = useState(null)
+  const [otp, setOtp] = useState('')
+  const [devHint, setDevHint] = useState(null)
 
   if (!authModalOpen) return null
 
-  const handleClose = () => dispatch(closeAuthModal())
-  const handleTab = (tab) => dispatch(setAuthModalTab(tab))
+  const resetSignup = () => {
+    setSignupStep('details')
+    setVerificationId(null)
+    setOtp('')
+    setDevHint(null)
+  }
 
-  const handleSubmit = async (e) => {
+  const handleClose = () => {
+    resetSignup()
+    dispatch(closeAuthModal())
+  }
+
+  const handleTab = (tab) => {
+    resetSignup()
+    setForm(emptyForm)
+    dispatch(setAuthModalTab(tab))
+  }
+
+  const finishAuth = (authResult) => {
+    dispatch(closeAuthModal())
+    resetSignup()
+    dispatch(showNotification({ message: 'Welcome to SalonBazar!', type: 'success' }))
+    const role = authResult?.role || authResult?.user?.role
+    const salonId = authResult?.user?.salonId
+    navigate(getPostAuthPath(role, salonId))
+  }
+
+  const handleLogin = async (e) => {
     e.preventDefault()
     try {
-      let authResult
-      if (authModalTab === 'login') {
-        authResult = await dispatch(loginUser({ email: form.email, password: form.password })).unwrap()
-      } else {
-        authResult = await dispatch(registerUser({
-          name: form.name,
-          email: form.email,
-          phone: form.phone,
-          password: form.password,
-          role: form.accountType,
-        })).unwrap()
-      }
-      dispatch(closeAuthModal())
-      dispatch(showNotification({ message: 'Welcome to SalonBazar!', type: 'success' }))
-
-      const role = authResult?.role || authResult?.user?.role
-      const salonId = authResult?.user?.salonId
-      navigate(getPostAuthPath(role, salonId))
+      const authResult = await dispatch(loginUser({
+        identifier: loginId.trim(),
+        password: loginPassword,
+      })).unwrap()
+      finishAuth(authResult)
     } catch (err) {
       dispatch(showNotification({ message: err || 'Authentication failed', type: 'error' }))
     }
   }
+
+  const handleSignupInitiate = async (e) => {
+    e.preventDefault()
+    try {
+      const payload = {
+        name: form.name.trim(),
+        password: form.password,
+        role: form.accountType,
+        method: form.verifyMethod,
+      }
+      if (form.verifyMethod === 'email') {
+        payload.email = form.email.trim()
+      } else {
+        payload.phone = form.phone.trim()
+      }
+
+      const result = await dispatch(initiateSignup(payload)).unwrap()
+      setVerificationId(result.verificationId)
+
+      if (form.verifyMethod === 'phone') {
+        setSignupStep('verify-phone')
+        setDevHint(result.devOtp ? { type: 'otp', value: result.devOtp } : null)
+        dispatch(showNotification({ message: 'OTP sent to your phone', type: 'success' }))
+      } else {
+        setSignupStep('verify-email-sent')
+        setDevHint(result.verifyUrl ? { type: 'link', value: result.verifyUrl } : null)
+        dispatch(showNotification({ message: 'Check your email to verify', type: 'success' }))
+      }
+    } catch (err) {
+      dispatch(showNotification({ message: err || 'Could not start signup', type: 'error' }))
+    }
+  }
+
+  const handleVerifyOtp = async (e) => {
+    e.preventDefault()
+    try {
+      const authResult = await dispatch(verifySignupOtp({
+        verificationId,
+        otp: otp.trim(),
+      })).unwrap()
+      finishAuth(authResult)
+    } catch (err) {
+      dispatch(showNotification({ message: err || 'Invalid OTP', type: 'error' }))
+    }
+  }
+
+  const handleResend = async () => {
+    if (!verificationId) return
+    try {
+      const result = await dispatch(resendSignupVerification(verificationId)).unwrap()
+      if (result.devOtp) setDevHint({ type: 'otp', value: result.devOtp })
+      if (result.verifyUrl) setDevHint({ type: 'link', value: result.verifyUrl })
+      dispatch(showNotification({ message: result.message || 'Sent again', type: 'success' }))
+    } catch (err) {
+      dispatch(showNotification({ message: err || 'Could not resend', type: 'error' }))
+    }
+  }
+
+  const renderSignupDetails = () => (
+    <>
+      <div className={styles.field}>
+        <label>Full Name</label>
+        <input
+          type="text"
+          placeholder="Your full name"
+          value={form.name}
+          onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+          required
+        />
+      </div>
+
+      <div className={styles.field}>
+        <label>Verify with</label>
+        <div className={styles.methodToggle}>
+          <button
+            type="button"
+            className={`${styles.methodBtn} ${form.verifyMethod === 'email' ? styles.methodBtnActive : ''}`}
+            onClick={() => setForm(f => ({ ...f, verifyMethod: 'email' }))}
+          >
+            ✉ Email
+          </button>
+          <button
+            type="button"
+            className={`${styles.methodBtn} ${form.verifyMethod === 'phone' ? styles.methodBtnActive : ''}`}
+            onClick={() => setForm(f => ({ ...f, verifyMethod: 'phone' }))}
+          >
+            📱 Phone
+          </button>
+        </div>
+      </div>
+
+      {form.verifyMethod === 'email' ? (
+        <div className={styles.field}>
+          <label>Email Address</label>
+          <input
+            type="email"
+            placeholder="you@example.com"
+            value={form.email}
+            onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
+            required
+          />
+          <p className={styles.fieldHint}>We&apos;ll send a verification link to this email.</p>
+        </div>
+      ) : (
+        <div className={styles.field}>
+          <label>Phone Number</label>
+          <input
+            type="tel"
+            placeholder="+91 98765 43210"
+            value={form.phone}
+            onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+            required
+          />
+          <p className={styles.fieldHint}>We&apos;ll send a 6-digit OTP to this number.</p>
+        </div>
+      )}
+
+      <div className={styles.field}>
+        <label>I am signing up as</label>
+        <div className={styles.accountTypes}>
+          <button
+            type="button"
+            className={`${styles.accountType} ${form.accountType === ROLES.CUSTOMER ? styles.accountTypeActive : ''}`}
+            onClick={() => setForm(f => ({ ...f, accountType: ROLES.CUSTOMER }))}
+          >
+            <span className={styles.accountTypeTitle}>Customer</span>
+            <span className={styles.accountTypeDesc}>Book salons & save favourites</span>
+          </button>
+          <button
+            type="button"
+            className={`${styles.accountType} ${form.accountType === ROLES.SHOP_OWNER ? styles.accountTypeActive : ''}`}
+            onClick={() => setForm(f => ({ ...f, accountType: ROLES.SHOP_OWNER }))}
+          >
+            <span className={styles.accountTypeTitle}>Salon Owner</span>
+            <span className={styles.accountTypeDesc}>List & manage your salon</span>
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.field}>
+        <label>Password</label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          value={form.password}
+          onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
+          required
+          minLength={6}
+        />
+      </div>
+
+      <button type="submit" className={styles.submitBtn} disabled={loading}>
+        {loading ? 'Please wait…' : form.verifyMethod === 'email' ? 'Send Verification Email' : 'Send OTP'}
+      </button>
+    </>
+  )
+
+  const renderVerifyPhone = () => (
+    <>
+      <div className={styles.verifyBanner}>
+        <span className={styles.verifyIcon}>📱</span>
+        <p>Enter the 6-digit code sent to <strong>{form.phone}</strong></p>
+      </div>
+
+      {devHint?.type === 'otp' && (
+        <div className={styles.devHint}>Dev OTP: <strong>{devHint.value}</strong></div>
+      )}
+
+      <div className={styles.field}>
+        <label>Verification Code</label>
+        <input
+          type="text"
+          inputMode="numeric"
+          autoComplete="one-time-code"
+          placeholder="000000"
+          maxLength={6}
+          value={otp}
+          onChange={e => setOtp(e.target.value.replace(/\D/g, ''))}
+          className={styles.otpInput}
+          required
+        />
+      </div>
+
+      <button type="submit" className={styles.submitBtn} disabled={loading || otp.length < 6}>
+        {loading ? 'Verifying…' : 'Verify & Create Account'}
+      </button>
+
+      <div className={styles.verifyActions}>
+        <button type="button" className={styles.textBtn} onClick={handleResend} disabled={loading}>
+          Resend OTP
+        </button>
+        <button type="button" className={styles.textBtn} onClick={resetSignup}>
+          Change details
+        </button>
+      </div>
+    </>
+  )
+
+  const renderVerifyEmailSent = () => (
+    <>
+      <div className={styles.verifyBanner}>
+        <span className={styles.verifyIcon}>✉</span>
+        <p>We sent a verification link to <strong>{form.email}</strong>. Open it to finish creating your account.</p>
+      </div>
+
+      {devHint?.type === 'link' && (
+        <div className={styles.devHint}>
+          Dev link: <a href={devHint.value} target="_blank" rel="noreferrer">{devHint.value}</a>
+        </div>
+      )}
+
+      <p className={styles.emailNote}>Didn&apos;t get it? Check spam or resend.</p>
+
+      <button type="button" className={styles.submitBtn} onClick={handleResend} disabled={loading}>
+        {loading ? 'Sending…' : 'Resend Email'}
+      </button>
+
+      <div className={styles.verifyActions}>
+        <button type="button" className={styles.textBtn} onClick={resetSignup}>
+          Change details
+        </button>
+      </div>
+    </>
+  )
 
   return (
     <div className={styles.overlay} onClick={handleClose}>
@@ -74,105 +328,52 @@ export default function AuthModal() {
           </div>
         </div>
 
-        <form onSubmit={handleSubmit} className={styles.form}>
-          {authModalTab === 'register' && (
+        {authModalTab === 'login' ? (
+          <form onSubmit={handleLogin} className={styles.form}>
             <div className={styles.field}>
-              <label>Full Name</label>
+              <label>Email or Phone</label>
               <input
                 type="text"
-                placeholder="Your full name"
-                value={form.name}
-                onChange={e => setForm(f => ({ ...f, name: e.target.value }))}
+                placeholder="you@example.com or +91 98765 43210"
+                value={loginId}
+                onChange={e => setLoginId(e.target.value)}
                 required
               />
             </div>
-          )}
 
-          <div className={styles.field}>
-            <label>Email Address</label>
-            <input
-              type="email"
-              placeholder="you@example.com"
-              value={form.email}
-              onChange={e => setForm(f => ({ ...f, email: e.target.value }))}
-              required
-            />
-          </div>
-
-          {authModalTab === 'register' && (
             <div className={styles.field}>
-              <label>I am signing up as</label>
-              <div className={styles.accountTypes}>
-                <button
-                  type="button"
-                  className={`${styles.accountType} ${form.accountType === ROLES.CUSTOMER ? styles.accountTypeActive : ''}`}
-                  onClick={() => setForm(f => ({ ...f, accountType: ROLES.CUSTOMER }))}
-                >
-                  <span className={styles.accountTypeTitle}>Customer</span>
-                  <span className={styles.accountTypeDesc}>Book salons & save favourites</span>
-                </button>
-                <button
-                  type="button"
-                  className={`${styles.accountType} ${form.accountType === ROLES.SHOP_OWNER ? styles.accountTypeActive : ''}`}
-                  onClick={() => setForm(f => ({ ...f, accountType: ROLES.SHOP_OWNER }))}
-                >
-                  <span className={styles.accountTypeTitle}>Salon Owner</span>
-                  <span className={styles.accountTypeDesc}>List & manage your salon</span>
-                </button>
-              </div>
-            </div>
-          )}
-
-          {authModalTab === 'register' && (
-            <div className={styles.field}>
-              <label>Phone Number</label>
+              <label>Password</label>
               <input
-                type="tel"
-                placeholder="+91 98765 43210"
-                value={form.phone}
-                onChange={e => setForm(f => ({ ...f, phone: e.target.value }))}
+                type="password"
+                placeholder="••••••••"
+                value={loginPassword}
+                onChange={e => setLoginPassword(e.target.value)}
+                required
               />
             </div>
-          )}
 
-          <div className={styles.field}>
-            <label>Password</label>
-            <input
-              type="password"
-              placeholder="••••••••"
-              value={form.password}
-              onChange={e => setForm(f => ({ ...f, password: e.target.value }))}
-              required
-            />
-          </div>
-
-          {authModalTab === 'login' && (
             <div className={styles.forgotRow}>
               <button type="button" className={styles.forgotBtn}>Forgot password?</button>
             </div>
-          )}
 
-          <button type="submit" className={styles.submitBtn} disabled={loading}>
-            {loading ? 'Please wait…' : authModalTab === 'login' ? 'Sign In' : 'Create Account'}
-          </button>
-
-          <div className={styles.divider}><span>or continue with</span></div>
-
-          <div className={styles.socials}>
-            <button type="button" className={styles.socialBtn}>
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>
-                <path d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z" fill="#34A853"/>
-                <path d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z" fill="#FBBC05"/>
-                <path d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z" fill="#EA4335"/>
-              </svg>
-              Google
+            <button type="submit" className={styles.submitBtn} disabled={loading}>
+              {loading ? 'Please wait…' : 'Sign In'}
             </button>
-            <button type="button" className={styles.socialBtn}>
-              📱 OTP Login
-            </button>
-          </div>
-        </form>
+          </form>
+        ) : (
+          <form
+            onSubmit={(e) => {
+              if (signupStep === 'verify-phone') handleVerifyOtp(e)
+              else if (signupStep === 'details') handleSignupInitiate(e)
+              else e.preventDefault()
+            }}
+            className={styles.form}
+          >
+            {signupStep === 'details' && renderSignupDetails()}
+            {signupStep === 'verify-phone' && renderVerifyPhone()}
+            {signupStep === 'verify-email-sent' && renderVerifyEmailSent()}
+          </form>
+        )}
       </div>
     </div>
   )

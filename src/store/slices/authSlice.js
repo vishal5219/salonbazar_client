@@ -7,11 +7,46 @@ import { normalizeAuthPayload } from '@/utils/authRedirect'
 
 export const loginUser = createAsyncThunk(
   'auth/loginUser',
-  async ({ email, password }, { rejectWithValue }) => {
+  async ({ email, identifier, password }, { rejectWithValue }) => {
     try {
-      const data = await authService.login(email, password)
+      const data = await authService.login(identifier || email, password)
       authService.saveTokens(data.token, data.refreshToken)
       return data
+    } catch (err) {
+      return rejectWithValue(err.message)
+    }
+  }
+)
+
+export const initiateSignup = createAsyncThunk(
+  'auth/initiateSignup',
+  async (formData, { rejectWithValue }) => {
+    try {
+      return await authService.initiateSignup(formData)
+    } catch (err) {
+      return rejectWithValue(err.message)
+    }
+  }
+)
+
+export const verifySignupOtp = createAsyncThunk(
+  'auth/verifySignupOtp',
+  async ({ verificationId, otp }, { rejectWithValue }) => {
+    try {
+      const data = await authService.verifySignupOtp(verificationId, otp)
+      authService.saveTokens(data.token, data.refreshToken)
+      return data
+    } catch (err) {
+      return rejectWithValue(err.message)
+    }
+  }
+)
+
+export const resendSignupVerification = createAsyncThunk(
+  'auth/resendSignupVerification',
+  async (verificationId, { rejectWithValue }) => {
+    try {
+      return await authService.resendSignupVerification(verificationId)
     } catch (err) {
       return rejectWithValue(err.message)
     }
@@ -136,6 +171,15 @@ const authSlice = createSlice({
       .addCase(loginUser.pending,     pending)
       .addCase(loginUser.fulfilled,   fulfilled)
       .addCase(loginUser.rejected,    rejected)
+      .addCase(initiateSignup.pending, (state) => { state.loading = true; state.error = null })
+      .addCase(initiateSignup.fulfilled, (state) => { state.loading = false })
+      .addCase(initiateSignup.rejected, rejected)
+      .addCase(verifySignupOtp.pending, pending)
+      .addCase(verifySignupOtp.fulfilled, fulfilled)
+      .addCase(verifySignupOtp.rejected, rejected)
+      .addCase(resendSignupVerification.pending, (state) => { state.loading = true })
+      .addCase(resendSignupVerification.fulfilled, (state) => { state.loading = false })
+      .addCase(resendSignupVerification.rejected, rejected)
       .addCase(registerUser.pending,  pending)
       .addCase(registerUser.fulfilled,fulfilled)
       .addCase(registerUser.rejected, rejected)
