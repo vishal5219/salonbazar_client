@@ -81,9 +81,9 @@ export const verifyOTP = createAsyncThunk(
 
 export const googleLogin = createAsyncThunk(
   'auth/googleLogin',
-  async (idToken, { rejectWithValue }) => {
+  async ({ idToken, role }, { rejectWithValue }) => {
     try {
-      const data = await authService.googleLogin(idToken)
+      const data = await authService.googleLogin(idToken, role)
       authService.saveTokens(data.token, data.refreshToken)
       return data
     } catch (err) {

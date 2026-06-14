@@ -7,10 +7,12 @@ import {
   initiateSignup,
   verifySignupOtp,
   resendSignupVerification,
+  googleLogin,
 } from '@/store/slices/authSlice'
 import { ROLES } from '@/constants/roles'
 import { getPostAuthPath } from '@/utils/authRedirect'
 import Logo from '@/components/brand/Logo'
+import GoogleAuthButton from '@/components/common/GoogleAuthButton'
 import styles from './AuthModal.module.css'
 
 const emptyForm = {
@@ -134,6 +136,37 @@ export default function AuthModal() {
       dispatch(showNotification({ message: err || 'Could not resend', type: 'error' }))
     }
   }
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    const idToken = credentialResponse?.credential
+    if (!idToken) {
+      dispatch(showNotification({ message: 'Google sign-in failed', type: 'error' }))
+      return
+    }
+    try {
+      const role = authModalTab === 'register' ? form.accountType : undefined
+      const authResult = await dispatch(googleLogin({ idToken, role })).unwrap()
+      finishAuth(authResult)
+    } catch (err) {
+      dispatch(showNotification({ message: err || 'Google sign-in failed', type: 'error' }))
+    }
+  }
+
+  const handleGoogleError = () => {
+    dispatch(showNotification({ message: 'Google sign-in was cancelled', type: 'warning' }))
+  }
+
+  const renderGoogleSection = () => (
+    <>
+      <div className={styles.divider}><span>or continue with</span></div>
+      <GoogleAuthButton
+        mode={authModalTab === 'login' ? 'signin' : 'signup'}
+        onSuccess={handleGoogleSuccess}
+        onError={handleGoogleError}
+        disabled={loading}
+      />
+    </>
+  )
 
   const renderSignupDetails = () => (
     <>
@@ -359,6 +392,7 @@ export default function AuthModal() {
             <button type="submit" className={styles.submitBtn} disabled={loading}>
               {loading ? 'Please wait…' : 'Sign In'}
             </button>
+            {renderGoogleSection()}
           </form>
         ) : (
           <form
@@ -369,7 +403,12 @@ export default function AuthModal() {
             }}
             className={styles.form}
           >
-            {signupStep === 'details' && renderSignupDetails()}
+            {signupStep === 'details' && (
+              <>
+                {renderSignupDetails()}
+                {renderGoogleSection()}
+              </>
+            )}
             {signupStep === 'verify-phone' && renderVerifyPhone()}
             {signupStep === 'verify-email-sent' && renderVerifyEmailSent()}
           </form>

@@ -32,8 +32,8 @@ export const authService = {
   verifyOTP: (phone, otp) =>
     api.post(AUTH_ENDPOINTS.verifyOTP, { phone, otp }),
 
-  googleLogin: (idToken) =>
-    api.post(AUTH_ENDPOINTS.googleAuth, { idToken }),
+  googleLogin: (idToken, role) =>
+    api.post(AUTH_ENDPOINTS.googleAuth, { idToken, role }),
 
   logout: () =>
     api.post(AUTH_ENDPOINTS.logout),

@@ -23,6 +23,7 @@ api.interceptors.request.use(
   (config) => {
     const isPublicAuth = config.url?.includes('/auth/register/verify-email')
       || config.url?.includes('/auth/register/initiate')
+      || config.url?.includes('/auth/google')
     const token = localStorage.getItem('sb_token')
     if (token && !isPublicAuth) {
       config.headers.Authorization = `Bearer ${token}`
