@@ -11,7 +11,7 @@ const MONTH_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Se
 const TIME_SLOTS  = ['10:00 AM','11:00 AM','12:00 PM','01:00 PM','02:00 PM','03:00 PM','04:00 PM','05:00 PM','06:00 PM','07:00 PM']
 const UNAVAILABLE = new Set(['11:00 AM', '03:00 PM'])
 
-export default function MobileBookingBar({ salon, selectedService, id }) {
+export default function MobileBookingBar({ salon, selectedService, id, onOpenWalkIn }) {
   const dispatch   = useDispatch()
   const navigate   = useNavigate()
   const { isAuthenticated } = useSelector(s => s.auth)
@@ -120,8 +120,8 @@ export default function MobileBookingBar({ salon, selectedService, id }) {
               : 'Select a Time Slot'}
           </button>
 
-          <button className={styles.walkinBtn}>
-            📲 Join Walk-In Queue via QR
+          <button type="button" className={styles.walkinBtn} onClick={onOpenWalkIn}>
+            📲 Join Walk-In Queue
           </button>
         </div>
       </div>

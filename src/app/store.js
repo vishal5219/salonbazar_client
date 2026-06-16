@@ -7,6 +7,8 @@ import uiReducer from '../store/slices/uiSlice'
 import dashboardReducer from '../store/slices/dashboardSlice'
 import profileReducer from '../store/slices/profileSlice'
 import adminReducer from '../store/slices/adminSlice'
+import queueReducer from '../store/slices/queueSlice'
+import locationReducer from '../store/slices/locationSlice'
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +20,8 @@ export const store = configureStore({
     dashboard: dashboardReducer,
     profile: profileReducer,
     admin: adminReducer,
+    queue: queueReducer,
+    location: locationReducer,
   },
 })
 

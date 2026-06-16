@@ -1,0 +1,60 @@
+.banner {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 16px;
+  border-radius: 12px;
+  background: rgba(201, 168, 76, 0.1);
+  border: 1px solid rgba(201, 168, 76, 0.35);
+  margin-bottom: 16px;
+}
+
+.bannerDenied {
+  background: rgba(239, 68, 68, 0.06);
+  border-color: rgba(239, 68, 68, 0.2);
+}
+
+.text {
+  font-size: 13.5px;
+  color: var(--charcoal);
+  line-height: 1.45;
+}
+
+.sub {
+  font-size: 12px;
+  color: var(--smoke);
+  margin-top: 4px;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.allowBtn {
+  padding: 8px 14px;
+  border-radius: 8px;
+  background: var(--charcoal);
+  color: var(--warm-white);
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: pointer;
+}
+
+.allowBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.dismissBtn {
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: transparent;
+  border: 1px solid var(--cream-2);
+  color: var(--smoke);
+  font-size: 13px;
+  cursor: pointer;
+}

@@ -26,6 +26,7 @@ import DashStaff from '@/components/dashboard/DashStaff'
 import DashSettings from '@/components/dashboard/DashSettings'
 import DashboardOwnerRoute from '@/components/dashboard/DashboardOwnerRoute'
 import VerifyEmail from '@/pages/VerifyEmail/index.jsx'
+import ScanQueuePage from '@/pages/ScanQueue/index.jsx'
 import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
 
 const router = createBrowserRouter([
@@ -39,6 +40,7 @@ const router = createBrowserRouter([
       { path: 'offers', element: <Offers /> },
       { path: 'about', element: <About /> },
       { path: 'verify-email', element: <VerifyEmail /> },
+      { path: 'queue/scan', element: <ScanQueuePage /> },
       { path: 'unauthorized', element: <Unauthorized /> },
       {
         path: 'booking/:salonId',

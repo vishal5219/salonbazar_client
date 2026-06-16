@@ -1,0 +1,8 @@
+.desktopMsg {
+  max-width: 520px;
+  margin: 120px auto;
+  padding: 24px;
+  text-align: center;
+  color: var(--smoke);
+  line-height: 1.6;
+}

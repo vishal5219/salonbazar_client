@@ -1,12 +1,16 @@
 import { useState } from 'react'
-import { FiSearch, FiMapPin, FiGrid, FiList, FiMap, FiSliders } from 'react-icons/fi'
+import { useNavigate } from 'react-router-dom'
+import { FiSearch, FiMapPin, FiGrid, FiList, FiMap, FiSliders, FiCamera } from 'react-icons/fi'
+import { useQrScannerAvailability } from '@/hooks/useQrScannerAvailability'
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import styles from './SalonListHeader.module.css'
 
 export default function SalonListHeader({
-  onSearch, onOpenMobileFilters, viewMode, onViewModeChange, totalCount,
+  onSearch, onOpenMobileFilters, viewMode, onViewModeChange, totalCount, usingLocation,
 }) {
   const [query, setQuery] = useState('')
+  const navigate = useNavigate()
+  const { scannerAvailable, confirmAndRun } = useQrScannerAvailability()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -34,7 +38,9 @@ export default function SalonListHeader({
           )}
         </div>
 
-        <h1 className={styles.pageTitle}>Explore Salons in Ahmedabad</h1>
+        <h1 className={styles.pageTitle}>
+          {usingLocation ? 'Explore Salons Near You' : 'Explore Salons'}
+        </h1>
 
         {/* Search + controls row */}
         <div className={styles.controlsRow}>
@@ -42,8 +48,7 @@ export default function SalonListHeader({
           <form className={styles.searchForm} onSubmit={handleSubmit}>
             <div className={styles.locationPill}>
               <FiMapPin size={14} />
-              <span>Ahmedabad</span>
-              <span className={styles.caret}>▾</span>
+              <span>{usingLocation ? 'Near you' : 'All areas'}</span>
             </div>
             <div className={styles.divider} />
             <div className={styles.inputWrap}>
@@ -90,6 +95,17 @@ export default function SalonListHeader({
               <FiSliders size={15} />
               Filters
             </button>
+
+            {scannerAvailable && (
+              <button
+                type="button"
+                className={styles.scanBtn}
+                onClick={() => confirmAndRun(() => navigate('/queue/scan'))}
+              >
+                <FiCamera size={15} />
+                Scan QR
+              </button>
+            )}
           </div>
         </div>
 

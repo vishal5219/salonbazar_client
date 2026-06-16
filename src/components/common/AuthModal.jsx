@@ -11,6 +11,7 @@ import {
 } from '@/store/slices/authSlice'
 import { ROLES } from '@/constants/roles'
 import { getPostAuthPath } from '@/utils/authRedirect'
+import { getPendingWalkIn, clearPendingWalkIn } from '@/utils/pendingWalkIn'
 import Logo from '@/components/brand/Logo'
 import GoogleAuthButton from '@/components/common/GoogleAuthButton'
 import styles from './AuthModal.module.css'
@@ -62,6 +63,17 @@ export default function AuthModal() {
     dispatch(closeAuthModal())
     resetSignup()
     dispatch(showNotification({ message: 'Welcome to SalonBazar!', type: 'success' }))
+
+    const pendingWalkInSalonId = getPendingWalkIn()
+    if (pendingWalkInSalonId) {
+      clearPendingWalkIn()
+      const onSalonPage = window.location.pathname === `/salons/${pendingWalkInSalonId}`
+      if (!onSalonPage) {
+        navigate(`/salons/${pendingWalkInSalonId}?queue=join`)
+      }
+      return
+    }
+
     const role = authResult?.role || authResult?.user?.role
     const salonId = authResult?.user?.salonId
     navigate(getPostAuthPath(role, salonId))

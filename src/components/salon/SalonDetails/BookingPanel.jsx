@@ -30,7 +30,7 @@ const TIME_SLOTS = [
 
 const UNAVAILABLE = new Set(['11:00 AM', '12:30 PM', '03:30 PM', '06:00 PM'])
 
-export default function BookingPanel({ salon, selectedService, onClearService }) {
+export default function BookingPanel({ salon, selectedService, onClearService, onOpenWalkIn }) {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { isAuthenticated } = useSelector(s => s.auth)
@@ -264,8 +264,8 @@ export default function BookingPanel({ salon, selectedService, onClearService })
         {/* Walk-in option */}
         <div className={styles.walkinRow}>
           <span className={styles.walkinOr}>or</span>
-          <button className={styles.walkinBtn}>
-            📲 Scan QR for Walk-In Queue
+          <button type="button" className={styles.walkinBtn} onClick={onOpenWalkIn}>
+            📲 Join Walk-In Queue
           </button>
         </div>
       </div>

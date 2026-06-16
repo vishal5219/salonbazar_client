@@ -4,11 +4,32 @@ import salonService from '@/services/salonService'
 export const fetchFeaturedSalons = createAsyncThunk('salons/fetchFeatured', async (_, { rejectWithValue }) => {
   try { return await salonService.getFeatured() } catch (err) { return rejectWithValue(err.message) }
 })
-export const fetchNearbySalons = createAsyncThunk('salons/fetchNearby', async (params = {}, { rejectWithValue }) => {
-  try { return await salonService.getNearby(params.lat, params.lng, params.radius) } catch (err) { return rejectWithValue(err.message) }
+export const fetchNearbySalons = createAsyncThunk('salons/fetchNearby', async (params = {}, { rejectWithValue, getState }) => {
+  try {
+    const { coords } = getState().location
+    const lat = params.lat ?? coords?.lat
+    const lng = params.lng ?? coords?.lng
+    if (lat == null || lng == null) {
+      return rejectWithValue('Location is required for nearby salons')
+    }
+    return await salonService.getNearby(lat, lng, params.radius)
+  } catch (err) {
+    return rejectWithValue(err.message)
+  }
 })
-export const fetchAllSalons = createAsyncThunk('salons/fetchAll', async (params = {}, { rejectWithValue }) => {
-  try { return await salonService.getAll(params) } catch (err) { return rejectWithValue(err.message) }
+export const fetchAllSalons = createAsyncThunk('salons/fetchAll', async (params = {}, { rejectWithValue, getState }) => {
+  try {
+    const { coords, status } = getState().location
+    const queryParams = { ...params }
+    if (coords?.lat != null && coords?.lng != null && status === 'granted') {
+      queryParams.lat = coords.lat
+      queryParams.lng = coords.lng
+      if (!queryParams.radius) queryParams.radius = 50
+    }
+    return await salonService.getAll(queryParams)
+  } catch (err) {
+    return rejectWithValue(err.message)
+  }
 })
 export const fetchSalonById = createAsyncThunk('salons/fetchById', async (id, { rejectWithValue }) => {
   try { return await salonService.getById(id) } catch (err) { return rejectWithValue(err.message) }

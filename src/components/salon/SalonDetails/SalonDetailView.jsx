@@ -1,5 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useSearchParams } from 'react-router-dom'
 import { fetchSalonById } from '@/store/slices/salonSlice'
 import SalonDetailHero from './SalonDetailHero'
 import SalonDetailNav from './SalonDetailNav'
@@ -11,6 +12,7 @@ import ReviewsSection from './ReviewsSection'
 import LocationSection from './LocationSection'
 import BookingPanel from './BookingPanel'
 import MobileBookingBar from './MobileBookingBar'
+import WalkInQueueModal from '@/components/salon/WalkInQueue/WalkInQueueModal'
 import SalonDetailSkeleton from './SalonDetailSkeleton'
 import { getSalonDisplayGallery } from '@/utils/salonImages'
 import styles from '@/pages/SalonDetails/SalonDetails.module.css'
@@ -19,10 +21,13 @@ const NAV_SECTIONS = ['Gallery', 'Services', 'Staff', 'Reviews', 'Location']
 
 export default function SalonDetailView({ salonId }) {
   const dispatch = useDispatch()
+  const [searchParams, setSearchParams] = useSearchParams()
   const { selectedSalon: salon, loading } = useSelector(s => s.salons)
+  const { isAuthenticated } = useSelector(s => s.auth)
   const [activeSection, setActiveSection] = useState('Gallery')
   const [selectedService, setSelectedService] = useState(null)
   const [bookingPanelFixed, setBookingPanelFixed] = useState(false)
+  const [walkInOpen, setWalkInOpen] = useState(false)
 
   const sectionRefs = useRef({})
   const heroRef = useRef(null)
@@ -30,6 +35,23 @@ export default function SalonDetailView({ salonId }) {
   useEffect(() => {
     if (salonId) dispatch(fetchSalonById(salonId))
   }, [salonId, dispatch])
+
+  const openWalkInQueue = () => setWalkInOpen(true)
+
+  const closeWalkInQueue = () => {
+    setWalkInOpen(false)
+    if (searchParams.get('queue') === 'join') {
+      const next = new URLSearchParams(searchParams)
+      next.delete('queue')
+      setSearchParams(next, { replace: true })
+    }
+  }
+
+  useEffect(() => {
+    if (searchParams.get('queue') === 'join' && salon && String(salon.id) === String(salonId)) {
+      setWalkInOpen(true)
+    }
+  }, [searchParams, salon, salonId, isAuthenticated])
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -152,6 +174,7 @@ export default function SalonDetailView({ salonId }) {
               salon={salon}
               selectedService={selectedService}
               onClearService={() => setSelectedService(null)}
+              onOpenWalkIn={openWalkInQueue}
             />
           </div>
         </aside>
@@ -161,6 +184,13 @@ export default function SalonDetailView({ salonId }) {
         salon={salon}
         selectedService={selectedService}
         id="mobile-booking-bar"
+        onOpenWalkIn={openWalkInQueue}
+      />
+
+      <WalkInQueueModal
+        open={walkInOpen}
+        onClose={closeWalkInQueue}
+        salon={salon}
       />
     </div>
   )

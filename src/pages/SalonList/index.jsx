@@ -5,6 +5,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useSearchParams } from 'react-router-dom'
 import { fetchAllSalons, setFilters, setSearchQuery, clearFilters } from '@/store/slices/salonSlice'
+import LocationPromptBanner from '@/components/common/LocationPromptBanner'
 import SalonListHeader   from '@/components/salon/SalonList/SalonListHeader'
 import FiltersSidebar    from '@/components/salon/SalonList/FiltersSidebar'
 import SalonGrid         from '@/components/salon/SalonList/SalonGrid'
@@ -27,8 +28,13 @@ export default function SalonList() {
   const [mapHoveredId,     setMapHoveredId]     = useState(null)
 
   const { salons, loading, filters, searchQuery, pagination } = useSelector(s => s.salons)
+  const { coords, status: locationStatus } = useSelector(s => s.location)
 
-  // ── Sync URL params → Redux on mount ─────────────────────
+  const loadSalons = useCallback((params = {}) => {
+    dispatch(fetchAllSalons({ ...filters, q: searchQuery, ...params }))
+  }, [dispatch, filters, searchQuery])
+
+  // ── Sync URL params → Redux, then load salons ─────────────
   useEffect(() => {
     const q        = searchParams.get('q')        || ''
     const category = searchParams.get('category') || ''
@@ -40,6 +46,10 @@ export default function SalonList() {
 
     dispatch(fetchAllSalons({ q, category, city }))
   }, []) // eslint-disable-line
+
+  const handleLocationReady = () => {
+    loadSalons()
+  }
 
   // ── Re-fetch when filters change ──────────────────────────
   const handleFilterChange = useCallback((newFilters) => {
@@ -97,6 +107,7 @@ export default function SalonList() {
         viewMode={viewMode}
         onViewModeChange={setViewMode}
         totalCount={sortedSalons.length}
+        usingLocation={locationStatus === 'granted' && Boolean(coords)}
       />
 
       <div className={styles.body}>
@@ -111,6 +122,7 @@ export default function SalonList() {
 
         {/* Right: Results area */}
         <main className={styles.results}>
+          <LocationPromptBanner onLocated={handleLocationReady} />
           {/* Sort + active filters row */}
           <div className={styles.controlsRow}>
             <ActiveFilters
@@ -125,7 +137,11 @@ export default function SalonList() {
           {/* Results count */}
           <p className={styles.resultsCount}>
             {loading ? 'Searching...' : (
-              <><strong>{sortedSalons.length}</strong> salons found{searchQuery ? ` for "${searchQuery}"` : ''}</>
+              <>
+                <strong>{sortedSalons.length}</strong> salons found
+                {locationStatus === 'granted' && coords ? ' near you' : ''}
+                {searchQuery ? ` for "${searchQuery}"` : ''}
+              </>
             )}
           </p>
 

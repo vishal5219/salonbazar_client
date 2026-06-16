@@ -7,20 +7,9 @@ import { fetchSalonById } from '@/store/slices/salonSlice'
 import { showNotification } from '@/store/slices/uiSlice'
 import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
 import { FALLBACK_WALK_IN_SERVICES } from '@/constants/walkInServices'
+import { flattenSalonServices } from '@/utils/salonServices'
+import SalonQrCard from './SalonQrCard'
 import styles from './DashWalkIn.module.css'
-
-function flattenSalonServices(salon) {
-  return (salon?.services || []).flatMap(cat =>
-    (cat.items || []).map(item => ({
-      id: item.id,
-      name: item.name,
-      duration: item.duration,
-      price: item.price,
-      category: cat.category,
-      categoryIcon: cat.icon,
-    }))
-  )
-}
 
 export default function DashWalkIn() {
   const dispatch = useDispatch()
@@ -249,6 +238,8 @@ export default function DashWalkIn() {
         </div>
 
         <div className={styles.previewCol}>
+          <SalonQrCard salonId={salonId} salonName={selectedSalon?.name} />
+
           <div className={styles.previewCard}>
             <div className={styles.previewTitle}>Queue Ticket Preview</div>
             <div className={styles.ticket}>
