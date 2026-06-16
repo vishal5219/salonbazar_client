@@ -11,20 +11,22 @@ const filters = ['All', 'Open Now', 'Hair', 'Spa', 'Bridal', 'Men\'s']
 export default function NearbySalons() {
   const dispatch = useDispatch()
   const { nearbySalons, loading } = useSelector(s => s.salons)
-  const { coords, status: locationStatus } = useSelector(s => s.location)
+  const { coords, status: locationStatus, selectedCity } = useSelector(s => s.location)
   const [activeFilter, setActiveFilter] = useState('All')
 
   const loadNearby = () => {
-    if (coords?.lat != null && coords?.lng != null) {
-      dispatch(fetchNearbySalons({ lat: coords.lat, lng: coords.lng, radius: 25 }))
+    const lat = coords?.lat ?? selectedCity?.latitude
+    const lng = coords?.lng ?? selectedCity?.longitude
+    if (lat != null && lng != null) {
+      dispatch(fetchNearbySalons({ lat, lng, radius: 25 }))
     }
   }
 
   useEffect(() => {
-    if (locationStatus === 'granted' && coords) {
+    if (selectedCity || (locationStatus === 'granted' && coords)) {
       loadNearby()
     }
-  }, [locationStatus, coords?.lat, coords?.lng]) // eslint-disable-line
+  }, [locationStatus, coords?.lat, coords?.lng, selectedCity?.id]) // eslint-disable-line
 
   const handleLocationReady = () => {
     loadNearby()
@@ -44,7 +46,9 @@ export default function NearbySalons() {
         <div className={styles.header}>
           <div>
             <span className="overline">Discover</span>
-            <h2 className={styles.title}>Salons Near <em>You</em></h2>
+            <h2 className={styles.title}>
+              Salons Near <em>{selectedCity?.name || 'You'}</em>
+            </h2>
           </div>
           <Link to="/salons" className={styles.viewAll}>View All →</Link>
         </div>

@@ -23,6 +23,14 @@ export const AUTH_ENDPOINTS = {
   resetPassword:  '/auth/reset-password',
 }
 
+// ── Location Endpoints ────────────────────────────────────────
+export const LOCATION_ENDPOINTS = {
+  states:         '/locations/states',
+  citiesByState:  (stateId) => `/locations/states/${stateId}/cities`,
+  activeCities:   '/locations/active-cities',
+  resolve:        '/locations/resolve',
+}
+
 // ── Salon Endpoints ───────────────────────────────────────────
 export const SALON_ENDPOINTS = {
   list:     '/salons',

@@ -6,21 +6,27 @@ export const fetchFeaturedSalons = createAsyncThunk('salons/fetchFeatured', asyn
 })
 export const fetchNearbySalons = createAsyncThunk('salons/fetchNearby', async (params = {}, { rejectWithValue, getState }) => {
   try {
-    const { coords } = getState().location
-    const lat = params.lat ?? coords?.lat
-    const lng = params.lng ?? coords?.lng
+    const { coords, selectedCity } = getState().location
+    const lat = params.lat ?? coords?.lat ?? selectedCity?.latitude
+    const lng = params.lng ?? coords?.lng ?? selectedCity?.longitude
     if (lat == null || lng == null) {
       return rejectWithValue('Location is required for nearby salons')
     }
-    return await salonService.getNearby(lat, lng, params.radius)
+    return await salonService.getNearby(lat, lng, params.radius ?? 25)
   } catch (err) {
     return rejectWithValue(err.message)
   }
 })
 export const fetchAllSalons = createAsyncThunk('salons/fetchAll', async (params = {}, { rejectWithValue, getState }) => {
   try {
-    const { coords, status } = getState().location
+    const { coords, status, selectedCity, selectedState } = getState().location
     const queryParams = { ...params }
+    if (!queryParams.city && selectedCity?.name) {
+      queryParams.city = selectedCity.name
+    }
+    if (!queryParams.state && selectedState?.name) {
+      queryParams.state = selectedState.name
+    }
     if (coords?.lat != null && coords?.lng != null && status === 'granted') {
       queryParams.lat = coords.lat
       queryParams.lng = coords.lng

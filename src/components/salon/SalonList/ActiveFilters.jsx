@@ -8,8 +8,6 @@ export default function ActiveFilters({ filters, searchQuery, onChange, onClearA
     chips.push({ key: 'q',        label: `"${searchQuery}"`,     onRemove: () => onChange({ searchQuery: '' }) })
   if (filters.category)
     chips.push({ key: 'category', label: filters.category,       onRemove: () => onChange({ category: '' }) })
-  if (filters.location)
-    chips.push({ key: 'location', label: filters.location,       onRemove: () => onChange({ location: '' }) })
   if (filters.rating > 0)
     chips.push({ key: 'rating',   label: `★ ${filters.rating}+`, onRemove: () => onChange({ rating: 0 }) })
   if (filters.isOpen)

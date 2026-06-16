@@ -1,12 +1,14 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { FiSearch, FiMapPin, FiGrid, FiList, FiMap, FiSliders, FiCamera } from 'react-icons/fi'
+import { FiSearch, FiGrid, FiList, FiMap, FiSliders, FiCamera } from 'react-icons/fi'
 import { useQrScannerAvailability } from '@/hooks/useQrScannerAvailability'
+import HeroLocationPicker from '@/components/booking/HeroLocationPicker'
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import styles from './SalonListHeader.module.css'
 
 export default function SalonListHeader({
-  onSearch, onOpenMobileFilters, viewMode, onViewModeChange, totalCount, usingLocation,
+  onSearch, onOpenMobileFilters, viewMode, onViewModeChange, totalCount,
+  locationCity, locationState, onLocationChange,
 }) {
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
@@ -39,17 +41,16 @@ export default function SalonListHeader({
         </div>
 
         <h1 className={styles.pageTitle}>
-          {usingLocation ? 'Explore Salons Near You' : 'Explore Salons'}
+          {locationCity
+            ? `Salons in ${locationCity}${locationState ? `, ${locationState}` : ''}`
+            : 'Explore Salons'}
         </h1>
 
         {/* Search + controls row */}
         <div className={styles.controlsRow}>
           {/* Search form */}
           <form className={styles.searchForm} onSubmit={handleSubmit}>
-            <div className={styles.locationPill}>
-              <FiMapPin size={14} />
-              <span>{usingLocation ? 'Near you' : 'All areas'}</span>
-            </div>
+            <HeroLocationPicker variant="compact" onCityChange={onLocationChange} />
             <div className={styles.divider} />
             <div className={styles.inputWrap}>
               <FiSearch size={15} className={styles.searchIcon} />

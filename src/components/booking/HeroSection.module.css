@@ -118,11 +118,13 @@
   align-items: center;
   background: var(--warm-white);
   border-radius: 14px;
-  overflow: hidden;
+  overflow: visible;
   max-width: 680px;
   box-shadow: 0 16px 48px rgba(26, 23, 20, 0.3);
   animation: fadeUp 0.7s 0.3s ease both;
   margin-bottom: 20px;
+  position: relative;
+  z-index: 3;
 }
 
 .searchLocation {

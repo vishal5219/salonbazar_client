@@ -44,7 +44,7 @@ export default function FiltersSidebar({ filters, onChange, onClearAll }) {
     const [priceRange, setPriceRange] = useState(filters.priceRange || [0, 2000])
     const [selectedAmenities, setSelectedAmenities] = useState([])
 
-    const hasAnyFilter = filters.category || filters.location ||
+    const hasAnyFilter = filters.category ||
         filters.rating > 0 || priceRange[0] > 0 || priceRange[1] < 2000
 
     const handleCategory = (id) => {
