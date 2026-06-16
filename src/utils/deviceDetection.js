@@ -1,3 +1,5 @@
+import { isSecureCameraContext, isCameraApiSupported } from '@/utils/cameraAccess'
+
 /**
  * Phone / tablet detection — excludes typical laptop/desktop setups.
  */
@@ -19,12 +21,18 @@ export function isPhoneOrTablet() {
 }
 
 export async function hasCameraDevice() {
-  if (!navigator.mediaDevices?.enumerateDevices) return false
+  if (!isCameraApiSupported()) return false
+
+  // Many phones hide camera labels until permission is granted — on mobile + HTTPS, assume available
+  if (isPhoneOrTablet() && isSecureCameraContext()) {
+    return true
+  }
+
   try {
     const devices = await navigator.mediaDevices.enumerateDevices()
     return devices.some(device => device.kind === 'videoinput')
   } catch {
-    return false
+    return isSecureCameraContext()
   }
 }
 
@@ -33,5 +41,6 @@ export async function hasCameraDevice() {
  */
 export async function canShowQrScanner() {
   if (!isPhoneOrTablet()) return false
+  if (!isSecureCameraContext()) return false
   return hasCameraDevice()
 }

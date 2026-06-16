@@ -55,9 +55,27 @@
   line-height: 1.5;
 }
 
+.errorBox {
+  padding: 0 20px 12px;
+  text-align: center;
+}
+
 .error {
   color: #FCA5A5;
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.errorHelp {
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 12px;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+
+.status {
   text-align: center;
-  padding: 12px 24px;
+  color: rgba(255, 255, 255, 0.8);
   font-size: 13px;
+  padding: 0 24px 12px;
 }
