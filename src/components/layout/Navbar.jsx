@@ -53,7 +53,13 @@ export default function Navbar() {
 
         <ul className={styles.links}>
           <li>
+            <NavLink to="/" end className={linkClass}>Home</NavLink>
+          </li>
+          <li>
             <NavLink to="/salons" className={linkClass}>Explore</NavLink>
+          </li>
+          <li>
+            <NavLink to="/queue/scan" className={linkClass}>Scan QR</NavLink>
           </li>
           <li>
             <NavLink to="/offers" className={linkClass}>Offers</NavLink>
@@ -61,6 +67,11 @@ export default function Navbar() {
           <li>
             <NavLink to="/about" className={linkClass}>About</NavLink>
           </li>
+          {isAuthenticated && isSuperAdmin(role) && (
+            <li>
+              <NavLink to="/admin" className={linkClass}>Platform Admin</NavLink>
+            </li>
+          )}
           {showSalonNav && (
             <li>
               <NavLink to={salonNavPath} className={salonLinkClass}>Salon</NavLink>
@@ -134,7 +145,9 @@ export default function Navbar() {
       </div>
 
       <div className={`${styles.mobileMenu} ${menuOpen ? styles.mobileOpen : styles.mobileClose}`}>
+        <NavLink to="/" end className={mobileLinkClass}>Home</NavLink>
         <NavLink to="/salons" className={mobileLinkClass}>Explore Salons</NavLink>
+        <NavLink to="/queue/scan" className={mobileLinkClass}>Scan QR</NavLink>
         <NavLink to="/offers" className={mobileLinkClass}>Offers</NavLink>
         <NavLink to="/about" className={mobileLinkClass}>About</NavLink>
         {showSalonNav && (

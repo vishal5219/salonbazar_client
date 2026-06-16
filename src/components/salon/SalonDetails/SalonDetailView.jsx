@@ -10,6 +10,7 @@ import ServicesSection from './ServicesSection'
 import StaffSection from './StaffSection'
 import ReviewsSection from './ReviewsSection'
 import LocationSection from './LocationSection'
+import SalonWalkInQrSection from '@/components/salon/WalkInQueue/SalonWalkInQrSection'
 import BookingPanel from './BookingPanel'
 import MobileBookingBar from './MobileBookingBar'
 import WalkInQueueModal from '@/components/salon/WalkInQueue/WalkInQueueModal'
@@ -125,6 +126,12 @@ export default function SalonDetailView({ salonId }) {
           <section className={styles.section}>
             <AboutSection salon={salon} />
           </section>
+
+          {salon.status === 'active' && (
+            <section className={styles.section}>
+              <SalonWalkInQrSection salon={salon} />
+            </section>
+          )}
 
           <section
             data-section="Services"

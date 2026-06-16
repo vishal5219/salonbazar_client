@@ -238,7 +238,11 @@ export default function DashWalkIn() {
         </div>
 
         <div className={styles.previewCol}>
-          <SalonQrCard salonId={salonId} salonName={selectedSalon?.name} />
+          <SalonQrCard
+            salonId={salonId}
+            salonName={selectedSalon?.name}
+            salon={selectedSalon}
+          />
 
           <div className={styles.previewCard}>
             <div className={styles.previewTitle}>Queue Ticket Preview</div>

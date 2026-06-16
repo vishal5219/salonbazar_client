@@ -36,6 +36,39 @@
 
 .walkInBtn:hover { background: var(--gold-dark); }
 
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.scanBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 11px 18px;
+  background: var(--warm-white);
+  color: var(--charcoal);
+  border: 1.5px solid var(--cream-2);
+  font-size: 14px;
+  font-weight: 500;
+  border-radius: 10px;
+  font-family: var(--font-body);
+  cursor: pointer;
+  transition: border-color var(--transition-fast), background var(--transition-fast);
+  white-space: nowrap;
+}
+
+.scanBtn:hover {
+  border-color: var(--gold);
+  background: rgba(201, 168, 76, 0.08);
+}
+
+.qrSection {
+  max-width: 420px;
+}
+
 /* KPI grid */
 .kpiGrid {
   display: grid;

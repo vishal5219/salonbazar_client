@@ -1,8 +1,13 @@
-import { useSelector, useDispatch } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { advanceQueue } from '@/store/slices/dashboardSlice'
+import { fetchSalonById } from '@/store/slices/salonSlice'
 import { DASHBOARD_PATHS } from '@/constants/dashboardRoutes'
-import { FiTrendingUp, FiUsers, FiCalendar, FiDollarSign, FiArrowRight, FiClock, FiCheckCircle } from 'react-icons/fi'
+import { useSalonQueueScan } from '@/hooks/useSalonQueueScan'
+import QrScannerModal from '@/components/salon/WalkInQueue/QrScannerModal'
+import SalonQueueQrDisplay from '@/components/salon/WalkInQueue/SalonQueueQrDisplay'
+import { FiTrendingUp, FiUsers, FiCalendar, FiDollarSign, FiArrowRight, FiClock, FiCheckCircle, FiCamera } from 'react-icons/fi'
 import styles from './DashOverview.module.css'
 
 function KpiCard({ icon: Icon, label, value, sub, trend, color }) {
@@ -28,7 +33,21 @@ function KpiCard({ icon: Icon, label, value, sub, trend, color }) {
 export default function DashOverview() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { user } = useSelector(s => s.auth)
   const { queue, bookings, earnings, queueLoading, queueStats } = useSelector(s => s.dashboard)
+  const { selectedSalon } = useSelector(s => s.salons)
+  const { handleScan } = useSalonQueueScan()
+  const [scannerOpen, setScannerOpen] = useState(false)
+
+  const salonId = user?.salonId
+  const salon = selectedSalon && String(selectedSalon.id) === String(salonId) ? selectedSalon : null
+
+  useEffect(() => {
+    if (!salonId) return
+    if (!selectedSalon || String(selectedSalon.id) !== String(salonId)) {
+      dispatch(fetchSalonById(salonId))
+    }
+  }, [salonId, selectedSalon, dispatch])
 
   const todayBookings = bookings.filter(b => b.date === 'Today')
   const inProgress    = queue.find(q => q.status === 'in_progress')
@@ -37,6 +56,12 @@ export default function DashOverview() {
 
   return (
     <div className={styles.wrap}>
+      <QrScannerModal
+        open={scannerOpen}
+        onClose={() => setScannerOpen(false)}
+        onScan={(text) => { setScannerOpen(false); handleScan(text) }}
+      />
+
       {/* Page header */}
       <div className={styles.pageHeader}>
         <div>
@@ -45,13 +70,29 @@ export default function DashOverview() {
             {new Date().toLocaleDateString('en-IN', { weekday:'long', day:'numeric', month:'long', year:'numeric' })}
           </p>
         </div>
-        <button
-          className={styles.walkInBtn}
-          onClick={() => navigate(DASHBOARD_PATHS.walkIn)}
-        >
-          + Add Walk-In
-        </button>
+        <div className={styles.headerActions}>
+          <button
+            type="button"
+            className={styles.scanBtn}
+            onClick={() => setScannerOpen(true)}
+          >
+            <FiCamera size={15} />
+            Scan QR
+          </button>
+          <button
+            className={styles.walkInBtn}
+            onClick={() => navigate(DASHBOARD_PATHS.walkIn)}
+          >
+            + Add Walk-In
+          </button>
+        </div>
       </div>
+
+      {salonId && salon?.status === 'active' && (
+        <div className={styles.qrSection}>
+          <SalonQueueQrDisplay salonId={salonId} salon={salon} variant="owner" />
+        </div>
+      )}
 
       {/* KPI cards */}
       <div className={styles.kpiGrid}>

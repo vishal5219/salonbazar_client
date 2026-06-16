@@ -12,7 +12,6 @@ import {
 import { setPendingWalkIn, clearPendingWalkIn } from '@/utils/pendingWalkIn'
 import { flattenSalonServices } from '@/utils/salonServices'
 import { parseSalonQueueQr, buildSalonQueuePath } from '@/utils/parseSalonQueueQr'
-import { useQrScannerAvailability } from '@/hooks/useQrScannerAvailability'
 import QrScannerModal from './QrScannerModal'
 import styles from './WalkInQueueModal.module.css'
 
@@ -21,7 +20,6 @@ export default function WalkInQueueModal({ open, onClose, salon }) {
   const navigate = useNavigate()
   const { isAuthenticated } = useSelector(s => s.auth)
   const { myEntry, loading, joining, leaving } = useSelector(s => s.queue)
-  const { scannerAvailable, confirmAndRun } = useQrScannerAvailability()
 
   const [selectedServiceId, setSelectedServiceId] = useState('')
   const [scannerOpen, setScannerOpen] = useState(false)
@@ -117,9 +115,7 @@ export default function WalkInQueueModal({ open, onClose, salon }) {
     dispatch(showNotification({ message: 'QR matched this salon — select a service to join', type: 'success' }))
   }
 
-  const handleOpenScanner = () => {
-    confirmAndRun(() => setScannerOpen(true))
-  }
+  const handleOpenScanner = () => setScannerOpen(true)
 
   return (
     <>
@@ -173,16 +169,12 @@ export default function WalkInQueueModal({ open, onClose, salon }) {
             </div>
           ) : (
             <>
-              {scannerAvailable && (
-                <button type="button" className={styles.scanBtn} onClick={handleOpenScanner}>
-                  <FiCamera size={16} />
-                  Scan Salon QR Code
-                </button>
-              )}
+              <button type="button" className={styles.scanBtn} onClick={handleOpenScanner}>
+                <FiCamera size={16} />
+                Scan Salon QR Code
+              </button>
               <p className={styles.hint}>
-                {scannerAvailable
-                  ? 'Scan the QR at reception or pick a service below to join the queue.'
-                  : 'Pick a service below to join the live walk-in queue.'}
+                Scan the QR at reception (camera or upload image), or pick a service below to join the queue.
               </p>
               {services.length === 0 ? (
                 <p className={styles.hint}>No services listed — you can still join and choose at the counter.</p>

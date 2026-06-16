@@ -1,8 +1,23 @@
-.desktopMsg {
-  max-width: 520px;
-  margin: 120px auto;
-  padding: 24px;
-  text-align: center;
-  color: var(--smoke);
-  line-height: 1.6;
+.page {
+  min-height: 100vh;
+  padding: calc(var(--nav-height) + 24px) 16px 48px;
+  background: var(--cream);
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+.pageInner {
+  width: min(100%, 520px);
+}
+
+@media (max-width: 768px) {
+  .page {
+    padding: calc(var(--nav-height) + 16px) 12px 32px;
+    align-items: stretch;
+  }
+
+  .pageInner {
+    width: 100%;
+  }
 }

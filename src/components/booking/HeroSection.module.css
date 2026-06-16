@@ -304,6 +304,20 @@
     height: 52px;
     border-radius: 12px;
     font-size: 16px;
+    background: linear-gradient(135deg, var(--gold-dark) 0%, var(--gold) 100%);
+    color: var(--charcoal);
+    font-weight: 600;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+    border: 1.5px solid rgba(255, 255, 255, 0.15);
+  }
+
+  .searchBtn:hover {
+    background: linear-gradient(135deg, var(--gold) 0%, #E8C97A 100%);
+  }
+
+  .searchInput {
+    border: 1.5px solid var(--cream-2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
   }
 
   .statsRow {

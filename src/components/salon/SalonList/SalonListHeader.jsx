@@ -1,7 +1,6 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FiSearch, FiGrid, FiList, FiMap, FiSliders, FiCamera } from 'react-icons/fi'
-import { useQrScannerAvailability } from '@/hooks/useQrScannerAvailability'
 import HeroLocationPicker from '@/components/booking/HeroLocationPicker'
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import styles from './SalonListHeader.module.css'
@@ -12,7 +11,6 @@ export default function SalonListHeader({
 }) {
   const [query, setQuery] = useState('')
   const navigate = useNavigate()
-  const { scannerAvailable, confirmAndRun } = useQrScannerAvailability()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -97,16 +95,14 @@ export default function SalonListHeader({
               Filters
             </button>
 
-            {scannerAvailable && (
-              <button
-                type="button"
-                className={styles.scanBtn}
-                onClick={() => confirmAndRun(() => navigate('/queue/scan'))}
-              >
-                <FiCamera size={15} />
-                Scan QR
-              </button>
-            )}
+            <button
+              type="button"
+              className={styles.scanBtn}
+              onClick={() => navigate('/queue/scan')}
+            >
+              <FiCamera size={15} />
+              Scan QR
+            </button>
           </div>
         </div>
 

@@ -352,7 +352,7 @@ export default function AuthModal() {
       <div className={styles.modal} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true">
         <div className={styles.modalHeader}>
           <div className={styles.topDeco}>
-            <Logo linked={false} variant="modal" className={styles.logoMark} />
+            <Logo linked={false} variant="inverse" className={styles.logoMark} />
           </div>
           <button type="button" className={styles.closeBtn} onClick={handleClose} aria-label="Close">✕</button>
           <div className={styles.tabs}>

@@ -304,3 +304,32 @@
   color: var(--smoke);
   text-align: center;
 }
+
+@media (max-width: 768px) {
+  .locationPicker {
+    width: 100%;
+  }
+
+  .searchLocation {
+    width: 100%;
+    height: 52px;
+    padding: 0 16px;
+    border-right: none;
+    border-radius: 12px;
+    background: var(--warm-white);
+    border: 1.5px solid var(--cream-2);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .searchLocation:hover,
+  .searchLocationOpen {
+    background: var(--warm-white);
+    border-color: var(--gold);
+  }
+
+  .locationText {
+    max-width: none;
+    flex: 1;
+    font-size: 15px;
+  }
+}
