@@ -1,6 +1,5 @@
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { FiSearch, FiGrid, FiList, FiMap, FiSliders, FiCamera } from 'react-icons/fi'
+import { FiSearch, FiGrid, FiList, FiMap, FiSliders } from 'react-icons/fi'
 import HeroLocationPicker from '@/components/booking/HeroLocationPicker'
 import Breadcrumbs from '@/components/seo/Breadcrumbs'
 import styles from './SalonListHeader.module.css'
@@ -10,7 +9,6 @@ export default function SalonListHeader({
   locationCity, locationState, onLocationChange,
 }) {
   const [query, setQuery] = useState('')
-  const navigate = useNavigate()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -93,15 +91,6 @@ export default function SalonListHeader({
             >
               <FiSliders size={15} />
               Filters
-            </button>
-
-            <button
-              type="button"
-              className={styles.scanBtn}
-              onClick={() => navigate('/queue/scan')}
-            >
-              <FiCamera size={15} />
-              Scan QR
             </button>
           </div>
         </div>

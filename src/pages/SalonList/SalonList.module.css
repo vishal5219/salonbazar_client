@@ -2,6 +2,8 @@
   min-height: 100vh;
   background: var(--warm-white);
   padding-top: var(--nav-height);
+  overflow-x: hidden;
+  max-width: 100%;
 }
 
 .body {
@@ -56,4 +58,21 @@
     padding: 24px 16px 48px;
   }
   .sidebar { display: none; }
+}
+
+@media (max-width: 768px) {
+  .body {
+    padding: 16px 16px 40px;
+  }
+
+  .controlsRow {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+
+  .resultsCount {
+    font-size: 13px;
+    line-height: 1.5;
+  }
 }

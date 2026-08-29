@@ -12,28 +12,80 @@
 .bgGrid {
   position: absolute;
   inset: 0;
+  overflow: hidden;
 }
 
-.bgImg {
+.bgGradient {
   position: absolute;
   inset: 0;
-  background-size: cover;
-  background-position: center;
-  opacity: 0;
-  transition: opacity 1.2s ease;
+  background:
+    linear-gradient(
+      135deg,
+      var(--charcoal) 0%,
+      #2a2318 24%,
+      #3d3224 48%,
+      #5c4a28 72%,
+      var(--gold-dark) 88%,
+      #b8943f 100%
+    );
+  background-size: 200% 200%;
+  animation: gradientShift 16s ease infinite;
 }
 
-.bgActive { opacity: 1; }
+.bgBlob1,
+.bgBlob2,
+.bgBlob3 {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  opacity: 0.7;
+  animation: floatBlob 18s ease-in-out infinite;
+}
+
+.bgBlob1 {
+  width: 42vw;
+  height: 42vw;
+  top: -12%;
+  left: -8%;
+  background: radial-gradient(circle, rgba(201, 168, 76, 0.55) 0%, transparent 70%);
+}
+
+.bgBlob2 {
+  width: 36vw;
+  height: 36vw;
+  top: 18%;
+  right: -10%;
+  background: radial-gradient(circle, rgba(232, 201, 122, 0.42) 0%, transparent 70%);
+  animation-delay: -6s;
+}
+
+.bgBlob3 {
+  width: 30vw;
+  height: 30vw;
+  bottom: -8%;
+  left: 28%;
+  background: radial-gradient(circle, rgba(158, 126, 48, 0.38) 0%, transparent 70%);
+  animation-delay: -12s;
+}
 
 .bgOverlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(26, 23, 20, 0.82) 0%,
-    rgba(26, 23, 20, 0.6) 50%,
-    rgba(26, 23, 20, 0.45) 100%
-  );
+  background:
+    linear-gradient(180deg, rgba(26, 23, 20, 0.28) 0%, rgba(26, 23, 20, 0.52) 100%),
+    radial-gradient(ellipse at 22% 18%, rgba(201, 168, 76, 0.14) 0%, transparent 52%),
+    radial-gradient(ellipse at 78% 72%, rgba(232, 201, 122, 0.1) 0%, transparent 48%);
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes floatBlob {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(3%, 4%) scale(1.05); }
+  66% { transform: translate(-2%, 2%) scale(0.96); }
 }
 
 /* Grain texture */
@@ -196,6 +248,33 @@
 
 .searchBtn:hover { background: var(--gold-dark); }
 
+.scanQrBtn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  max-width: 680px;
+  margin-bottom: 20px;
+  padding: 14px 24px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(16, 185, 129, 0.45);
+  background: rgba(16, 185, 129, 0.14);
+  color: #d1fae5;
+  font-size: 15px;
+  font-weight: 600;
+  font-family: var(--font-body);
+  transition: all var(--transition-fast);
+  animation: fadeUp 0.7s 0.35s ease both;
+}
+
+.scanQrBtn:hover {
+  background: rgba(16, 185, 129, 0.22);
+  border-color: rgba(110, 231, 183, 0.65);
+  color: var(--warm-white);
+  transform: translateY(-1px);
+}
+
 /* Popular searches */
 .popularRow {
   display: flex;
@@ -318,6 +397,15 @@
   .searchInput {
     border: 1.5px solid var(--cream-2);
     box-shadow: 0 8px 24px rgba(0, 0, 0, 0.22);
+  }
+
+  .scanQrBtn {
+    max-width: none;
+    height: 52px;
+    border-radius: 12px;
+    font-size: 16px;
+    background: rgba(16, 185, 129, 0.18);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   }
 
   .statsRow {

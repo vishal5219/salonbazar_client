@@ -5,12 +5,17 @@
     top: var(--nav-height);
     z-index: 50;
     box-shadow: 0 2px 16px rgba(26, 23, 20, 0.05);
+    width: 100%;
+    max-width: 100vw;
+    overflow-x: hidden;
   }
   
   .inner {
     max-width: var(--container-max);
     margin: 0 auto;
     padding: 16px 24px 0;
+    min-width: 0;
+    width: 100%;
   }
   
   .breadcrumbRow {
@@ -28,6 +33,7 @@
     color: var(--charcoal);
     margin: 0 0 14px;
     line-height: 1.15;
+    overflow-wrap: anywhere;
   }
   
   .countBadge {
@@ -47,18 +53,20 @@
     align-items: center;
     gap: 12px;
     margin-bottom: 14px;
+    min-width: 0;
   }
   
   /* Search form */
   .searchForm {
     flex: 1;
+    min-width: 0;
     display: flex;
     align-items: center;
     background: #fff;
     border: 1.5px solid var(--cream-2);
     border-radius: 12px;
     height: 48px;
-    overflow: visible;
+    overflow: hidden;
     position: relative;
     transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
   }
@@ -66,6 +74,11 @@
   .searchForm:focus-within {
     border-color: var(--gold);
     box-shadow: 0 0 0 3px rgba(201, 168, 76, 0.12);
+  }
+
+  .searchForm > :first-child {
+    flex-shrink: 0;
+    max-width: 118px;
   }
   
   .locationPill {
@@ -95,7 +108,8 @@
   }
   
   .inputWrap {
-    flex: 1;
+    flex: 1 1 auto;
+    min-width: 0;
     display: flex;
     align-items: center;
     gap: 8px;
@@ -106,6 +120,8 @@
   
   .input {
     flex: 1;
+    width: 100%;
+    min-width: 0;
     border: none;
     outline: none;
     font-size: 14px;
@@ -134,7 +150,7 @@
   
   .searchBtn {
     height: 100%;
-    padding: 0 22px;
+    padding: 0 16px;
     background: var(--charcoal);
     color: var(--warm-white);
     font-size: 13.5px;
@@ -155,6 +171,7 @@
     align-items: center;
     gap: 10px;
     flex-shrink: 0;
+    min-width: 0;
   }
   
   /* View toggle */
@@ -208,24 +225,6 @@
   }
   
   .mobileFilterBtn:hover { border-color: var(--gold); }
-
-  .scanBtn {
-    display: none;
-    align-items: center;
-    gap: 6px;
-    padding: 9px 14px;
-    border-radius: 10px;
-    border: 1.5px solid rgba(16, 185, 129, 0.35);
-    background: rgba(16, 185, 129, 0.08);
-    color: #059669;
-    font-size: 13px;
-    font-weight: 600;
-    font-family: var(--font-body);
-    cursor: pointer;
-    white-space: nowrap;
-  }
-
-  .scanBtn:hover { border-color: #059669; background: rgba(16, 185, 129, 0.14); }
   
   /* Quick pills */
   .quickPills {
@@ -234,6 +233,7 @@
     overflow-x: auto;
     padding-bottom: 14px;
     scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
   }
   
   .quickPills::-webkit-scrollbar { display: none; }
@@ -282,13 +282,91 @@
   
   @media (max-width: 1024px) {
     .mobileFilterBtn { display: flex; }
-    .scanBtn { display: flex; }
+
+    .controlsRow {
+      flex-wrap: wrap;
+    }
+
+    .searchForm {
+      flex: 1 1 100%;
+      width: 100%;
+    }
+
+    .searchForm > :first-child {
+      max-width: 118px;
+    }
+
+    .rightControls {
+      flex: 1 1 auto;
+      justify-content: flex-end;
+    }
   }
   
-  @media (max-width: 640px) {
+  @media (max-width: 768px) {
     .inner { padding: 12px 16px 0; }
-    .viewToggle { display: none; }
-    .locationPill { display: none; }
+
+    .breadcrumbRow {
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+
+    .controlsRow {
+      flex-direction: column;
+      align-items: stretch;
+      gap: 10px;
+    }
+
+    .searchForm {
+      flex-direction: column;
+      align-items: stretch;
+      height: auto;
+      background: transparent;
+      border: none;
+      gap: 10px;
+      overflow: visible;
+    }
+
+    .searchForm > :first-child {
+      width: 100%;
+      max-width: none;
+    }
+
     .divider { display: none; }
-    .searchBtn { padding: 0 16px; font-size: 13px; }
+
+    .inputWrap {
+      width: 100%;
+      background: #fff;
+      border: 1.5px solid var(--cream-2);
+      border-radius: 12px;
+      height: 48px;
+      padding: 0 14px;
+    }
+
+    .searchBtn {
+      width: 100%;
+      height: 48px;
+      border-radius: 12px;
+      padding: 0 16px;
+      font-size: 14px;
+    }
+
+    .rightControls {
+      width: 100%;
+    }
+
+    .mobileFilterBtn {
+      width: 100%;
+      justify-content: center;
+      height: 48px;
+    }
+
+    .quickPills {
+      margin: 0 -16px;
+      padding-left: 16px;
+      padding-right: 16px;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .viewToggle { display: none; }
   }

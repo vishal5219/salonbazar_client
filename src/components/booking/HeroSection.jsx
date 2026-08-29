@@ -1,24 +1,22 @@
 import { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { FiCamera } from 'react-icons/fi'
 import { setSearchQuery } from '@/store/slices/salonSlice'
 import HeroLocationPicker from './HeroLocationPicker'
+import QrScannerModal from '@/components/salon/WalkInQueue/QrScannerModal'
+import { useSalonQueueScan } from '@/hooks/useSalonQueueScan'
 import { POPULAR_SEARCHES, ACTIVE_CITIES, DEFAULT_CITY } from '@/constants/locationData'
 import styles from './HeroSection.module.css'
-
-const heroImages = [
-  'https://images.unsplash.com/photo-1560066984-138dadb4c035?w=1600&q=85',
-  'https://images.unsplash.com/photo-1521590832167-7bcbfaa6381f?w=1600&q=85',
-  'https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=1600&q=85',
-]
 
 const popularSearches = POPULAR_SEARCHES.slice(0, 5).map(item => item.label)
 
 export default function HeroSection() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { handleScan } = useSalonQueueScan()
   const [query, setQuery] = useState('')
-  const [activeImg] = useState(0)
+  const [scannerOpen, setScannerOpen] = useState(false)
   const { selectedCity, selectedState, detecting } = useSelector(s => s.location)
 
   const buildSalonsUrl = (searchQuery = '') => {
@@ -43,6 +41,12 @@ export default function HeroSection() {
     navigate(buildSalonsUrl(match?.query || term))
   }
 
+  const handleQrScan = (text) => {
+    if (handleScan(text)) {
+      setScannerOpen(false)
+    }
+  }
+
   const cityLabel = detecting
     ? 'your area'
     : selectedCity?.name || DEFAULT_CITY?.name || 'Ahmedabad'
@@ -51,16 +55,11 @@ export default function HeroSection() {
 
   return (
     <section className={styles.hero}>
-      <div className={styles.bgGrid}>
-        {heroImages.map((img, i) => (
-          <div
-            key={i}
-            role="img"
-            aria-label={`Salon interior showcase ${i + 1}`}
-            className={`${styles.bgImg} ${i === activeImg ? styles.bgActive : ''}`}
-            style={{ backgroundImage: `url(${img})` }}
-          />
-        ))}
+      <div className={styles.bgGrid} aria-hidden="true">
+        <div className={styles.bgGradient} />
+        <div className={styles.bgBlob1} />
+        <div className={styles.bgBlob2} />
+        <div className={styles.bgBlob3} />
         <div className={styles.bgOverlay} />
       </div>
 
@@ -104,6 +103,15 @@ export default function HeroSection() {
           </button>
         </form>
 
+        <button
+          type="button"
+          className={styles.scanQrBtn}
+          onClick={() => setScannerOpen(true)}
+        >
+          <FiCamera size={18} aria-hidden="true" />
+          Scan Salon QR
+        </button>
+
         <div className={styles.popularRow}>
           <span className={styles.popularLabel}>Popular:</span>
           {popularSearches.map(term => (
@@ -140,6 +148,12 @@ export default function HeroSection() {
           <span className={styles.statLabel}>Queue Hassle</span>
         </div>
       </div>
+
+      <QrScannerModal
+        open={scannerOpen}
+        onClose={() => setScannerOpen(false)}
+        onScan={handleQrScan}
+      />
     </section>
   )
 }

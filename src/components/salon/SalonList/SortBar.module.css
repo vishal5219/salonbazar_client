@@ -52,5 +52,26 @@
   
   @media (max-width: 768px) {
     .label { display: none; }
-    .btn { padding: 6px 10px; font-size: 12px; }
+    .wrap {
+      width: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 8px;
+    }
+    .options {
+      display: flex;
+      gap: 8px;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      justify-content: flex-start;
+      padding-bottom: 2px;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: none;
+    }
+    .options::-webkit-scrollbar { display: none; }
+    .btn {
+      padding: 8px 12px;
+      font-size: 12px;
+      flex-shrink: 0;
+    }
   }

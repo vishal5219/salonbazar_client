@@ -6,8 +6,8 @@
 .searchLocation {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 0 12px;
+  gap: 4px;
+  padding: 0 10px;
   height: 100%;
   min-height: 44px;
   cursor: pointer;
@@ -32,7 +32,7 @@
   font-weight: 500;
   color: var(--charcoal);
   white-space: nowrap;
-  max-width: 110px;
+  max-width: 72px;
   overflow: hidden;
   text-overflow: ellipsis;
 }
@@ -296,4 +296,23 @@
   font-size: 13px;
   color: var(--smoke);
   text-align: center;
+}
+
+@media (max-width: 768px) {
+  .locationPicker {
+    width: 100%;
+  }
+
+  .searchLocation {
+    width: 100%;
+    justify-content: center;
+    background: #fff;
+    border: 1.5px solid var(--cream-2);
+    border-radius: 12px;
+    min-height: 48px;
+  }
+
+  .locationText {
+    max-width: none;
+  }
 }
