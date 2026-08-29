@@ -3,5 +3,7 @@
 /build
 .env
 .env.local
+.env.live
+.env.development
 .env.production
 .env.*.local
